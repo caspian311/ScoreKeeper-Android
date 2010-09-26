@@ -1,4 +1,4 @@
-package net.todd.android.cube;
+package net.todd.android.opengl;
 
 import javax.microedition.khronos.opengles.GL10;
 

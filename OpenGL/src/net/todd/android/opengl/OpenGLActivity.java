@@ -1,10 +1,10 @@
-package net.todd.android.cube;
+package net.todd.android.opengl;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-public class CubeActivity extends Activity {
+public class OpenGLActivity extends Activity {
 	private GLSurfaceView glSurfaceView;
 
 	@Override
@@ -12,7 +12,7 @@ public class CubeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		glSurfaceView = new GLSurfaceView(this);
-		glSurfaceView.setRenderer(new CubeRenderer());
+		glSurfaceView.setRenderer(new OpenGLRenderer());
 
 		setContentView(glSurfaceView);
 	}

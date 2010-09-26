@@ -1,4 +1,4 @@
-package net.todd.android.cube;
+package net.todd.android.opengl;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -10,6 +10,7 @@ public class Cube {
 	private float angle;
 
 	public void draw(GL10 gl) {
+		gl.glTranslatef(2, 0, 0);
 		gl.glRotatef(angle, 0, 1, 0);
 		
 		gl.glFrontFace(GL10.GL_CW);
@@ -18,7 +19,10 @@ public class Cube {
 		setupColors(gl);
 		setupIndecies(gl);
 		
-		angle += 1.2f;
+		angle -= 1.5f;
+		
+		gl.glRotatef(-angle, 0, 1, 0);
+		gl.glTranslatef(-2, 0, 0);
 	}
 
 	private void setupIndecies(GL10 gl) {
