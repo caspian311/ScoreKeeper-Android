@@ -1,7 +1,5 @@
 package net.todd.android.cube;
 
-import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.opengles.GL10;
 
 public class GLU {
@@ -17,7 +15,7 @@ public class GLU {
 		float[] forward = new float[3];
 		float[] side = new float[3];
 		float[] up = new float[3];
-		float[][] m = new float[4][4];
+		float[] m = new float[16];
 
 		forward[0] = centerx - eyex;
 		forward[1] = centery - eyey;
@@ -37,45 +35,45 @@ public class GLU {
 		cross(side, forward, up);
 
 		gluMakeIdentityf(m);
-		m[0][0] = side[0];
-		m[1][0] = side[1];
-		m[2][0] = side[2];
+		m[0] = side[0];
+		m[4] = side[1];
+		m[8] = side[2];
 
-		m[0][1] = up[0];
-		m[1][1] = up[1];
-		m[2][1] = up[2];
+		m[1] = up[0];
+		m[5] = up[1];
+		m[9] = up[2];
 
-		m[0][2] = -forward[0];
-		m[1][2] = -forward[1];
-		m[2][2] = -forward[2];
+		m[2] = -forward[0];
+		m[6] = -forward[1];
+		m[10] = -forward[2];
 
 		// XXX verify that this works as expected
 		// java opengles equivalent --> gl.glMultMatrixf(&m[0][0]);
-		gl.glMultMatrixf(FloatBuffer.wrap(m[0]));
+		gl.glMultMatrixf(m, 0);
 		gl.glTranslatef(-eyex, -eyey, -eyez);
 
 	}
 
-	private void gluMakeIdentityf(float[][] m) {
-		m[0][0] = 1;
-		m[0][1] = 0;
-		m[0][2] = 0;
-		m[0][3] = 0;
+	private void gluMakeIdentityf(float[] m) {
+		m[0] = 1;
+		m[1] = 0;
+		m[2] = 0;
+		m[3] = 0;
 
-		m[1][0] = 0;
-		m[1][1] = 1;
-		m[1][2] = 0;
-		m[1][3] = 0;
+		m[4] = 0;
+		m[5] = 1;
+		m[6] = 0;
+		m[7] = 0;
 
-		m[2][0] = 0;
-		m[2][1] = 0;
-		m[2][2] = 1;
-		m[2][3] = 0;
+		m[8] = 0;
+		m[9] = 0;
+		m[10] = 1;
+		m[11] = 0;
 
-		m[3][0] = 0;
-		m[3][1] = 0;
-		m[3][2] = 0;
-		m[3][3] = 1;
+		m[12] = 0;
+		m[13] = 0;
+		m[14] = 0;
+		m[15] = 1;
 	}
 
 	private void cross(float[] v1, float[] v2, float[] result) {
@@ -97,7 +95,7 @@ public class GLU {
 	}
 
 	public void gluPerspective(float fovy, float aspect, float zNear, float zFar) {
-		float[][] m = new float[4][4];
+		float[] m = new float[16];
 		double sine, cotangent, deltaZ;
 		double radians = fovy / 2 * Math.PI / 180;
 
@@ -109,14 +107,14 @@ public class GLU {
 		cotangent = Math.cos(radians) / sine;
 
 		gluMakeIdentityf(m);
-		m[0][0] = (float) cotangent / aspect;
-		m[1][1] = (float) cotangent;
-		m[2][2] = (float) (-(zFar + zNear) / deltaZ);
-		m[2][3] = -1f;
-		m[3][2] = (float) (-2 * zNear * zFar / deltaZ);
-		m[3][3] = 0f;
+		m[0] = (float) cotangent / aspect;
+		m[5] = (float) cotangent;
+		m[10] = (float) (-(zFar + zNear) / deltaZ);
+		m[11] = -1f;
+		m[14] = (float) (-2 * zNear * zFar / deltaZ);
+		m[15] = 0f;
 		// XXX verify that this works as expected
 		// java opengles equivalent --> gl.glMultMatrixf(&m[0][0]);
-		gl.glMultMatrixf(FloatBuffer.wrap(m[0]));
+		gl.glMultMatrixf(m, 0);
 	}
 }

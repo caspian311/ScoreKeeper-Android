@@ -7,13 +7,18 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 public class Cube {
+	private float angle;
+
 	public void draw(GL10 gl) {
-		gl.glColor4f(0, 0, 1, 0);
+		gl.glRotatef(angle, 0, 1, 0);
+		
 		gl.glFrontFace(GL10.GL_CW);
 
 		setupVerticies(gl);
 		setupColors(gl);
 		setupIndecies(gl);
+		
+		angle += 1.2f;
 	}
 
 	private void setupIndecies(GL10 gl) {

@@ -12,7 +12,7 @@ public class CubeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		glSurfaceView = new GLSurfaceView(this);
-		glSurfaceView.setRenderer(new CubeRenderer(false));
+		glSurfaceView.setRenderer(new CubeRenderer());
 
 		setContentView(glSurfaceView);
 	}
