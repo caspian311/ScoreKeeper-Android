@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="menu_item_quit">Quit</string>
+    <string name="menu_item_enable_lighting">Lighting</string>
+    <string name="menu_item_enable_wireframes">Wireframes</string>
+    <string name="menu_item_enable_draw_normals">Draw Normals</string>
     <string name="app_name">OpenGl</string>
 </resources>

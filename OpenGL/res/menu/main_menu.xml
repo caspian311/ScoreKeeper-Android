@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:title="@string/menu_item_enable_wireframes" android:id="@+id/enableWireframes"></item>
+	<item android:title="@string/menu_item_enable_lighting" android:id="@+id/enableLighting"></item>
+	<item android:title="@string/menu_item_enable_draw_normals" android:id="@+id/enableDrawNormals"></item>
+	<item android:title="@string/menu_item_quit" android:id="@+id/quit"></item>
+</menu>
