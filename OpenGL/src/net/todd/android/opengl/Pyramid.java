@@ -4,7 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class Pyramid extends Shape {
 	private float angle;
-	private boolean doAnimate = true;
+	private boolean doAnimate;
 
 	@Override
 	void positioning(GL10 gl) {
