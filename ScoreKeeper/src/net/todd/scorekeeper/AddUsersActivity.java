@@ -17,7 +17,7 @@ public class AddUsersActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.add_user);
 
 		playerNameText = (EditText) findViewById(R.id.EditText01);
 		final ListView listOfPlayers = (ListView) findViewById(R.id.ListView01);
