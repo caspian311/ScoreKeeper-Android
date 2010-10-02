@@ -11,5 +11,12 @@ public class MainPresenter {
 				mainModel.quitApplication();
 			}
 		});
+		
+		mainView.addPlayersButtonListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mainModel.goToAddPlayerPage();
+			}
+		});
 	}
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 public class MainView {
 	private final RelativeLayout mainLayout;
 	private final Button quitButton;
+	private final Button addPlayersButton;
 
 	public MainView(Context context) {
 		mainLayout = new RelativeLayout(context);
@@ -37,7 +38,7 @@ public class MainView {
 		TableRow firstRow = new TableRow(context);
 		tableView.addView(firstRow);
 		
-		Button addPlayersButton = new Button(context);
+		addPlayersButton = new Button(context);
 		addPlayersButton.setText("Add Players");
 		addPlayersButton.setTextSize(20);
 		firstRow.addView(addPlayersButton);
@@ -65,5 +66,9 @@ public class MainView {
 
 	public void addQuitButtonListener(OnClickListener clickListener) {
 		quitButton.setOnClickListener(clickListener);
+	}
+	
+	public void addPlayersButtonListener(OnClickListener clickListener) {
+		addPlayersButton.setOnClickListener(clickListener);
 	}
 }
