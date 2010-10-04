@@ -41,7 +41,7 @@ public class MainView {
 		tableView.addView(firstRow);
 
 		addPlayersButton = new Button(context);
-		addPlayersButton.setText("Add Players");
+		addPlayersButton.setText("Manage Players");
 		addPlayersButton.setTextSize(20);
 		firstRow.addView(addPlayersButton);
 		Button historyButton = new Button(context);

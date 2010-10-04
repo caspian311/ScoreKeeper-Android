@@ -3,10 +3,13 @@ package net.todd.scorekeeper;
 import java.util.List;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -14,7 +17,8 @@ import android.widget.TextView;
 public class AddPlayerView {
 	private final Context context;
 	
-	private final TableLayout mainView;
+	private final LinearLayout mainView;
+	private final TableLayout tableView;
 	private final EditText playerNameText;
 	private final Button addPlayerButton;
 
@@ -23,15 +27,28 @@ public class AddPlayerView {
 	
 	public AddPlayerView(Context context) {
 		this.context = context;
-
-		mainView = new TableLayout(context);
-		mainView.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT));
+		
+		mainView = new LinearLayout(context);
+		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainView.setBackgroundColor(0xFF3399CC);
-		mainView.setColumnStretchable(0, true);
+		
+		TextView title = new TextView(context);
+		title.setText("Manager Players");
+		title.setTextSize(30);
+		title.setTextColor(0xFF000000);
+		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		title.setGravity(Gravity.CENTER_HORIZONTAL);
+		mainView.addView(title);
+
+		tableView = new TableLayout(context);
+		tableView.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT));
+		tableView.setColumnStretchable(0, true);
+		mainView.addView(tableView);
 
 		TableRow controlsRow = new TableRow(context);
 		controlsRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-		mainView.addView(controlsRow);
+		tableView.addView(controlsRow);
 		
 		playerNameText = new EditText(context);
 		controlsRow.addView(playerNameText);
@@ -66,7 +83,7 @@ public class AddPlayerView {
 		TableRow playerRow = new TableRow(context);
 		playerRow.setId(playerId);
 		playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-		mainView.addView(playerRow);
+		tableView.addView(playerRow);
 
 		TextView player = new TextView(context);
 		player.setText(playerName);
@@ -103,8 +120,8 @@ public class AddPlayerView {
 	}
 
 	private void clearCurrentPlayers() {
-		while (mainView.getChildCount() > 1) {
-			mainView.removeViewAt(mainView.getChildCount() - 1);		
+		while (tableView.getChildCount() > 1) {
+			tableView.removeViewAt(tableView.getChildCount() - 1);		
 		}
 	}
 }
