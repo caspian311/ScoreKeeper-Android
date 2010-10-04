@@ -1,5 +1,7 @@
 package net.todd.scorekeeper;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,7 +62,7 @@ public class AddPlayerView {
 		});
 	}
 	
-	public void addPlayer(final int playerId, String playerName) {
+	private void addPlayer(final int playerId, String playerName) {
 		TableRow playerRow = new TableRow(context);
 		playerRow.setId(playerId);
 		playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -92,8 +94,17 @@ public class AddPlayerView {
 		return playerToRemove;
 	}
 
-	public void removePlayer(int playerToRemove) {
-		View rowToRemove = mainView.findViewById(playerToRemove);
-		mainView.removeView(rowToRemove);
+	public void setPlayers(List<Player> players) {
+		clearCurrentPlayers();
+	
+		for (Player player : players) {
+			addPlayer(player.getId(), player.getName());
+		}
+	}
+
+	private void clearCurrentPlayers() {
+		while (mainView.getChildCount() > 1) {
+			mainView.removeViewAt(mainView.getChildCount() - 1);		
+		}
 	}
 }

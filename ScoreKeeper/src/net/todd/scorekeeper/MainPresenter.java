@@ -1,20 +1,18 @@
 package net.todd.scorekeeper;
 
-import android.view.View;
-import android.view.View.OnClickListener;
 
 public class MainPresenter {
 	public static void create(final MainView mainView, final MainModel mainModel) {
-		mainView.addQuitButtonListener(new OnClickListener() {
+		mainView.addQuitButtonListener(new IListener() {
 			@Override
-			public void onClick(View v) {
+			public void handle() {
 				mainModel.quitApplication();
 			}
 		});
 		
-		mainView.addPlayersButtonListener(new OnClickListener() {
+		mainView.addPlayersButtonListener(new IListener() {
 			@Override
-			public void onClick(View v) {
+			public void handle() {
 				mainModel.goToAddPlayerPage();
 			}
 		});

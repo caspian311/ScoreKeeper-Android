@@ -18,9 +18,10 @@ public class MainView {
 
 	public MainView(Context context) {
 		mainLayout = new RelativeLayout(context);
-		mainLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		mainLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT));
 		mainLayout.setBackgroundColor(0xFF3399CC);
-		
+
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		title.setText("Score Keeper");
@@ -28,16 +29,17 @@ public class MainView {
 		title.setTextColor(0xFF000000);
 		title.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 		mainLayout.addView(title);
-		
+
 		TableLayout tableView = new TableLayout(context);
-		tableView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		tableView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT));
 		tableView.setStretchAllColumns(true);
 		tableView.setGravity(Gravity.CENTER);
 		mainLayout.addView(tableView);
-		
+
 		TableRow firstRow = new TableRow(context);
 		tableView.addView(firstRow);
-		
+
 		addPlayersButton = new Button(context);
 		addPlayersButton.setText("Add Players");
 		addPlayersButton.setTextSize(20);
@@ -64,11 +66,21 @@ public class MainView {
 		return mainLayout;
 	}
 
-	public void addQuitButtonListener(OnClickListener clickListener) {
-		quitButton.setOnClickListener(clickListener);
+	public void addQuitButtonListener(final IListener listener) {
+		quitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				listener.handle();
+			}
+		});
 	}
-	
-	public void addPlayersButtonListener(OnClickListener clickListener) {
-		addPlayersButton.setOnClickListener(clickListener);
+
+	public void addPlayersButtonListener(final IListener listener) {
+		addPlayersButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				listener.handle();
+			}
+		});
 	}
 }
