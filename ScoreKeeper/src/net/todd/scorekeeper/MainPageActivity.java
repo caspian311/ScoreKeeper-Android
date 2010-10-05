@@ -3,14 +3,14 @@ package net.todd.scorekeeper;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class MainActivity extends Activity {
+public class MainPageActivity extends Activity {
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			
-			MainView mainView = new MainView(this);
-			MainModel mainModel = new MainModel(this);
-			MainPresenter.create(mainView, mainModel);
+			MainPageView mainView = new MainPageView(this);
+			MainPageModel mainModel = new MainPageModel(this);
+			MainPagePresenter.create(mainView, mainModel);
 			
 			setContentView(mainView.getView());
 		}

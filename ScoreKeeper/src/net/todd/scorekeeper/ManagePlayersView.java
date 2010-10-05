@@ -14,7 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class AddPlayerView {
+public class ManagePlayersView {
 	private final Context context;
 	
 	private final LinearLayout mainView;
@@ -25,7 +25,7 @@ public class AddPlayerView {
 	private int playerToRemove;
 	private IListener playerRemovedListener;
 	
-	public AddPlayerView(Context context) {
+	public ManagePlayersView(Context context) {
 		this.context = context;
 		
 		mainView = new LinearLayout(context);

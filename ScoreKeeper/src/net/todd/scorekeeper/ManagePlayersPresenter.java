@@ -1,7 +1,7 @@
 package net.todd.scorekeeper;
 
-public class AddPlayerPresenter {
-	public static void create(final AddPlayerView view, final AddPlayerModel model) {
+public class ManagePlayersPresenter {
+	public static void create(final ManagePlayersView view, final ManagePlayersModel model) {
 		view.addAddPlayerButtonListener(new IListener() {
 			@Override
 			public void handle() {
@@ -23,5 +23,7 @@ public class AddPlayerPresenter {
 				view.setPlayers(model.getPlayers());
 			}
 		});
+		
+		view.setPlayers(model.getPlayers());
 	}
 }
