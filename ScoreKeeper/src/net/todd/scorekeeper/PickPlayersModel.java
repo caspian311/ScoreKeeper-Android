@@ -31,4 +31,15 @@ public class PickPlayersModel {
 		Intent intent = new Intent(pickPlayersActivity, OrderSelectedPlayersActivity.class);
 		pickPlayersActivity.startActivity(intent);
 	}
+
+	public void goToMainPage() {
+		Intent intent = new Intent(pickPlayersActivity, MainPageActivity.class);
+		pickPlayersActivity.startActivity(intent);
+	}
+
+	public void goToOrderPlayerPage() {
+		Intent intent = new Intent(pickPlayersActivity, OrderPlayersActivity.class);
+		intent.putExtra("playerIds", (ArrayList<Player>)selectedPlayers);
+		pickPlayersActivity.startActivity(intent);
+	}
 }

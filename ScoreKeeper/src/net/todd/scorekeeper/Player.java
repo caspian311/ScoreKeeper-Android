@@ -1,6 +1,10 @@
 package net.todd.scorekeeper;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
+	private static final long serialVersionUID = -3804201764603746312L;
+	
 	private final int id;
 	private final String name;
 

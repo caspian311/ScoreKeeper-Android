@@ -5,6 +5,7 @@ import java.util.List;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -108,5 +109,23 @@ public class PickPlayersView {
 	
 	public int getCurrentPlayer() {
 		return currentPlayer;
+	}
+	
+	public void addNextButtonListener(final IListener listener) {
+		nextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				listener.handle();
+			}
+		});
+	}
+	
+	public void addCancelButtonListener(final IListener listener) {
+		cancelButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				listener.handle();
+			}
+		});
 	}
 }

@@ -34,4 +34,16 @@ public class PlayerStore {
 		}
 		return targetPlayer;
 	}
+
+	public List<Player> getPlayersById(ArrayList<Integer> playerIds) {
+		List<Player> selectedPlayers = new ArrayList<Player>();
+		for (Integer playerId : playerIds) {
+			for (Player player : getAllPlayers()) {
+				if (playerId.equals(player.getId())) {
+					selectedPlayers.add(player);
+				}
+			}
+		}
+		return selectedPlayers;
+	}
 }
