@@ -9,7 +9,7 @@ public class ManagePlayersActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		ManagePlayersView view = new ManagePlayersView(this);
-		ManagePlayersModel model = new ManagePlayersModel(new PlayerStore());
+		ManagePlayersModel model = new ManagePlayersModel(this, new PlayerStore(this));
 		ManagePlayersPresenter.create(view, model);
 		
 		setContentView(view.getView());

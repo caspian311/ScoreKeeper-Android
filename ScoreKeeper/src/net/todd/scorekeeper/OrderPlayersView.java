@@ -21,8 +21,8 @@ public class OrderPlayersView {
 	private final Button backButton;
 	
 	private int currentPlayerId;
-	private IListener upButtonListener;
-	private IListener downButtonListener;
+	private Listener upButtonListener;
+	private Listener downButtonListener;
 
 	public OrderPlayersView(Context context) {
 		this.context = context;
@@ -100,7 +100,7 @@ public class OrderPlayersView {
 		}
 	}
 	
-	public void addStartGameButtonListener(final IListener listener) {
+	public void addStartGameButtonListener(final Listener listener) {
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -109,7 +109,7 @@ public class OrderPlayersView {
 		});
 	}
 	
-	public void addBackButtonListener(final IListener listener) {
+	public void addBackButtonListener(final Listener listener) {
 		backButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -122,11 +122,11 @@ public class OrderPlayersView {
 		return currentPlayerId;
 	}
 
-	public void addUpButtonListener(IListener listener) {
+	public void addUpButtonListener(Listener listener) {
 		this.upButtonListener = listener;
 	}
 	
-	public void addDownButtonListener(IListener listener) {
+	public void addDownButtonListener(Listener listener) {
 		this.downButtonListener = listener;
 	}
 

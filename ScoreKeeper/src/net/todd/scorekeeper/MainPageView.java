@@ -68,7 +68,7 @@ public class MainPageView {
 		return mainLayout;
 	}
 
-	public void addQuitButtonListener(final IListener listener) {
+	public void addQuitButtonListener(final Listener listener) {
 		quitButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -77,7 +77,7 @@ public class MainPageView {
 		});
 	}
 
-	public void addManagePlayersButtonListener(final IListener listener) {
+	public void addManagePlayersButtonListener(final Listener listener) {
 		addPlayersButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -86,7 +86,7 @@ public class MainPageView {
 		});
 	}
 
-	public void addStartButtonListener(final IListener listener) {
+	public void addStartButtonListener(final Listener listener) {
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -1,16 +1,17 @@
 package net.todd.scorekeeper;
 
+import android.app.Activity;
 import android.content.Intent;
 
 public class MainPageModel {
-	private final MainPageActivity mainPageActivity;
+	private final Activity mainPageActivity;
 
-	public MainPageModel(MainPageActivity mainActivity) {
-		this.mainPageActivity = mainActivity;
+	public MainPageModel(Activity activity) {
+		this.mainPageActivity = activity;
 	}
 	
 	public void quitApplication() {
-		mainPageActivity.finish();
+		System.exit(0);
 	}
 
 	public void goToManagePlayerPage() {

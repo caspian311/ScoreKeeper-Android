@@ -4,21 +4,21 @@ public class PickPlayersPresenter {
 	public static void create(final PickPlayersView view, final PickPlayersModel model) {
 		view.setAllPlayers(model.getAllPlayers());
 
-		view.setSelectedPlayersChangedListener(new IListener() {
+		view.setSelectedPlayersChangedListener(new Listener() {
 			@Override
 			public void handle() {
 				model.selectionChanged(view.getCurrentPlayer(), view.isCurrentPlayerSelected());
 			}
 		});
 
-		view.addCancelButtonListener(new IListener() {
+		view.addCancelButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.goToMainPage();
 			}
 		});
 
-		view.addNextButtonListener(new IListener() {
+		view.addNextButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.goToOrderPlayerPage();

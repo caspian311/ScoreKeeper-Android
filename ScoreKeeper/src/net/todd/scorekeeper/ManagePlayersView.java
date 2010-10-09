@@ -23,7 +23,9 @@ public class ManagePlayersView {
 	private final Button addPlayerButton;
 
 	private int playerToRemove;
-	private IListener playerRemovedListener;
+	private Listener playerRemovedListener;
+
+	private final Button doneButton;
 	
 	public ManagePlayersView(Context context) {
 		this.context = context;
@@ -42,7 +44,7 @@ public class ManagePlayersView {
 		mainView.addView(title);
 
 		tableView = new TableLayout(context);
-		tableView.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT));
+		tableView.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
 		tableView.setColumnStretchable(0, true);
 		mainView.addView(tableView);
 
@@ -56,6 +58,11 @@ public class ManagePlayersView {
 		addPlayerButton = new Button(context);
 		addPlayerButton.setText("Add Player");
 		controlsRow.addView(addPlayerButton);
+		
+		doneButton = new Button(context);
+		doneButton.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+		doneButton.setText("Done");
+		mainView.addView(doneButton);
 	}
 
 	public View getView() {
@@ -70,7 +77,7 @@ public class ManagePlayersView {
 		playerNameText.setText("");
 	}
 	
-	public void addAddPlayerButtonListener(final IListener listener) {
+	public void addAddPlayerButtonListener(final Listener listener) {
 		addPlayerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -103,7 +110,7 @@ public class ManagePlayersView {
 		playerRow.addView(removePlayerButton);
 	}
 	
-	public void addPlayerRemoveListener(IListener listener) {
+	public void addPlayerRemoveListener(Listener listener) {
 		playerRemovedListener = listener;
 	}
 	
@@ -123,5 +130,15 @@ public class ManagePlayersView {
 		while (tableView.getChildCount() > 1) {
 			tableView.removeViewAt(tableView.getChildCount() - 1);		
 		}
+	}
+	
+	public void addDoneButtonListener(final Listener listener) {
+		doneButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				listener.handle();
+			}
+		});
+		
 	}
 }

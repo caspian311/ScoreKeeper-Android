@@ -9,7 +9,7 @@ public class PickPlayersActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		PickPlayersView view = new PickPlayersView(this);
-		PickPlayersModel model = new PickPlayersModel(this, new PlayerStore());
+		PickPlayersModel model = new PickPlayersModel(this, new PlayerStore(this));
 		PickPlayersPresenter.create(view, model);
 		
 		setContentView(view.getView());

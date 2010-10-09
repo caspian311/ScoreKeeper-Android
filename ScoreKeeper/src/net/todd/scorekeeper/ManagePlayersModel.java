@@ -2,12 +2,18 @@ package net.todd.scorekeeper;
 
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
+
 public class ManagePlayersModel {
 	private final PlayerStore playerStore;
 
-	private IListener playerChangedListener;
+	private Listener playerChangedListener;
 
-	public ManagePlayersModel(PlayerStore playerStore) {
+	private final Context context;
+
+	public ManagePlayersModel(Context context, PlayerStore playerStore) {
+		this.context = context;
 		this.playerStore = playerStore;
 	}
 	
@@ -17,7 +23,7 @@ public class ManagePlayersModel {
 		playerChangedListener.handle();
 	}
 
-	public void addPlayerChangedListener(IListener listener) {
+	public void addPlayerChangedListener(Listener listener) {
 		this.playerChangedListener = listener;
 	}
 
@@ -28,5 +34,10 @@ public class ManagePlayersModel {
 
 	public List<Player> getPlayers() {
 		return playerStore.getAllPlayers();
+	}
+
+	public void goToMainPage() {
+		Intent intent = new Intent(context, MainPageActivity.class);
+		context.startActivity(intent);
 	}
 }

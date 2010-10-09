@@ -1,5 +1,5 @@
 package net.todd.scorekeeper;
 
-public interface IListener {
+public interface Listener {
 	void handle();
 }

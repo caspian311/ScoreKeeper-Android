@@ -21,7 +21,7 @@ public class PickPlayersView {
 	private final TableLayout allPlayersTable;
 	private final Context context;
 	
-	private IListener selectedPlayersChangedListener;
+	private Listener selectedPlayersChangedListener;
 	private boolean isCurrentPlayerSelected;
 	private int currentPlayer;
 	private final Button cancelButton;
@@ -99,7 +99,7 @@ public class PickPlayersView {
 		}
 	}
 	
-	public void setSelectedPlayersChangedListener(IListener listener) {
+	public void setSelectedPlayersChangedListener(Listener listener) {
 		this.selectedPlayersChangedListener = listener;
 	}
 	
@@ -111,7 +111,7 @@ public class PickPlayersView {
 		return currentPlayer;
 	}
 	
-	public void addNextButtonListener(final IListener listener) {
+	public void addNextButtonListener(final Listener listener) {
 		nextButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -120,7 +120,7 @@ public class PickPlayersView {
 		});
 	}
 	
-	public void addCancelButtonListener(final IListener listener) {
+	public void addCancelButtonListener(final Listener listener) {
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -4,21 +4,21 @@ public class OrderPlayersPresenter {
 	public static void create(final OrderPlayersView view, final OrderPlayersModel model) {
 		view.setPlayers(model.getSelectedPlayers());
 
-		view.addBackButtonListener(new IListener() {
+		view.addBackButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.goToPickPlayersPage();
 			}
 		});
 
-		view.addStartGameButtonListener(new IListener() {
+		view.addStartGameButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.startGame();
 			}
 		});
 
-		view.addUpButtonListener(new IListener() {
+		view.addUpButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.movePlayerUp(view.getCurrentPlayerId());
@@ -27,7 +27,7 @@ public class OrderPlayersPresenter {
 			}
 		});
 		
-		view.addDownButtonListener(new IListener() {
+		view.addDownButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.movePlayerDown(view.getCurrentPlayerId());
