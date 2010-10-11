@@ -7,7 +7,7 @@ import android.content.Intent;
 
 public class PickPlayersModel {
 	private final PlayerStore playerStore;
-	private final List<Player> selectedPlayers = new ArrayList<Player>();
+	private final ArrayList<Player> selectedPlayers = new ArrayList<Player>();
 	private final PickPlayersActivity pickPlayersActivity;
 	
 	public PickPlayersModel(PickPlayersActivity pickPlayersActivity, PlayerStore playerStore) {
@@ -34,12 +34,13 @@ public class PickPlayersModel {
 
 	public void goToMainPage() {
 		Intent intent = new Intent(pickPlayersActivity, MainPageActivity.class);
+		intent.putExtra("selectedPlayers", selectedPlayers);
 		pickPlayersActivity.startActivity(intent);
 	}
 
 	public void goToOrderPlayerPage() {
 		Intent intent = new Intent(pickPlayersActivity, OrderPlayersActivity.class);
-		intent.putExtra("playerIds", (ArrayList<Player>)selectedPlayers);
+		intent.putExtra("selectedPlayers", selectedPlayers);
 		pickPlayersActivity.startActivity(intent);
 	}
 }

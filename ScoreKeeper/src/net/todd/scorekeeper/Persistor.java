@@ -65,12 +65,11 @@ public class Persistor<T> {
 	}
 
 	private boolean doesFileExist(String filename) {
-		boolean doesFileExist;
+		boolean doesFileExist = false;
 		try {
 			context.openFileInput(filename);
 			doesFileExist = true;
 		} catch (FileNotFoundException e) {
-			doesFileExist = false;
 		}
 		return doesFileExist;
 	}
@@ -86,7 +85,8 @@ public class Persistor<T> {
 					items.add(clazz.cast(object));
 				}
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				Logger.error(getClass().getName(), "Could not restore data from file: "
+						+ getDataFilename(), e);
 			}
 		}
 		return items;

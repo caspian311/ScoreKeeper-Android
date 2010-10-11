@@ -14,7 +14,7 @@ public class OrderPlayersModel {
 	public OrderPlayersModel(OrderPlayersActivity activity) {
 		this.activity = activity;
 
-		selectedPlayers = (ArrayList<Player>) activity.getIntent().getExtras().get("playerIds");
+		selectedPlayers = (ArrayList<Player>) activity.getIntent().getExtras().get("selectedPlayers");
 	}
 
 	public List<Player> getSelectedPlayers() {
@@ -28,6 +28,7 @@ public class OrderPlayersModel {
 
 	public void startGame() {
 		Intent intent = new Intent(activity, StartGameActivity.class);
+		intent.putExtra("selectedPlayers", selectedPlayers);
 		activity.startActivity(intent);
 	}
 

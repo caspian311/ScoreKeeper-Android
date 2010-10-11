@@ -9,7 +9,7 @@ public class StartGameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		GameView view = new GameView(this);
-		GameModel model = new GameModel();
+		GameModel model = new GameModel(this);
 		GamePresenter.create(view, model);
 		
 		setContentView(view.getView());

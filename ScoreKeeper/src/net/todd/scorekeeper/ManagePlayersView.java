@@ -53,6 +53,7 @@ public class ManagePlayersView {
 		tableView.addView(controlsRow);
 		
 		playerNameText = new EditText(context);
+		playerNameText.setLines(1);
 		controlsRow.addView(playerNameText);
 		
 		addPlayerButton = new Button(context);
