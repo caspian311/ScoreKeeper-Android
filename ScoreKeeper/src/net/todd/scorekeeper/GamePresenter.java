@@ -19,7 +19,7 @@ public class GamePresenter {
 			@Override
 			public void handle() {
 				view.clearScore();
-				view.setCurrentPlayer(model.getPreviousPlayer(), model.getPrevoiusPlayersScore());
+				view.setCurrentPlayer(model.getPreviousPlayer(), model.getCurrentPlayersScore());
 			}
 		});
 	}

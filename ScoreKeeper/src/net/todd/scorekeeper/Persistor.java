@@ -49,17 +49,16 @@ public class Persistor<T> {
 	}
 
 	private int loadCurrentId() {
-		Integer id = null;
+		Integer id = 0;
 		if (doesFileExist(getIdFilename())) {
 			try {
 				ObjectInputStream ois = new ObjectInputStream(
 						context.openFileInput(getIdFilename()));
-				id = (Integer) ois.readObject();
+				id = ((Integer) ois.readObject()).intValue();
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				Logger.error(getClass().getName(), "Could not load the id file for: "
+						+ getIdFilename(), e);
 			}
-		} else {
-			id = 0;
 		}
 		return id;
 	}

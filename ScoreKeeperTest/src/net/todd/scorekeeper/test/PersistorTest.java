@@ -79,7 +79,8 @@ public class PersistorTest {
 		List<Person> items = Arrays.asList(person1, person2);
 		persistor.persist(items);
 		
-		List<Person> personList = persistor.load();
+		Persistor<Person> anotherPersistor = Persistor.create(Person.class, context);
+		List<Person> personList = anotherPersistor.load();
 		
 		assertEquals(2, personList.size());
 		assertEquals(person1, personList.get(0));
@@ -118,16 +119,44 @@ public class PersistorTest {
 		assertEquals(Context.MODE_PRIVATE, outputFileMode);
 	}
 	
-	public void testLoadingStuffLoadsFromTheCorrectFile() throws FileNotFoundException {
+	@Test
+	public void loadingStuffLoadsFromTheCorrectFile() throws FileNotFoundException {
 		Persistor<Person> persistor = Persistor.create(Person.class, context);
 		persistor.persist(Arrays.asList(new Person()));
 		persistor.load();
 
 		ArgumentCaptor<String> inputFilenameCaptor = ArgumentCaptor.forClass(String.class);
-		verify(context).openFileInput(inputFilenameCaptor.capture());
+		verify(context, atLeastOnce()).openFileInput(inputFilenameCaptor.capture());
 		inputFilename = inputFilenameCaptor.getValue();
 		
 		assertEquals(Person.class.getName() + ".data", inputFilename);
+	}
+	
+	@Test
+	public void nextIdAlwaysIncrementsByOne() throws FileNotFoundException {
+		Persistor<Person> persistor = Persistor.create(Person.class, context);
+		int firstId = persistor.nextId();
+		
+		Persistor<Person> anotherPersistor = Persistor.create(Person.class, context);
+		int secondId = anotherPersistor.nextId();
+		
+		Persistor<Person> yetAnotherPersistor = Persistor.create(Person.class, context);
+		int thirdId = yetAnotherPersistor.nextId();
+
+		assertEquals(firstId + 1, secondId);
+		assertEquals(secondId + 1, thirdId);
+	}
+	
+	@Test
+	public void loadingIdsLoadsFromTheCorrectFile() throws FileNotFoundException {
+		Persistor<Person> persistor = Persistor.create(Person.class, context);
+		persistor.nextId();
+
+		ArgumentCaptor<String> inputFilenameCaptor = ArgumentCaptor.forClass(String.class);
+		verify(context, atLeastOnce()).openFileInput(inputFilenameCaptor.capture());
+		inputFilename = inputFilenameCaptor.getValue();
+		
+		assertEquals(Person.class.getName() + ".id", inputFilename);
 	}
 	
 	private static class Person implements Serializable {

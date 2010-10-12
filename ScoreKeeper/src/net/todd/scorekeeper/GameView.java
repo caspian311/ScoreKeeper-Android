@@ -93,8 +93,8 @@ public class GameView {
 		return mainView;
 	}
 
-	public String getScore() {
-		return score.getText().toString();
+	public int getScore() {
+		return Integer.parseInt(score.getText().toString());
 	}
 	
 	public void addPreviousPlayerButtonListener(final Listener listener) {

@@ -7,13 +7,16 @@ import java.util.Map;
 import android.app.Activity;
 
 public class GameModel {
+	private static final int INITIAL_POSITION = -99;
+
 	private final ArrayList<Player> selectedPlayers;
-	private int currentPlayersTurn = -1;
+	private int currentPlayersTurn = INITIAL_POSITION;
 	private final Map<Player, Integer> scoreBoard = new HashMap<Player, Integer>();
 
 	@SuppressWarnings("unchecked")
 	public GameModel(Activity activity) {
-		selectedPlayers = (ArrayList<Player>)activity.getIntent().getExtras().get("selectedPlayers");
+		selectedPlayers = (ArrayList<Player>) activity.getIntent().getSerializableExtra(
+				"selectedPlayers");
 		for (Player player : selectedPlayers) {
 			scoreBoard.put(player, 0);
 		}
@@ -24,20 +27,30 @@ public class GameModel {
 	}
 
 	private int getNextTurn() {
-		currentPlayersTurn++;
-		currentPlayersTurn %= selectedPlayers.size();
-		return currentPlayersTurn;
-	}
-	
-	private int getPreviousTurn() {
-		currentPlayersTurn--;
-		currentPlayersTurn %= selectedPlayers.size();
+		if (currentPlayersTurn == INITIAL_POSITION) {
+			currentPlayersTurn = 0;
+		} else {
+			currentPlayersTurn++;
+			currentPlayersTurn %= selectedPlayers.size();
+		}
 		return currentPlayersTurn;
 	}
 
-	public void setScoreForCurrentPlayer(String score) {
+	private int getPreviousTurn() {
+		if (currentPlayersTurn == INITIAL_POSITION) {
+			currentPlayersTurn = selectedPlayers.size() - 1;
+		} else {
+			currentPlayersTurn--;
+			if (currentPlayersTurn == -1) {
+				currentPlayersTurn = selectedPlayers.size() - 1;
+			}
+		}
+		return currentPlayersTurn;
+	}
+
+	public void setScoreForCurrentPlayer(int score) {
 		Integer currentScore = scoreBoard.get(getCurrentPlayer());
-		currentScore += Integer.parseInt(score);
+		currentScore += score;
 		scoreBoard.put(getCurrentPlayer(), currentScore);
 	}
 
@@ -51,10 +64,6 @@ public class GameModel {
 
 	public Player getPreviousPlayer() {
 		return selectedPlayers.get(getPreviousTurn());
-	}
-
-	public int getPrevoiusPlayersScore() {
-		return scoreBoard.get(getPreviousPlayer());
 	}
 
 	public Map<Player, Integer> getScoreBoard() {
