@@ -21,8 +21,8 @@ public class OrderPlayersView {
 	private final Button backButton;
 	
 	private int currentPlayerId;
-	private Listener upButtonListener;
-	private Listener downButtonListener;
+	private final ListenerManager upButtonListenerManager = new ListenerManager();
+	private final ListenerManager downButtonListenerManager = new ListenerManager();
 
 	public OrderPlayersView(Context context) {
 		this.context = context;
@@ -65,6 +65,7 @@ public class OrderPlayersView {
 	}
 	
 	public void setPlayers(List<Player> players) {
+		playerTable.removeAllViews();
 		for (final Player player : players) {
 			TableRow playerRow = new TableRow(context);
 			playerRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -82,7 +83,7 @@ public class OrderPlayersView {
 				@Override
 				public void onClick(View v) {
 					currentPlayerId = player.getId();
-					upButtonListener.handle();
+					upButtonListenerManager.notifyListeners();
 				}
 			});
 			playerRow.addView(upButton);
@@ -93,7 +94,7 @@ public class OrderPlayersView {
 				@Override
 				public void onClick(View v) {
 					currentPlayerId = player.getId();
-					downButtonListener.handle();
+					downButtonListenerManager.notifyListeners();
 				}
 			});
 			playerRow.addView(downButton);
@@ -123,11 +124,11 @@ public class OrderPlayersView {
 	}
 
 	public void addUpButtonListener(Listener listener) {
-		this.upButtonListener = listener;
+		upButtonListenerManager.addListener(listener);
 	}
 	
 	public void addDownButtonListener(Listener listener) {
-		this.downButtonListener = listener;
+		downButtonListenerManager.addListener(listener);
 	}
 
 	public void clearPlayersTable() {

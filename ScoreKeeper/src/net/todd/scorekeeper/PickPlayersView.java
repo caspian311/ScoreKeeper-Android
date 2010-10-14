@@ -2,7 +2,9 @@ package net.todd.scorekeeper;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,12 +22,14 @@ public class PickPlayersView {
 	private final LinearLayout mainView;
 	private final TableLayout allPlayersTable;
 	private final Context context;
-	
+
 	private Listener selectedPlayersChangedListener;
 	private boolean isCurrentPlayerSelected;
 	private int currentPlayer;
-	private final Button cancelButton;
-	private final Button nextButton;
+
+	private final ListenerManager cancelButtonListenerManager = new ListenerManager();
+	private final ListenerManager nextButtonListenerManager = new ListenerManager();
+	private final ListenerManager selectedPlayersChangedListenerManager = new ListenerManager();
 
 	public PickPlayersView(Context context) {
 		this.context = context;
@@ -35,7 +39,7 @@ public class PickPlayersView {
 				LayoutParams.MATCH_PARENT));
 		mainView.setBackgroundColor(0xFF3399CC);
 		mainView.setOrientation(LinearLayout.VERTICAL);
-		
+
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("Pick the players");
@@ -45,23 +49,36 @@ public class PickPlayersView {
 		mainView.addView(title);
 
 		LinearLayout controlView = new LinearLayout(context);
-		controlView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		controlView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		controlView.setOrientation(LinearLayout.HORIZONTAL);
 		controlView.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(controlView);
-		
-		cancelButton = new Button(context);
+
+		Button cancelButton = new Button(context);
 		cancelButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
 		cancelButton.setText("Cancel");
+		cancelButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				cancelButtonListenerManager.notifyListeners();
+			}
+		});
 		controlView.addView(cancelButton);
 
-		nextButton = new Button(context);
+		Button nextButton = new Button(context);
 		nextButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
 		nextButton.setText("Next");
+		nextButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				nextButtonListenerManager.notifyListeners();
+			}
+		});
 		controlView.addView(nextButton);
-		
+
 		allPlayersTable = new TableLayout(context);
 		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
@@ -74,6 +91,7 @@ public class PickPlayersView {
 	}
 
 	public void setAllPlayers(List<Player> allPlayers) {
+		allPlayersTable.removeAllViews();
 		for (final Player player : allPlayers) {
 			TableRow playerRow = new TableRow(context);
 			playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -98,34 +116,34 @@ public class PickPlayersView {
 			playerRow.addView(playerSelection);
 		}
 	}
-	
-	public void setSelectedPlayersChangedListener(Listener listener) {
-		this.selectedPlayersChangedListener = listener;
+
+	public void addSelectedPlayersChangedListener(Listener listener) {
+		selectedPlayersChangedListenerManager.addListener(listener);
 	}
-	
+
 	public boolean isCurrentPlayerSelected() {
 		return isCurrentPlayerSelected;
 	}
-	
+
 	public int getCurrentPlayer() {
 		return currentPlayer;
 	}
-	
+
 	public void addNextButtonListener(final Listener listener) {
-		nextButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				listener.handle();
-			}
-		});
+		nextButtonListenerManager.addListener(listener);
 	}
-	
+
 	public void addCancelButtonListener(final Listener listener) {
-		cancelButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				listener.handle();
-			}
-		});
+		cancelButtonListenerManager.addListener(listener);
+	}
+
+	public void popupErrorMessage() {
+		new AlertDialog.Builder(context).setMessage("You must select at least 2 players.")
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				}).show();
 	}
 }

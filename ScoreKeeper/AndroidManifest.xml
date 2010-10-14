@@ -4,15 +4,19 @@
 	android:versionName="1.0">
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name="net.todd.scorekeeper.MainPageActivity"
-			android:label="@string/app_name">
+			android:label="@string/app_name" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="net.todd.scorekeeper.ManagePlayersActivity" />
-		<activity android:name="net.todd.scorekeeper.PickPlayersActivity" />
-		<activity android:name="net.todd.scorekeeper.OrderPlayersActivity" />
-		<activity android:name="net.todd.scorekeeper.StartGameActivity" />
+		<activity android:name="net.todd.scorekeeper.ManagePlayersActivity"
+			android:screenOrientation="portrait" />
+		<activity android:name="net.todd.scorekeeper.PickPlayersActivity"
+			android:screenOrientation="portrait" />
+		<activity android:name="net.todd.scorekeeper.OrderPlayersActivity"
+			android:screenOrientation="portrait" />
+		<activity android:name="net.todd.scorekeeper.GameActivity"
+			android:screenOrientation="portrait" />
 	</application>
 </manifest> 

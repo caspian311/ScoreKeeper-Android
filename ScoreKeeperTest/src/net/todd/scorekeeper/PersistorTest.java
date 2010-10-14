@@ -1,4 +1,4 @@
-package net.todd.scorekeeper.test;
+package net.todd.scorekeeper;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
@@ -12,9 +12,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
-import net.todd.scorekeeper.Logger;
-import net.todd.scorekeeper.Persistor;
 
 import org.junit.After;
 import org.junit.AfterClass;

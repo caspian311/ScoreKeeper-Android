@@ -1,4 +1,4 @@
-package net.todd.scorekeeper.test;
+package net.todd.scorekeeper;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -6,12 +6,6 @@ import static org.mockito.Mockito.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
-import net.todd.scorekeeper.GameModel;
-import net.todd.scorekeeper.GamePresenter;
-import net.todd.scorekeeper.GameView;
-import net.todd.scorekeeper.Listener;
-import net.todd.scorekeeper.Player;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +21,8 @@ public class GamePresenterTest {
 	private GameModel model;
 	private Listener nextPlayerButtonListener;
 	private Listener previousPlayerButtonListener;
+	private Listener backButtonListener;
+	private Listener cancelGameListener;
 
 	@Before
 	public void setUp() {
@@ -43,6 +39,14 @@ public class GamePresenterTest {
 				.forClass(Listener.class);
 		verify(view).addPreviousPlayerButtonListener(previousPlayerButtonListenerCaptor.capture());
 		previousPlayerButtonListener = previousPlayerButtonListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> backButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
+		verify(view).addBackPressedListener(backButtonListenerCaptor.capture());
+		backButtonListener = backButtonListenerCaptor.getValue();
+		
+		ArgumentCaptor<Listener> cancelGameListenerCaptor = ArgumentCaptor.forClass(Listener.class);
+		verify(view).addCancelGameListener(cancelGameListenerCaptor.capture());
+		cancelGameListener = cancelGameListenerCaptor.getValue();
 
 		reset(view, model);
 	}
@@ -108,7 +112,7 @@ public class GamePresenterTest {
 		inOrder.verify(model).getNextPlayer();
 		inOrder.verify(model).getCurrentPlayersScore();
 	}
-	
+
 	@Test
 	public void currentPlayersScoreIsCollectedWhenNextPlayerButtonIsPressed() {
 		int score = new Random().nextInt();
@@ -118,7 +122,7 @@ public class GamePresenterTest {
 
 		verify(model).setScoreForCurrentPlayer(score);
 	}
-	
+
 	@Test
 	public void currentPlayersScoreIsCollectedBeforeClearingTheScoreAndSwitchingToTheNextPlayerWhenNextPlayerButtonIsPressed() {
 		nextPlayerButtonListener.handle();
@@ -126,26 +130,41 @@ public class GamePresenterTest {
 		InOrder inOrder = inOrder(view, model);
 		inOrder.verify(view).getScore();
 		inOrder.verify(view).clearScore();
+		inOrder.verify(view).closeSoftKeyboard();
 		inOrder.verify(model).getNextPlayer();
 	}
-	
+
 	@Test
 	public void clearScoreWhenPreviousPlayerButtonIsPressed() {
 		previousPlayerButtonListener.handle();
 
 		verify(view).clearScore();
 	}
-	
+
 	@Test
 	public void setCurrentPlayerToPreviousPlayerWhenPreviousPlayerButtonIsPressed() {
 		Player player = mock(Player.class);
 		doReturn(player).when(model).getPreviousPlayer();
 		int score = new Random().nextInt();
 		doReturn(score).when(model).getCurrentPlayersScore();
-		
+
 		previousPlayerButtonListener.handle();
 
 		verify(view).setCurrentPlayer(player, score);
+	}
+
+	@Test
+	public void pressingTheBackButtonPopsUpTheBackButtonDialog() {
+		backButtonListener.handle();
+		
+		verify(view).popupNoBackButtonDialog();
+	}
+	
+	@Test
+	public void killingTheGameNotifiesTheModelThatTheGameIsOver() {
+		cancelGameListener.handle();
+		
+		verify(model).cancelGame();
 	}
 	
 	@Test
@@ -154,6 +173,7 @@ public class GamePresenterTest {
 
 		InOrder inOrder = inOrder(view, model);
 		inOrder.verify(view).clearScore();
+		inOrder.verify(view).closeSoftKeyboard();
 		inOrder.verify(model).getPreviousPlayer();
 		inOrder.verify(model).getCurrentPlayersScore();
 		inOrder.verify(view).setCurrentPlayer(any(Player.class), anyInt());

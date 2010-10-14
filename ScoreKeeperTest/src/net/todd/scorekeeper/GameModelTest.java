@@ -1,4 +1,4 @@
-package net.todd.scorekeeper.test;
+package net.todd.scorekeeper;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -6,9 +6,6 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
-
-import net.todd.scorekeeper.GameModel;
-import net.todd.scorekeeper.Player;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -111,5 +108,12 @@ public class GameModelTest {
 		testObject.setScoreForCurrentPlayer(secondScore);
 
 		assertEquals(firstScore + secondScore, testObject.getCurrentPlayersScore());
+	}
+	
+	@Test
+	public void cancellingTheGameFinishesTheActivity() {
+		testObject.cancelGame();
+
+		verify(activity).finish();
 	}
 }

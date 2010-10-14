@@ -29,8 +29,8 @@ public class PlayerStore {
 		persist();
 	}
 	
-	public void removePlayer(Player player) {
-		players.remove(player);
+	public void removePlayer(int playerId) {
+		players.remove(getPlayerById(playerId));
 		
 		persist();
 	}

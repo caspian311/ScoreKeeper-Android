@@ -10,7 +10,7 @@ public class ManagePlayersPresenter {
 			}
 		});
 
-		view.addPlayerRemoveListener(new Listener() {
+		view.addRemovePlayerButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.removePlayer(view.getPlayerToRemove());
@@ -27,7 +27,7 @@ public class ManagePlayersPresenter {
 		view.addDoneButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				model.goToMainPage();
+				model.finish();
 			}
 		});
 

@@ -27,7 +27,7 @@ public class OrderPlayersModel {
 	}
 
 	public void startGame() {
-		Intent intent = new Intent(activity, StartGameActivity.class);
+		Intent intent = new Intent(activity, GameActivity.class);
 		intent.putExtra("selectedPlayers", selectedPlayers);
 		activity.startActivity(intent);
 	}

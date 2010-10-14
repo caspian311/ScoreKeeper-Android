@@ -13,8 +13,12 @@ public class GameModel {
 	private int currentPlayersTurn = INITIAL_POSITION;
 	private final Map<Player, Integer> scoreBoard = new HashMap<Player, Integer>();
 
+	private final Activity activity;
+
 	@SuppressWarnings("unchecked")
 	public GameModel(Activity activity) {
+		this.activity = activity;
+		
 		selectedPlayers = (ArrayList<Player>) activity.getIntent().getSerializableExtra(
 				"selectedPlayers");
 		for (Player player : selectedPlayers) {
@@ -68,5 +72,9 @@ public class GameModel {
 
 	public Map<Player, Integer> getScoreBoard() {
 		return scoreBoard;
+	}
+
+	public void cancelGame() {
+		activity.finish();
 	}
 }

@@ -2,42 +2,41 @@ package net.todd.scorekeeper;
 
 import java.util.List;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
 
 public class ManagePlayersModel {
 	private final PlayerStore playerStore;
 
-	private Listener playerChangedListener;
+	private final ListenerManager playerChangedListenerManager = new ListenerManager();
 
-	private final Context context;
+	private final Activity context;
 
-	public ManagePlayersModel(Context context, PlayerStore playerStore) {
+	public ManagePlayersModel(Activity context, PlayerStore playerStore) {
 		this.context = context;
 		this.playerStore = playerStore;
 	}
 	
 	public void addPlayer(String playerName) {
-		playerStore.addPlayer(new Player(playerStore.nextPlayerId(), playerName));
-		
-		playerChangedListener.handle();
+		if (playerName != null && playerName.length() > 0) {
+			playerStore.addPlayer(new Player(playerStore.nextPlayerId(), playerName));
+			playerChangedListenerManager.notifyListeners();
+		}
 	}
 
 	public void addPlayerChangedListener(Listener listener) {
-		this.playerChangedListener = listener;
+		playerChangedListenerManager.addListener(listener);
 	}
 
 	public void removePlayer(int playerToRemove) {
-		playerStore.removePlayer(playerStore.getPlayerById(playerToRemove));
-		playerChangedListener.handle();
+		playerStore.removePlayer(playerToRemove);
+		playerChangedListenerManager.notifyListeners();
 	}
 
 	public List<Player> getPlayers() {
 		return playerStore.getAllPlayers();
 	}
 
-	public void goToMainPage() {
-		Intent intent = new Intent(context, MainPageActivity.class);
-		context.startActivity(intent);
+	public void finish() {
+		context.finish();
 	}
 }

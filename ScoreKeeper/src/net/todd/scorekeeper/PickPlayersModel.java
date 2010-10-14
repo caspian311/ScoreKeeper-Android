@@ -8,11 +8,13 @@ import android.content.Intent;
 public class PickPlayersModel {
 	private final PlayerStore playerStore;
 	private final ArrayList<Player> selectedPlayers = new ArrayList<Player>();
-	private final PickPlayersActivity pickPlayersActivity;
+	private final PickPlayersActivity context;
+	private final IntentFactory intentFactory;
 	
-	public PickPlayersModel(PickPlayersActivity pickPlayersActivity, PlayerStore playerStore) {
-		this.pickPlayersActivity = pickPlayersActivity;
+	public PickPlayersModel(PickPlayersActivity pickPlayersActivity, PlayerStore playerStore, IntentFactory intentFactory) {
+		this.context = pickPlayersActivity;
 		this.playerStore = playerStore;
+		this.intentFactory = intentFactory;
 	}
 
 	public List<Player> getAllPlayers() {
@@ -27,20 +29,19 @@ public class PickPlayersModel {
 		}
 	}
 	
-	public void goToNextPage() {
-		Intent intent = new Intent(pickPlayersActivity, OrderSelectedPlayersActivity.class);
-		pickPlayersActivity.startActivity(intent);
-	}
-
 	public void goToMainPage() {
-		Intent intent = new Intent(pickPlayersActivity, MainPageActivity.class);
+		Intent intent = intentFactory.createIntent(context, MainPageActivity.class);
 		intent.putExtra("selectedPlayers", selectedPlayers);
-		pickPlayersActivity.startActivity(intent);
+		context.startActivity(intent);
 	}
 
 	public void goToOrderPlayerPage() {
-		Intent intent = new Intent(pickPlayersActivity, OrderPlayersActivity.class);
+		Intent intent = intentFactory.createIntent(context, OrderPlayersActivity.class);
 		intent.putExtra("selectedPlayers", selectedPlayers);
-		pickPlayersActivity.startActivity(intent);
+		context.startActivity(intent);
+	}
+
+	public boolean atLeastTwoPlayersSelected() {
+		return selectedPlayers.size() >= 2;
 	}
 }

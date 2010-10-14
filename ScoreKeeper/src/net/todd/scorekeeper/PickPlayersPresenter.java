@@ -4,7 +4,7 @@ public class PickPlayersPresenter {
 	public static void create(final PickPlayersView view, final PickPlayersModel model) {
 		view.setAllPlayers(model.getAllPlayers());
 
-		view.setSelectedPlayersChangedListener(new Listener() {
+		view.addSelectedPlayersChangedListener(new Listener() {
 			@Override
 			public void handle() {
 				model.selectionChanged(view.getCurrentPlayer(), view.isCurrentPlayerSelected());
@@ -21,7 +21,11 @@ public class PickPlayersPresenter {
 		view.addNextButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				model.goToOrderPlayerPage();
+				if (model.atLeastTwoPlayersSelected()) {
+					model.goToOrderPlayerPage();
+				} else {
+					view.popupErrorMessage();
+				}
 			}
 		});
 	}
