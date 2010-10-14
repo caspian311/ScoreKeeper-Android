@@ -22,13 +22,7 @@ public class Persistor<T> {
 	}
 
 	public void persist(List<T> items) {
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(
-					getDataFilename(), Context.MODE_PRIVATE));
-			oos.writeObject(items);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		save(getDataFilename(), items);
 	}
 
 	public int nextId() {
@@ -39,10 +33,14 @@ public class Persistor<T> {
 	}
 
 	private void saveCurrentId(int currentId) {
+		save(getIdFilename(), currentId);
+	}
+
+	private void save(String filename, Object object) {
 		try {
-			ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(getIdFilename(),
+			ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(filename,
 					Context.MODE_PRIVATE));
-			oos.writeObject(currentId);
+			oos.writeObject(object);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

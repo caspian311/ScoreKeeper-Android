@@ -9,7 +9,7 @@ public class MainPageActivity extends Activity {
 			super.onCreate(savedInstanceState);
 			
 			MainPageView mainView = new MainPageView(this);
-			MainPageModel mainModel = new MainPageModel(this);
+			MainPageModel mainModel = new MainPageModel(this, new IntentFactory());
 			MainPagePresenter.create(mainView, mainModel);
 			
 			setContentView(mainView.getView());

@@ -130,8 +130,4 @@ public class OrderPlayersView {
 	public void addDownButtonListener(Listener listener) {
 		downButtonListenerManager.addListener(listener);
 	}
-
-	public void clearPlayersTable() {
-		playerTable.removeAllViews();
-	}
 }

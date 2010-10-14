@@ -3,16 +3,17 @@ package net.todd.scorekeeper;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 
 public class PickPlayersModel {
 	private final PlayerStore playerStore;
 	private final ArrayList<Player> selectedPlayers = new ArrayList<Player>();
-	private final PickPlayersActivity context;
+	private final Activity context;
 	private final IntentFactory intentFactory;
 	
-	public PickPlayersModel(PickPlayersActivity pickPlayersActivity, PlayerStore playerStore, IntentFactory intentFactory) {
-		this.context = pickPlayersActivity;
+	public PickPlayersModel(Activity context, PlayerStore playerStore, IntentFactory intentFactory) {
+		this.context = context;
 		this.playerStore = playerStore;
 		this.intentFactory = intentFactory;
 	}
@@ -29,10 +30,8 @@ public class PickPlayersModel {
 		}
 	}
 	
-	public void goToMainPage() {
-		Intent intent = intentFactory.createIntent(context, MainPageActivity.class);
-		intent.putExtra("selectedPlayers", selectedPlayers);
-		context.startActivity(intent);
+	public void cancel() {
+		context.finish();
 	}
 
 	public void goToOrderPlayerPage() {

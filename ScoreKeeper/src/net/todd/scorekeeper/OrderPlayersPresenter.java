@@ -7,7 +7,7 @@ public class OrderPlayersPresenter {
 		view.addBackButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				model.goToPickPlayersPage();
+				model.cancel();
 			}
 		});
 
@@ -22,8 +22,6 @@ public class OrderPlayersPresenter {
 			@Override
 			public void handle() {
 				model.movePlayerUp(view.getCurrentPlayerId());
-				view.clearPlayersTable();
-				view.setPlayers(model.getSelectedPlayers());
 			}
 		});
 		
@@ -31,7 +29,12 @@ public class OrderPlayersPresenter {
 			@Override
 			public void handle() {
 				model.movePlayerDown(view.getCurrentPlayerId());
-				view.clearPlayersTable();
+			}
+		});
+		
+		model.addPlayersOrderChangedListener(new Listener() {
+			@Override
+			public void handle() {
 				view.setPlayers(model.getSelectedPlayers());
 			}
 		});

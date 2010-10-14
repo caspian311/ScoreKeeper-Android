@@ -24,14 +24,14 @@ public class PlayerStore {
 	}
 	
 	public void addPlayer(Player player) {
+		load();
 		players.add(player);
-		
 		persist();
 	}
 	
 	public void removePlayer(int playerId) {
+		load();
 		players.remove(getPlayerById(playerId));
-		
 		persist();
 	}
 
@@ -58,12 +58,14 @@ public class PlayerStore {
 		return targetPlayer;
 	}
 
-	public List<Player> getPlayersById(ArrayList<Integer> playerIds) {
+	public List<Player> getPlayersById(List<Integer> playerIds) {
 		List<Player> selectedPlayers = new ArrayList<Player>();
+		List<Player> allPlayers = getAllPlayers();
 		for (Integer playerId : playerIds) {
-			for (Player player : getAllPlayers()) {
+			for (Player player : allPlayers) {
 				if (playerId.equals(player.getId())) {
 					selectedPlayers.add(player);
+					break;
 				}
 			}
 		}

@@ -3,31 +3,35 @@ package net.todd.scorekeeper;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 
 public class OrderPlayersModel {
-	private final OrderPlayersActivity activity;
+	private final ListenerManager playersOrderChangedListenerManager = new ListenerManager();
 
+	private final Activity activity;
+	private final IntentFactory intentFactory;
 	private final ArrayList<Player> selectedPlayers;
 
 	@SuppressWarnings("unchecked")
-	public OrderPlayersModel(OrderPlayersActivity activity) {
+	public OrderPlayersModel(Activity activity, IntentFactory intentFactory) {
 		this.activity = activity;
+		this.intentFactory = intentFactory;
 
-		selectedPlayers = (ArrayList<Player>) activity.getIntent().getExtras().get("selectedPlayers");
+		selectedPlayers = (ArrayList<Player>) activity.getIntent().getSerializableExtra(
+				"selectedPlayers");
 	}
 
 	public List<Player> getSelectedPlayers() {
 		return selectedPlayers;
 	}
 
-	public void goToPickPlayersPage() {
-		Intent intent = new Intent(activity, PickPlayersActivity.class);
-		activity.startActivity(intent);
+	public void cancel() {
+		activity.finish();
 	}
 
 	public void startGame() {
-		Intent intent = new Intent(activity, GameActivity.class);
+		Intent intent = intentFactory.createIntent(activity, GameActivity.class);
 		intent.putExtra("selectedPlayers", selectedPlayers);
 		activity.startActivity(intent);
 	}
@@ -39,6 +43,7 @@ public class OrderPlayersModel {
 			selectedPlayers.remove(player);
 			selectedPlayers.add(currentIndex - 1, player);
 		}
+		playersOrderChangedListenerManager.notifyListeners();
 	}
 
 	private Player getPlayerById(int currentPlayerId) {
@@ -58,5 +63,10 @@ public class OrderPlayersModel {
 			selectedPlayers.remove(player);
 			selectedPlayers.add(currentIndex + 1, player);
 		}
+		playersOrderChangedListenerManager.notifyListeners();
+	}
+
+	public void addPlayersOrderChangedListener(Listener listener) {
+		playersOrderChangedListenerManager.addListener(listener);
 	}
 }

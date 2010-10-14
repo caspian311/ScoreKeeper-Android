@@ -148,4 +148,11 @@ public class PickPlayersModelTest {
 
 		assertEquals(Arrays.asList(player2), selectedPlayers);
 	}
+	
+	@Test
+	public void cancellingFinishesTheActivity() {
+		testObject.cancel();
+		
+		verify(activity).finish();
+	}
 }

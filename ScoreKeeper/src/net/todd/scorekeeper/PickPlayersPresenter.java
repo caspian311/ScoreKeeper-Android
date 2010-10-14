@@ -14,7 +14,7 @@ public class PickPlayersPresenter {
 		view.addCancelButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				model.goToMainPage();
+				model.cancel();
 			}
 		});
 

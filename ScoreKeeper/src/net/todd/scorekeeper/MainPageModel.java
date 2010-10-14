@@ -5,9 +5,11 @@ import android.content.Intent;
 
 public class MainPageModel {
 	private final Activity mainPageActivity;
+	private final IntentFactory intentFactory;
 
-	public MainPageModel(Activity activity) {
+	public MainPageModel(Activity activity, IntentFactory intentFactory) {
 		this.mainPageActivity = activity;
+		this.intentFactory = intentFactory;
 	}
 	
 	public void quitApplication() {
@@ -15,12 +17,12 @@ public class MainPageModel {
 	}
 
 	public void goToManagePlayerPage() {
-		Intent intent = new Intent(mainPageActivity, ManagePlayersActivity.class);
+		Intent intent = intentFactory.createIntent(mainPageActivity, ManagePlayersActivity.class);
 		mainPageActivity.startActivity(intent);
 	}
 	
 	public void goToStartGamePage() {
-		Intent intent = new Intent(mainPageActivity, PickPlayersActivity.class);
+		Intent intent = intentFactory.createIntent(mainPageActivity, PickPlayersActivity.class);
 		mainPageActivity.startActivity(intent);
 	}
 }
