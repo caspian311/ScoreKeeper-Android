@@ -23,6 +23,8 @@ public class GamePresenterTest {
 	private Listener previousPlayerButtonListener;
 	private Listener backButtonListener;
 	private Listener cancelGameListener;
+	private Listener scoreChangedListener;
+	private Listener playerChangedListener;
 
 	@Before
 	public void setUp() {
@@ -43,24 +45,42 @@ public class GamePresenterTest {
 		ArgumentCaptor<Listener> backButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addBackPressedListener(backButtonListenerCaptor.capture());
 		backButtonListener = backButtonListenerCaptor.getValue();
-		
+
 		ArgumentCaptor<Listener> cancelGameListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addCancelGameListener(cancelGameListenerCaptor.capture());
 		cancelGameListener = cancelGameListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> scoreChangedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(model).addScoreChangedListener(scoreChangedListenerCaptor.capture());
+		scoreChangedListener = scoreChangedListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> playerChangedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(model).addPlayerChangedListener(playerChangedListenerCaptor.capture());
+		playerChangedListener = playerChangedListenerCaptor.getValue();
 
 		reset(view, model);
 	}
 
 	@Test
-	public void currentPlayerIsSetInitiallyToNextPlayerFromModel() {
+	public void currentPlayerIsSetInitially() {
 		Player player = mock(Player.class);
-		doReturn(player).when(model).getNextPlayer();
+		doReturn(player).when(model).getCurrentPlayer();
+
+		GamePresenter.create(view, model);
+
+		verify(view).setCurrentPlayer(player);
+	}
+	
+	@Test
+	public void currentPlayersScoreIsSetInitially() {
 		int score = new Random().nextInt();
 		doReturn(score).when(model).getCurrentPlayersScore();
 
 		GamePresenter.create(view, model);
 
-		verify(view).setCurrentPlayer(player, score);
+		verify(view).setCurrentPlayersScore(score);
 	}
 
 	@Test
@@ -75,45 +95,6 @@ public class GamePresenterTest {
 	}
 
 	@Test
-	public void scoreBoardIsUpdatedFromModelWhenNextPlayerButtonIsPressed() {
-		@SuppressWarnings("unchecked")
-		Map<Player, Integer> scoreBoard = mock(HashMap.class);
-		doReturn(scoreBoard).when(model).getScoreBoard();
-
-		nextPlayerButtonListener.handle();
-
-		verify(view).setScoreBoard(scoreBoard);
-	}
-
-	@Test
-	public void scoreTextFieldIsClearedWhenNextPlayerButtonIsPressed() {
-		nextPlayerButtonListener.handle();
-
-		verify(view).clearScore();
-	}
-
-	@Test
-	public void currentPlayerIsSetWhenNextPlayerButtonIsPressed() {
-		Player player = mock(Player.class);
-		doReturn(player).when(model).getNextPlayer();
-		int score = new Random().nextInt();
-		doReturn(score).when(model).getCurrentPlayersScore();
-
-		nextPlayerButtonListener.handle();
-
-		verify(view).setCurrentPlayer(player, score);
-	}
-
-	@Test
-	public void ensureNextPlayerIsSetBeforeGettingTheCurrentPlayersScoreWhenNextPlayerButtonIsPressed() {
-		nextPlayerButtonListener.handle();
-
-		InOrder inOrder = inOrder(model);
-		inOrder.verify(model).getNextPlayer();
-		inOrder.verify(model).getCurrentPlayersScore();
-	}
-
-	@Test
 	public void currentPlayersScoreIsCollectedWhenNextPlayerButtonIsPressed() {
 		int score = new Random().nextInt();
 		doReturn(score).when(view).getScore();
@@ -124,58 +105,76 @@ public class GamePresenterTest {
 	}
 
 	@Test
-	public void currentPlayersScoreIsCollectedBeforeClearingTheScoreAndSwitchingToTheNextPlayerWhenNextPlayerButtonIsPressed() {
+	public void whenNextPlayerButtonIsPressedSetScoreForCurrentPlayerAndGoToNextPlayer() {
 		nextPlayerButtonListener.handle();
 
-		InOrder inOrder = inOrder(view, model);
-		inOrder.verify(view).getScore();
-		inOrder.verify(view).clearScore();
-		inOrder.verify(view).closeSoftKeyboard();
-		inOrder.verify(model).getNextPlayer();
+		InOrder inOrder = inOrder(model);
+		inOrder.verify(model).setScoreForCurrentPlayer(anyInt());
+		inOrder.verify(model).nextPlayer();
 	}
 
 	@Test
 	public void clearScoreWhenPreviousPlayerButtonIsPressed() {
 		previousPlayerButtonListener.handle();
 
-		verify(view).clearScore();
-	}
-
-	@Test
-	public void setCurrentPlayerToPreviousPlayerWhenPreviousPlayerButtonIsPressed() {
-		Player player = mock(Player.class);
-		doReturn(player).when(model).getPreviousPlayer();
-		int score = new Random().nextInt();
-		doReturn(score).when(model).getCurrentPlayersScore();
-
-		previousPlayerButtonListener.handle();
-
-		verify(view).setCurrentPlayer(player, score);
+		verify(model).previousPlayer();
 	}
 
 	@Test
 	public void pressingTheBackButtonPopsUpTheBackButtonDialog() {
 		backButtonListener.handle();
-		
+
 		verify(view).popupNoBackButtonDialog();
 	}
-	
+
 	@Test
 	public void killingTheGameNotifiesTheModelThatTheGameIsOver() {
 		cancelGameListener.handle();
-		
+
 		verify(model).cancelGame();
 	}
-	
-	@Test
-	public void ensureClearScoreFirstThenSetPlayerThenSetScoreWhenPreviousPlayerButtonIsPressed() {
-		previousPlayerButtonListener.handle();
 
-		InOrder inOrder = inOrder(view, model);
-		inOrder.verify(view).clearScore();
-		inOrder.verify(view).closeSoftKeyboard();
-		inOrder.verify(model).getPreviousPlayer();
-		inOrder.verify(model).getCurrentPlayersScore();
-		inOrder.verify(view).setCurrentPlayer(any(Player.class), anyInt());
+	@Test
+	public void whenTheScoreChangesOnTheModelThenClearTheScore() {
+		scoreChangedListener.handle();
+
+		verify(view).clearScore();
+	}
+
+	@Test
+	public void whenTheScoreChangesOnTheModelThenClosetheSoftKeyboard() {
+		scoreChangedListener.handle();
+
+		verify(view).closeSoftKeyboard();
+	}
+
+	@Test
+	public void whenTheScoreChangesOnTheModelThenSetTheScoreBoard() {
+		Map<Player, Integer> scoreBoard = new HashMap<Player, Integer>();
+		doReturn(scoreBoard).when(model).getScoreBoard();
+
+		scoreChangedListener.handle();
+
+		verify(view).setScoreBoard(scoreBoard);
+	}
+
+	@Test
+	public void whenThePlayerChangesOnTheModelThenSetTheCurrentPlayerOnTheView() {
+		Player player = mock(Player.class);
+		doReturn(player).when(model).getCurrentPlayer();
+
+		playerChangedListener.handle();
+
+		verify(view).setCurrentPlayer(player);
+	}
+
+	@Test
+	public void whenThePlayerChangesOnTheModelThenSetTheCurrentScoreOnTheView() {
+		int score = new Random().nextInt();
+		doReturn(score).when(model).getCurrentPlayersScore();
+
+		playerChangedListener.handle();
+
+		verify(view).setCurrentPlayersScore(score);
 	}
 }

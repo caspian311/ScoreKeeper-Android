@@ -44,33 +44,44 @@ public class GameModelTest {
 
 	@Test
 	public void everyTimeYouCallNextPlayerYouGetTheNextPlayer() {
-		assertSame(player1, testObject.getNextPlayer());
-		assertSame(player2, testObject.getNextPlayer());
-		assertSame(player3, testObject.getNextPlayer());
-		assertSame(player1, testObject.getNextPlayer());
-		assertSame(player2, testObject.getNextPlayer());
-		assertSame(player3, testObject.getNextPlayer());
+		assertSame(player1, testObject.getCurrentPlayer());
+		testObject.nextPlayer();
+		assertSame(player2, testObject.getCurrentPlayer());
+		testObject.nextPlayer();
+		assertSame(player3, testObject.getCurrentPlayer());
+		testObject.nextPlayer();
+		assertSame(player1, testObject.getCurrentPlayer());
+		testObject.nextPlayer();
+		assertSame(player2, testObject.getCurrentPlayer());
+		testObject.nextPlayer();
+		assertSame(player3, testObject.getCurrentPlayer());
 	}
 
 	@Test
 	public void everyTimeYouCallPreviousPlayerYouGetThePreviousPlayer() {
-		assertSame(player3, testObject.getPreviousPlayer());
-		assertSame(player2, testObject.getPreviousPlayer());
-		assertSame(player1, testObject.getPreviousPlayer());
-		assertSame(player3, testObject.getPreviousPlayer());
-		assertSame(player2, testObject.getPreviousPlayer());
-		assertSame(player1, testObject.getPreviousPlayer());
+		testObject.previousPlayer();
+		assertSame(player3, testObject.getCurrentPlayer());
+		testObject.previousPlayer();
+		assertSame(player2, testObject.getCurrentPlayer());
+		testObject.previousPlayer();
+		assertSame(player1, testObject.getCurrentPlayer());
+		testObject.previousPlayer();
+		assertSame(player3, testObject.getCurrentPlayer());
+		testObject.previousPlayer();
+		assertSame(player2, testObject.getCurrentPlayer());
+		testObject.previousPlayer();
+		assertSame(player1, testObject.getCurrentPlayer());
 	}
 
 	@Test
 	public void initiallyAllPlayersScoreIs0() {
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		assertEquals(0, testObject.getCurrentPlayersScore());
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		assertEquals(0, testObject.getCurrentPlayersScore());
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		assertEquals(0, testObject.getCurrentPlayersScore());
 	}
 
@@ -80,22 +91,22 @@ public class GameModelTest {
 		int secondScore = new Random().nextInt();
 		int thirdScore = new Random().nextInt();
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		testObject.setScoreForCurrentPlayer(firstScore);
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		testObject.setScoreForCurrentPlayer(secondScore);
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		testObject.setScoreForCurrentPlayer(thirdScore);
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		assertEquals(firstScore, testObject.getCurrentPlayersScore());
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		assertEquals(secondScore, testObject.getCurrentPlayersScore());
 
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		assertEquals(thirdScore, testObject.getCurrentPlayersScore());
 	}
 
@@ -103,17 +114,44 @@ public class GameModelTest {
 	public void settingANewScoreAddsToThePreviousScore() {
 		int firstScore = new Random().nextInt();
 		int secondScore = new Random().nextInt();
-		testObject.getNextPlayer();
+		testObject.nextPlayer();
 		testObject.setScoreForCurrentPlayer(firstScore);
 		testObject.setScoreForCurrentPlayer(secondScore);
 
 		assertEquals(firstScore + secondScore, testObject.getCurrentPlayersScore());
 	}
-	
+
 	@Test
 	public void cancellingTheGameFinishesTheActivity() {
 		testObject.cancelGame();
 
 		verify(activity).finish();
+	}
+
+	@Test
+	public void scoreChangedListenersAreNotifiedWhenScoresChange() {
+		Listener listener = mock(Listener.class);
+		testObject.addScoreChangedListener(listener);
+		testObject.setScoreForCurrentPlayer(new Random().nextInt());
+
+		verify(listener).handle();
+	}
+
+	@Test
+	public void playerChangedListenersAreNotifiedWhenGoingToNextPlayer() {
+		Listener listener = mock(Listener.class);
+		testObject.addPlayerChangedListener(listener);
+		testObject.nextPlayer();
+
+		verify(listener).handle();
+	}
+
+	@Test
+	public void playerChangedListenersAreNotifiedWhenGoingToPreviousPlayer() {
+		Listener listener = mock(Listener.class);
+		testObject.addPlayerChangedListener(listener);
+		testObject.previousPlayer();
+
+		verify(listener).handle();
 	}
 }

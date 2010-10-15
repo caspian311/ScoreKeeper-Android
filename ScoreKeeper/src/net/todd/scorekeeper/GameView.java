@@ -29,6 +29,7 @@ public class GameView {
 	private final Activity context;
 	private Listener backPressedListener;
 	private Listener cancelGameListener;
+	private final TextView playerScore;
 
 	public GameView(Activity context) {
 		this.context = context;
@@ -48,12 +49,31 @@ public class GameView {
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(title);
 
+		LinearLayout playerData = new LinearLayout(context);
+		playerData.setOrientation(LinearLayout.HORIZONTAL);
+		playerData.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		playerData.setGravity(Gravity.CENTER_HORIZONTAL);
+		mainView.addView(playerData);
+		
 		playerName = new TextView(context);
 		playerName.setTextColor(0xFF000000);
 		playerName.setTextSize(45);
 		playerName.setGravity(Gravity.CENTER_HORIZONTAL);
-		mainView.addView(playerName);
+		playerData.addView(playerName);
 
+		TextView colonText = new TextView(context);
+		colonText.setGravity(Gravity.CENTER_HORIZONTAL);
+		colonText.setTextColor(0xFF000000);
+		colonText.setTextSize(45);
+		colonText.setText(" : ");
+		playerData.addView(colonText);
+		
+		playerScore = new TextView(context);
+		playerScore.setTextColor(0xFF000000);
+		playerScore.setTextSize(45);
+		playerScore.setGravity(Gravity.CENTER_HORIZONTAL);
+		playerData.addView(playerScore);
+		
 		score = new EditText(context);
 		score.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		score.setWidth(100);
@@ -96,10 +116,14 @@ public class GameView {
 		mainView.addView(scoreBoardTable);
 	}
 
-	public void setCurrentPlayer(Player player, int score) {
-		playerName.setText(player.getName() + " : " + score);
+	public void setCurrentPlayer(Player player) {
+		playerName.setText(player.getName());
 	}
 
+	public void setCurrentPlayersScore(int score) {
+		playerScore.setText("" + score);
+	}
+	
 	public View getView() {
 		return mainView;
 	}
@@ -175,7 +199,7 @@ public class GameView {
 	public void addCancelGameListener(Listener listener) {
 		this.cancelGameListener = listener;
 	}
-	
+
 	public void popupNoBackButtonDialog() {
 		new AlertDialog.Builder(context)
 				.setMessage("If you leave this page you will lose any game data.  Is that ok?")
