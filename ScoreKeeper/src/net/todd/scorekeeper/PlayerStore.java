@@ -31,7 +31,8 @@ public class PlayerStore {
 	
 	public void removePlayer(int playerId) {
 		load();
-		players.remove(getPlayerById(playerId));
+		Player playerToRemove = getPlayerById(playerId);
+		players.remove(playerToRemove);
 		persist();
 	}
 
@@ -48,8 +49,9 @@ public class PlayerStore {
 	}
 
 	public Player getPlayerById(int playerId) {
+		List<Player> allPlayers = getAllPlayers();
 		Player targetPlayer = null;
-		for (Player player : getAllPlayers()) {
+		for (Player player : allPlayers) {
 			if (playerId == player.getId()) {
 				targetPlayer = player;
 				break;

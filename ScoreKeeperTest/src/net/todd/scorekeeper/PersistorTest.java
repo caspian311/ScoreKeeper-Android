@@ -19,13 +19,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import android.content.Context;
 
 public class PersistorTest {
 	private Context context;
-	private FileInputStream fileInputStream;
-	private FileOutputStream fileOutputStream;
 	private File tempFile;
 	private String inputFilename;
 	private int outputFileMode;
@@ -46,11 +46,20 @@ public class PersistorTest {
 		tempFile = File.createTempFile(getClass().getName(), ".data");
 		
 		context = mock(Context.class);
-		
-		fileInputStream = new FileInputStream(tempFile);
-		doReturn(fileInputStream).when(context).openFileInput(anyString());
-		fileOutputStream = new FileOutputStream(tempFile);
-		doReturn(fileOutputStream).when(context).openFileOutput(anyString(), anyInt());
+
+		when(context.openFileInput(anyString())).thenAnswer(new Answer<FileInputStream>() {
+			@Override
+			public FileInputStream answer(InvocationOnMock invocation) throws Throwable {
+				return new FileInputStream(tempFile);
+			}
+		});
+
+		when(context.openFileOutput(anyString(), anyInt())).thenAnswer(new Answer<FileOutputStream>() {
+			@Override
+			public FileOutputStream answer(InvocationOnMock invocation) throws Throwable {
+				return new FileOutputStream(tempFile);
+			}
+		});
 	}
 	
 	@After

@@ -37,12 +37,18 @@ public class Persistor<T> {
 	}
 
 	private void save(String filename, Object object) {
+		ObjectOutputStream oos = null;
 		try {
-			ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(filename,
+			oos = new ObjectOutputStream(context.openFileOutput(filename,
 					Context.MODE_PRIVATE));
 			oos.writeObject(object);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		} finally {
+			try {
+				oos.close();
+			} catch (Exception e) {
+			}
 		}
 	}
 
@@ -74,8 +80,9 @@ public class Persistor<T> {
 	public List<T> load() {
 		List<T> items = new ArrayList<T>();
 		if (doesFileExist(getDataFilename())) {
+			ObjectInputStream ois = null;
 			try {
-				ObjectInputStream ois = new ObjectInputStream(
+				ois = new ObjectInputStream(
 						context.openFileInput(getDataFilename()));
 				List<?> itemsFromFile = (List<?>) ois.readObject();
 				for (Object object : itemsFromFile) {
@@ -84,6 +91,11 @@ public class Persistor<T> {
 			} catch (Exception e) {
 				Logger.error(getClass().getName(), "Could not restore data from file: "
 						+ getDataFilename(), e);
+			} finally {
+				try {
+					ois.close();
+				} catch (Exception e) {
+				}
 			}
 		}
 		return items;
