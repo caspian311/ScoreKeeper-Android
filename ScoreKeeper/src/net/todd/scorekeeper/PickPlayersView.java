@@ -23,7 +23,6 @@ public class PickPlayersView {
 	private final TableLayout allPlayersTable;
 	private final Context context;
 
-	private Listener selectedPlayersChangedListener;
 	private boolean isCurrentPlayerSelected;
 	private int currentPlayer;
 
@@ -110,7 +109,7 @@ public class PickPlayersView {
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					isCurrentPlayerSelected = isChecked;
 					currentPlayer = player.getId();
-					selectedPlayersChangedListener.handle();
+					selectedPlayersChangedListenerManager.notifyListeners();
 				}
 			});
 			playerRow.addView(playerSelection);
