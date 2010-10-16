@@ -19,7 +19,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class GameView {
-	private final LinearLayout mainView;
+	private final ScrollView mainScrollView;
 	private final TextView playerName;
 	private final Button nextPlayerButton;
 	private final EditText score;
@@ -32,16 +32,21 @@ public class GameView {
 
 	private final ListenerManager gameOverButtonListenerManager = new ListenerManager();
 	private final ListenerManager gameOverConfirmationListenerManager = new ListenerManager();
-	
+
 	public GameView(Activity context) {
 		this.context = context;
 
-		mainView = new LinearLayout(context);
+		mainScrollView = new ScrollView(context);
+		mainScrollView.setFillViewport(true);
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		
+		LinearLayout mainView = new LinearLayout(context);
 		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 		mainView.setBackgroundColor(0xFF3399CC);
 		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.setOrientation(LinearLayout.VERTICAL);
+		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -53,10 +58,11 @@ public class GameView {
 
 		LinearLayout playerData = new LinearLayout(context);
 		playerData.setOrientation(LinearLayout.HORIZONTAL);
-		playerData.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		playerData.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		playerData.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(playerData);
-		
+
 		playerName = new TextView(context);
 		playerName.setTextColor(0xFF000000);
 		playerName.setTextSize(45);
@@ -69,13 +75,13 @@ public class GameView {
 		colonText.setTextSize(45);
 		colonText.setText(" : ");
 		playerData.addView(colonText);
-		
+
 		playerScore = new TextView(context);
 		playerScore.setTextColor(0xFF000000);
 		playerScore.setTextSize(45);
 		playerScore.setGravity(Gravity.CENTER_HORIZONTAL);
 		playerData.addView(playerScore);
-		
+
 		score = new EditText(context);
 		score.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		score.setWidth(100);
@@ -111,19 +117,15 @@ public class GameView {
 		scoreBoardTitle.setTextColor(0xFF000000);
 		mainView.addView(scoreBoardTitle);
 
-		ScrollView scrollableView = new ScrollView(context);
-		scrollableView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		mainView.addView(scrollableView);
-		
 		scoreBoardTable = new TableLayout(context);
-		scoreBoardTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
 		scoreBoardTable.setColumnStretchable(0, true);
-		scrollableView.addView(scoreBoardTable);
-		
-		
+		TableLayout.LayoutParams scoreBoardLayoutParams = new TableLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		mainView.addView(scoreBoardTable, scoreBoardLayoutParams);
+
 		Button gameOverButton = new Button(context);
-		gameOverButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		gameOverButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		gameOverButton.setText("Game Over");
 		gameOverButton.setGravity(Gravity.CENTER_HORIZONTAL);
 		gameOverButton.setOnClickListener(new OnClickListener() {
@@ -142,9 +144,9 @@ public class GameView {
 	public void setCurrentPlayersScore(int score) {
 		playerScore.setText("" + score);
 	}
-	
+
 	public View getView() {
-		return mainView;
+		return mainScrollView;
 	}
 
 	public int getScore() {
@@ -203,7 +205,7 @@ public class GameView {
 	public void closeSoftKeyboard() {
 		InputMethodManager inputMethodManager = (InputMethodManager) context
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputMethodManager.hideSoftInputFromWindow(mainView.getWindowToken(), 0);
+		inputMethodManager.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 	}
 
 	public void onBackPressed() {
@@ -217,7 +219,7 @@ public class GameView {
 	public void addCancelGameListener(Listener listener) {
 		this.cancelGameListener = listener;
 	}
-	
+
 	public void addGameOverButtonListener(Listener listener) {
 		gameOverButtonListenerManager.addListener(listener);
 	}
@@ -239,21 +241,20 @@ public class GameView {
 	}
 
 	public void popupGameOverConfirmation() {
-		new AlertDialog.Builder(context)
-		.setMessage("Are you sure the game is over?")
-		.setPositiveButton("Game Over", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				gameOverConfirmationListenerManager.notifyListeners();
-			}
-		}).setNegativeButton("Stll Playing", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		}).show();
+		new AlertDialog.Builder(context).setMessage("Are you sure the game is over?")
+				.setPositiveButton("Game Over", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						gameOverConfirmationListenerManager.notifyListeners();
+					}
+				}).setNegativeButton("Stll Playing", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				}).show();
 	}
-	
+
 	public void addGameOverConfirmationListener(Listener listener) {
 		gameOverConfirmationListenerManager.addListener(listener);
 	}

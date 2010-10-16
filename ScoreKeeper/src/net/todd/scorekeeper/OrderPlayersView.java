@@ -29,6 +29,7 @@ public class OrderPlayersView {
 		this.context = context;
 		
 		mainScrollView = new ScrollView(context);
+		mainScrollView.setFillViewport(true);
 		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
 		LinearLayout mainView = new LinearLayout(context);
