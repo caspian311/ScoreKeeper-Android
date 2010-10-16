@@ -10,13 +10,14 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 public class ManagePlayersView {
 	private final Context context;
-	private final LinearLayout mainView;
+	private final ScrollView mainScrollView;
 	private final TableLayout tableView;
 	private final EditText playerNameText;
 
@@ -29,11 +30,15 @@ public class ManagePlayersView {
 	public ManagePlayersView(Context context) {
 		this.context = context;
 
-		mainView = new LinearLayout(context);
+		mainScrollView = new ScrollView(context);
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		
+		LinearLayout mainView = new LinearLayout(context);
 		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainView.setBackgroundColor(0xFF3399CC);
+		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
 		title.setText("Manager Players");
@@ -82,7 +87,7 @@ public class ManagePlayersView {
 	}
 
 	public View getView() {
-		return mainView;
+		return mainScrollView;
 	}
 
 	public String getPlayerNameText() {

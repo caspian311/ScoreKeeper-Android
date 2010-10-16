@@ -9,12 +9,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 public class OrderPlayersView {
-	private final LinearLayout mainView;
+	private final ScrollView mainScrollView;
 	private final TableLayout playerTable;
 	private final Context context;
 	private final Button startGameButton;
@@ -27,10 +28,14 @@ public class OrderPlayersView {
 	public OrderPlayersView(Context context) {
 		this.context = context;
 		
-		mainView = new LinearLayout(context);
+		mainScrollView = new ScrollView(context);
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		
+		LinearLayout mainView = new LinearLayout(context);
 		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainView.setBackgroundColor(0xFF3399CC);
+		mainScrollView.addView(mainView);
 		
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -61,7 +66,7 @@ public class OrderPlayersView {
 	}
 
 	public View getView() {
-		return mainView;
+		return mainScrollView;
 	}
 	
 	public void setPlayers(List<Player> players) {

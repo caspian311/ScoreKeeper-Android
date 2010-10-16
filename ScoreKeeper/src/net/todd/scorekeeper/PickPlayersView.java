@@ -14,12 +14,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 public class PickPlayersView {
-	private final LinearLayout mainView;
+	private final ScrollView mainScrollView;
 	private final TableLayout allPlayersTable;
 	private final Context context;
 
@@ -33,11 +34,15 @@ public class PickPlayersView {
 	public PickPlayersView(Context context) {
 		this.context = context;
 
-		mainView = new LinearLayout(context);
+		mainScrollView = new ScrollView(context);
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		
+		LinearLayout mainView = new LinearLayout(context);
 		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
 		mainView.setBackgroundColor(0xFF3399CC);
 		mainView.setOrientation(LinearLayout.VERTICAL);
+		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -86,7 +91,7 @@ public class PickPlayersView {
 	}
 
 	public View getView() {
-		return mainView;
+		return mainScrollView;
 	}
 
 	public void setAllPlayers(List<Player> allPlayers) {

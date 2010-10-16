@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -110,11 +111,16 @@ public class GameView {
 		scoreBoardTitle.setTextColor(0xFF000000);
 		mainView.addView(scoreBoardTitle);
 
+		ScrollView scrollableView = new ScrollView(context);
+		scrollableView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		mainView.addView(scrollableView);
+		
 		scoreBoardTable = new TableLayout(context);
 		scoreBoardTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT));
 		scoreBoardTable.setColumnStretchable(0, true);
-		mainView.addView(scoreBoardTable);
+		scrollableView.addView(scoreBoardTable);
+		
 		
 		Button gameOverButton = new Button(context);
 		gameOverButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
