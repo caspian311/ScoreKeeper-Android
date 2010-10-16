@@ -154,4 +154,11 @@ public class GameModelTest {
 
 		verify(listener).handle();
 	}
+	
+	@Test
+	public void whenGameIsOverThenActivityIsFinished() {
+		testObject.gameOver();
+
+		verify(activity).finish();
+	}
 }

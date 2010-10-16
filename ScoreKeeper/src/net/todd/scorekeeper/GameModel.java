@@ -1,18 +1,16 @@
 package net.todd.scorekeeper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.app.Activity;
 
 public class GameModel {
-	private final Map<Player, Integer> scoreBoard = new HashMap<Player, Integer>();
 	private final ListenerManager scoreChangedListenerManager = new ListenerManager();
 	private final ListenerManager playerChangeListenerManager = new ListenerManager();
 
 	private final Activity activity;
 	private final ArrayList<Player> selectedPlayers;
+	private final ScoreBoard scoreBoard;
 
 	private int currentPlayersTurn;
 
@@ -22,9 +20,7 @@ public class GameModel {
 
 		selectedPlayers = (ArrayList<Player>) activity.getIntent().getSerializableExtra(
 				"selectedPlayers");
-		for (Player player : selectedPlayers) {
-			scoreBoard.put(player, 0);
-		}
+		scoreBoard = new ScoreBoard(selectedPlayers);
 	}
 
 	public void nextPlayer() {
@@ -47,9 +43,9 @@ public class GameModel {
 	}
 
 	public void setScoreForCurrentPlayer(int score) {
-		Integer currentScore = scoreBoard.get(getCurrentPlayer());
+		Integer currentScore = scoreBoard.getScore(getCurrentPlayer());
 		currentScore += score;
-		 scoreBoard.put(getCurrentPlayer(), currentScore);
+		 scoreBoard.setScore(getCurrentPlayer(), currentScore);
 		scoreChangedListenerManager.notifyListeners();
 	}
 
@@ -58,7 +54,7 @@ public class GameModel {
 	}
 
 	public int getCurrentPlayersScore() {
-		return scoreBoard.get(getCurrentPlayer());
+		return scoreBoard.getScore(getCurrentPlayer());
 	}
 
 	public void previousPlayer() {
@@ -66,7 +62,7 @@ public class GameModel {
 		playerChangeListenerManager.notifyListeners();
 	}
 
-	public Map<Player, Integer> getScoreBoard() {
+	public ScoreBoard getScoreBoard() {
 		return scoreBoard;
 	}
 
@@ -80,5 +76,9 @@ public class GameModel {
 
 	public void addPlayerChangedListener(Listener listener) {
 		playerChangeListenerManager.addListener(listener);
+	}
+
+	public void gameOver() {
+		activity.finish();
 	}
 }

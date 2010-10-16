@@ -43,12 +43,26 @@ public class GamePresenter {
 				view.setScoreBoard(model.getScoreBoard());
 			}
 		});
-		
+
 		model.addPlayerChangedListener(new Listener() {
 			@Override
 			public void handle() {
 				view.setCurrentPlayer(model.getCurrentPlayer());
 				view.setCurrentPlayersScore(model.getCurrentPlayersScore());
+			}
+		});
+
+		view.addGameOverButtonListener(new Listener() {
+			@Override
+			public void handle() {
+				view.popupGameOverConfirmation();
+			}
+		});
+
+		view.addGameOverConfirmationListener(new Listener() {
+			@Override
+			public void handle() {
+				model.gameOver();
 			}
 		});
 	}

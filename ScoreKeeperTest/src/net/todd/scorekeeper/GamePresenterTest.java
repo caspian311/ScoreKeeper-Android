@@ -3,8 +3,6 @@ package net.todd.scorekeeper;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import org.junit.Before;
@@ -25,6 +23,8 @@ public class GamePresenterTest {
 	private Listener cancelGameListener;
 	private Listener scoreChangedListener;
 	private Listener playerChangedListener;
+	private Listener gameOverButtonListener;
+	private Listener gameOverConfirmationListener;
 
 	@Before
 	public void setUp() {
@@ -60,6 +60,16 @@ public class GamePresenterTest {
 		verify(model).addPlayerChangedListener(playerChangedListenerCaptor.capture());
 		playerChangedListener = playerChangedListenerCaptor.getValue();
 
+		ArgumentCaptor<Listener> gameOverButtonListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addGameOverButtonListener(gameOverButtonListenerCaptor.capture());
+		gameOverButtonListener = gameOverButtonListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> gameOverConfirmationListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addGameOverConfirmationListener(gameOverConfirmationListenerCaptor.capture());
+		gameOverConfirmationListener = gameOverConfirmationListenerCaptor.getValue();
+
 		reset(view, model);
 	}
 
@@ -72,7 +82,7 @@ public class GamePresenterTest {
 
 		verify(view).setCurrentPlayer(player);
 	}
-	
+
 	@Test
 	public void currentPlayersScoreIsSetInitially() {
 		int score = new Random().nextInt();
@@ -85,8 +95,7 @@ public class GamePresenterTest {
 
 	@Test
 	public void scoreBoardIsSetInitiallyFromModel() {
-		@SuppressWarnings("unchecked")
-		Map<Player, Integer> scoreBoard = mock(HashMap.class);
+		ScoreBoard scoreBoard = mock(ScoreBoard.class);
 		doReturn(scoreBoard).when(model).getScoreBoard();
 
 		GamePresenter.create(view, model);
@@ -150,7 +159,7 @@ public class GamePresenterTest {
 
 	@Test
 	public void whenTheScoreChangesOnTheModelThenSetTheScoreBoard() {
-		Map<Player, Integer> scoreBoard = new HashMap<Player, Integer>();
+		ScoreBoard scoreBoard = mock(ScoreBoard.class);
 		doReturn(scoreBoard).when(model).getScoreBoard();
 
 		scoreChangedListener.handle();
@@ -176,5 +185,19 @@ public class GamePresenterTest {
 		playerChangedListener.handle();
 
 		verify(view).setCurrentPlayersScore(score);
+	}
+
+	@Test
+	public void whenGameOverButtonIsPressedThenPopupGameOverConfirmation() {
+		gameOverButtonListener.handle();
+
+		verify(view).popupGameOverConfirmation();
+	}
+
+	@Test
+	public void whenGameOverIsConfirmedTheGameIsOver() {
+		gameOverConfirmationListener.handle();
+
+		verify(model).gameOver();
 	}
 }

@@ -1,7 +1,5 @@
 package net.todd.scorekeeper;
 
-import java.util.Map;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -31,6 +29,9 @@ public class GameView {
 	private Listener cancelGameListener;
 	private final TextView playerScore;
 
+	private final ListenerManager gameOverButtonListenerManager = new ListenerManager();
+	private final ListenerManager gameOverConfirmationListenerManager = new ListenerManager();
+	
 	public GameView(Activity context) {
 		this.context = context;
 
@@ -111,9 +112,21 @@ public class GameView {
 
 		scoreBoardTable = new TableLayout(context);
 		scoreBoardTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+				LayoutParams.WRAP_CONTENT));
 		scoreBoardTable.setColumnStretchable(0, true);
 		mainView.addView(scoreBoardTable);
+		
+		Button gameOverButton = new Button(context);
+		gameOverButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		gameOverButton.setText("Game Over");
+		gameOverButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		gameOverButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				gameOverButtonListenerManager.notifyListeners();
+			}
+		});
+		mainView.addView(gameOverButton);
 	}
 
 	public void setCurrentPlayer(Player player) {
@@ -160,22 +173,21 @@ public class GameView {
 		score.setText("");
 	}
 
-	public void setScoreBoard(Map<Player, Integer> scoreBoard) {
+	public void setScoreBoard(ScoreBoard scoreBoard) {
 		scoreBoardTable.removeAllViews();
 
-		for (Player player : scoreBoard.keySet()) {
+		for (ScoreBoardEntry scoreBoardEntry : scoreBoard.getEntries()) {
 			TableRow playerRow = new TableRow(context);
 			scoreBoardTable.addView(playerRow);
 
 			TextView playerView = new TextView(context);
-			playerView.setText(player.getName());
+			playerView.setText(scoreBoardEntry.getPlayer().getName());
 			playerView.setTextSize(24);
 			playerView.setTextColor(0xFF000000);
 			playerRow.addView(playerView);
 
 			TextView playerScoreView = new TextView(context);
-			Integer score = scoreBoard.get(player);
-			playerScoreView.setText("" + score);
+			playerScoreView.setText("" + scoreBoardEntry.getScore());
 			playerScoreView.setTextSize(24);
 			playerScoreView.setTextColor(0xFF000000);
 			playerRow.addView(playerScoreView);
@@ -199,6 +211,10 @@ public class GameView {
 	public void addCancelGameListener(Listener listener) {
 		this.cancelGameListener = listener;
 	}
+	
+	public void addGameOverButtonListener(Listener listener) {
+		gameOverButtonListenerManager.addListener(listener);
+	}
 
 	public void popupNoBackButtonDialog() {
 		new AlertDialog.Builder(context)
@@ -214,5 +230,25 @@ public class GameView {
 						dialog.cancel();
 					}
 				}).show();
+	}
+
+	public void popupGameOverConfirmation() {
+		new AlertDialog.Builder(context)
+		.setMessage("Are you sure the game is over?")
+		.setPositiveButton("Game Over", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				gameOverConfirmationListenerManager.notifyListeners();
+			}
+		}).setNegativeButton("Stll Playing", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		}).show();
+	}
+	
+	public void addGameOverConfirmationListener(Listener listener) {
+		gameOverConfirmationListenerManager.addListener(listener);
 	}
 }
