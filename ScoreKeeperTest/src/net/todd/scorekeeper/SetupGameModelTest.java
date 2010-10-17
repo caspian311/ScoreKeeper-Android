@@ -18,44 +18,43 @@ import org.mockito.MockitoAnnotations;
 
 import android.content.Intent;
 
-public class PickPlayersModelTest {
+public class SetupGameModelTest {
 	@Mock
-	private PickPlayersActivity activity;
+	private SetupGameActivity activity;
 	@Mock
 	private PlayerStore playerStore;
-
-	private PickPlayersModel testObject;
+	@Mock
+	private IntentFactory intentFactory;
+	
+	private List<Player> allPlayers;
 	private int playerOneId;
 	private int playerTwoId;
 	private int playerThreeId;
-	@Mock
 	private Player player1;
-	@Mock
 	private Player player2;
-	@Mock
 	private Player player3;
-	@Mock
-	private IntentFactory intentFactory;
 
+	private SetupGameModel testObject;
+	
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
 		playerOneId = new Random().nextInt();
-		doReturn(player1).when(playerStore).getPlayerById(playerOneId);
+		player1 = new Player(playerOneId, "Peter");
 		playerTwoId = new Random().nextInt();
-		doReturn(player2).when(playerStore).getPlayerById(playerTwoId);
+		player2 = new Player(playerTwoId, "James");
 		playerThreeId = new Random().nextInt();
-		doReturn(player3).when(playerStore).getPlayerById(playerThreeId);
+		player3 = new Player(playerThreeId, "John");
+		
+		allPlayers = Arrays.asList(player1, player2, player3);
+		doReturn(allPlayers).when(playerStore).getAllPlayers();
 
-		testObject = new PickPlayersModel(activity, playerStore, intentFactory);
+		testObject = new SetupGameModel(activity, playerStore, intentFactory);
 	}
 
 	@Test
 	public void getAllPlayersReturnsAllPlayersFromPlayerStore() {
-		List<Player> allPlayers = Arrays.asList(player1, player2);
-		doReturn(allPlayers).when(playerStore).getAllPlayers();
-
 		assertEquals(allPlayers, testObject.getAllPlayers());
 	}
 
@@ -101,9 +100,9 @@ public class PickPlayersModelTest {
 	public void whenGoingToOrderPlayerPageThenCreatIntentFromFactory() {
 		Intent expectedIntent = mock(Intent.class);
 		doReturn(expectedIntent).when(intentFactory).createIntent(activity,
-				OrderPlayersActivity.class);
+				GameActivity.class);
 
-		testObject.goToOrderPlayerPage();
+		testObject.startGame();
 
 		ArgumentCaptor<Intent> intentCaptor = ArgumentCaptor.forClass(Intent.class);
 		verify(activity).startActivity(intentCaptor.capture());
@@ -118,9 +117,9 @@ public class PickPlayersModelTest {
 		testObject.selectionChanged(playerTwoId, true);
 
 		Intent intent = mock(Intent.class);
-		doReturn(intent).when(intentFactory).createIntent(activity, OrderPlayersActivity.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, GameActivity.class);
 
-		testObject.goToOrderPlayerPage();
+		testObject.startGame();
 
 		ArgumentCaptor<Serializable> serializableCaptor = ArgumentCaptor
 				.forClass(Serializable.class);
@@ -137,9 +136,9 @@ public class PickPlayersModelTest {
 		testObject.selectionChanged(playerOneId, false);
 
 		Intent intent = mock(Intent.class);
-		doReturn(intent).when(intentFactory).createIntent(activity, OrderPlayersActivity.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, GameActivity.class);
 
-		testObject.goToOrderPlayerPage();
+		testObject.startGame();
 
 		ArgumentCaptor<Serializable> serializableCaptor = ArgumentCaptor
 				.forClass(Serializable.class);
@@ -154,5 +153,77 @@ public class PickPlayersModelTest {
 		testObject.cancel();
 		
 		verify(activity).finish();
+	}
+	
+	@Test
+	public void movingAPlayerDown() {
+		testObject.movePlayerDown(playerOneId);
+		List<Player> players = testObject.getAllPlayers();
+
+		assertEquals(Arrays.asList(player2, player1, player3), players);
+	}
+	
+	@Test
+	public void movingAPlayerUp() {
+		testObject.movePlayerUp(playerThreeId);
+		List<Player> players = testObject.getAllPlayers();
+		
+		assertEquals(Arrays.asList(player1, player3, player2), players);
+	}
+	
+	@Test
+	public void movingTheLowestPlayerDownDoesNothing() {
+		Intent intent = mock(Intent.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, GameActivity.class);
+
+		testObject.movePlayerDown(playerThreeId);
+		List<Player> players = testObject.getAllPlayers();
+
+		assertEquals(Arrays.asList(player1, player2, player3), players);
+	}
+	
+	@Test
+	public void movingTheHighestPlayerUpDoesNothing() {
+		Intent intent = mock(Intent.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, GameActivity.class);
+
+		testObject.movePlayerUp(playerOneId);
+		List<Player> players = testObject.getAllPlayers();
+
+		assertEquals(Arrays.asList(player1, player2, player3), players);
+	}
+	
+	@Test
+	public void movingAPlayerDownNotifiesThatThePlayersOrderChanged() {
+		Listener listener = mock(Listener.class);
+		testObject.addPlayersOrderChangedListener(listener);
+
+		testObject.movePlayerDown(playerOneId);
+
+		verify(listener).handle();
+	}
+
+	@Test
+	public void movingAPlayerUpNotifiesThatThePlayersOrderChanged() {
+		Listener listener = mock(Listener.class);
+		testObject.addPlayersOrderChangedListener(listener);
+
+		testObject.movePlayerUp(playerThreeId);
+
+		verify(listener).handle();
+	}
+	
+	@Test
+	public void startingTheGame() {
+		Intent expectedIntent = mock(Intent.class);
+		doReturn(expectedIntent).when(intentFactory).createIntent(activity, GameActivity.class);
+
+		testObject.startGame();
+
+		ArgumentCaptor<Intent> intentCaptor = ArgumentCaptor.forClass(Intent.class);
+		verify(activity).startActivity(intentCaptor.capture());
+		Intent actualIntent = intentCaptor.getValue();
+
+		assertSame(expectedIntent, actualIntent);
 	}
 }

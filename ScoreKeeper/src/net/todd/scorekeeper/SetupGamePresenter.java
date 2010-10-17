@@ -1,10 +1,17 @@
 package net.todd.scorekeeper;
 
-public class OrderPlayersPresenter {
-	public static void create(final OrderPlayersView view, final OrderPlayersModel model) {
-		view.setPlayers(model.getSelectedPlayers());
+public class SetupGamePresenter {
+	public static void create(final SetupGameView view, final SetupGameModel model) {
+		view.setAllPlayers(model.getAllPlayers());
 
-		view.addBackButtonListener(new Listener() {
+		view.addSelectedPlayersChangedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.selectionChanged(view.getCurrentPlayerId(), view.isCurrentPlayerSelected());
+			}
+		});
+
+		view.addCancelButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.cancel();
@@ -14,10 +21,14 @@ public class OrderPlayersPresenter {
 		view.addStartGameButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				model.startGame();
+				if (model.atLeastTwoPlayersSelected()) {
+					model.startGame();
+				} else {
+					view.popupErrorMessage();
+				}
 			}
 		});
-
+		
 		view.addUpButtonListener(new Listener() {
 			@Override
 			public void handle() {
@@ -35,7 +46,7 @@ public class OrderPlayersPresenter {
 		model.addPlayersOrderChangedListener(new Listener() {
 			@Override
 			public void handle() {
-				view.setPlayers(model.getSelectedPlayers());
+				view.setAllPlayers(model.getAllPlayers());
 			}
 		});
 	}

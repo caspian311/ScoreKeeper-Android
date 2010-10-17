@@ -3,14 +3,14 @@ package net.todd.scorekeeper;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class OrderPlayersActivity extends Activity {
+public class SetupGameActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		OrderPlayersView view = new OrderPlayersView(this);
-		OrderPlayersModel model = new OrderPlayersModel(this, new IntentFactory());
-		OrderPlayersPresenter.create(view, model);
+		SetupGameView view = new SetupGameView(this);
+		SetupGameModel model = new SetupGameModel(this, new PlayerStore(this), new IntentFactory());
+		SetupGamePresenter.create(view, model);
 		
 		setContentView(view.getView());
 	}

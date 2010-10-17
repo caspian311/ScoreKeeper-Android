@@ -19,19 +19,21 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class PickPlayersView {
+public class SetupGameView {
 	private final ScrollView mainScrollView;
 	private final TableLayout allPlayersTable;
 	private final Context context;
 
 	private boolean isCurrentPlayerSelected;
-	private int currentPlayer;
-
+	private int currentPlayerId;
+	
 	private final ListenerManager cancelButtonListenerManager = new ListenerManager();
-	private final ListenerManager nextButtonListenerManager = new ListenerManager();
+	private final ListenerManager startGameButtonListenerManager = new ListenerManager();
 	private final ListenerManager selectedPlayersChangedListenerManager = new ListenerManager();
+	private final ListenerManager upButtonListenerManager = new ListenerManager();
+	private final ListenerManager downButtonListenerManager = new ListenerManager();
 
-	public PickPlayersView(Context context) {
+	public SetupGameView(Context context) {
 		this.context = context;
 
 		mainScrollView = new ScrollView(context);
@@ -47,7 +49,7 @@ public class PickPlayersView {
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		title.setText("Pick the players");
+		title.setText("Setup the Game");
 		title.setTextSize(30);
 		title.setTextColor(0xFF000000);
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -72,17 +74,17 @@ public class PickPlayersView {
 		});
 		controlView.addView(cancelButton);
 
-		Button nextButton = new Button(context);
-		nextButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+		Button startGameButton = new Button(context);
+		startGameButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
-		nextButton.setText("Next");
-		nextButton.setOnClickListener(new OnClickListener() {
+		startGameButton.setText("Start Game");
+		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				nextButtonListenerManager.notifyListeners();
+				startGameButtonListenerManager.notifyListeners();
 			}
 		});
-		controlView.addView(nextButton);
+		controlView.addView(startGameButton);
 
 		allPlayersTable = new TableLayout(context);
 		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
@@ -103,22 +105,45 @@ public class PickPlayersView {
 					TableRow.LayoutParams.WRAP_CONTENT));
 			allPlayersTable.addView(playerRow);
 
+			CheckBox playerSelection = new CheckBox(context);
+			playerSelection.setChecked(player.istSelected());
+			playerSelection.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+					isCurrentPlayerSelected = isChecked;
+					currentPlayerId = player.getId();
+					selectedPlayersChangedListenerManager.notifyListeners();
+				}
+			});
+			playerRow.addView(playerSelection);
+			
 			TextView playerName = new TextView(context);
 			playerName.setText(player.getName());
 			playerName.setTextSize(30);
 			playerName.setTextColor(0xFF000000);
 			playerRow.addView(playerName);
-
-			CheckBox playerSelection = new CheckBox(context);
-			playerSelection.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			Button upButton = new Button(context);
+			upButton.setText("Up");
+			upButton.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					isCurrentPlayerSelected = isChecked;
-					currentPlayer = player.getId();
-					selectedPlayersChangedListenerManager.notifyListeners();
+				public void onClick(View v) {
+					currentPlayerId = player.getId();
+					upButtonListenerManager.notifyListeners();
 				}
 			});
-			playerRow.addView(playerSelection);
+			playerRow.addView(upButton);
+			
+			Button downButton = new Button(context);
+			downButton.setText("Down");
+			downButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					currentPlayerId = player.getId();
+					downButtonListenerManager.notifyListeners();
+				}
+			});
+			playerRow.addView(downButton);
 		}
 	}
 
@@ -130,16 +155,24 @@ public class PickPlayersView {
 		return isCurrentPlayerSelected;
 	}
 
-	public int getCurrentPlayer() {
-		return currentPlayer;
-	}
-
-	public void addNextButtonListener(final Listener listener) {
-		nextButtonListenerManager.addListener(listener);
+	public void addStartGameButtonListener(final Listener listener) {
+		startGameButtonListenerManager.addListener(listener);
 	}
 
 	public void addCancelButtonListener(final Listener listener) {
 		cancelButtonListenerManager.addListener(listener);
+	}
+	
+	public int getCurrentPlayerId() {
+		return currentPlayerId;
+	}
+
+	public void addUpButtonListener(Listener listener) {
+		upButtonListenerManager.addListener(listener);
+	}
+	
+	public void addDownButtonListener(Listener listener) {
+		downButtonListenerManager.addListener(listener);
 	}
 
 	public void popupErrorMessage() {

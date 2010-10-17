@@ -38,7 +38,7 @@ public class MainPageModelTest {
 	@Test
 	public void goingToStartGamePageStartsAnActivityBasedOnThePickPlayersActivity() {
 		Intent intent = mock(Intent.class);
-		doReturn(intent).when(intentFactory).createIntent(activity, PickPlayersActivity.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, SetupGameActivity.class);
 		
 		testObject.goToStartGamePage();
 		

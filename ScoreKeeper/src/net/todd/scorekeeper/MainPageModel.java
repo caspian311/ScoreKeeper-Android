@@ -22,7 +22,7 @@ public class MainPageModel {
 	}
 	
 	public void goToStartGamePage() {
-		Intent intent = intentFactory.createIntent(mainPageActivity, PickPlayersActivity.class);
+		Intent intent = intentFactory.createIntent(mainPageActivity, SetupGameActivity.class);
 		mainPageActivity.startActivity(intent);
 	}
 }
