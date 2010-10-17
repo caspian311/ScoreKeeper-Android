@@ -26,7 +26,7 @@ public class SetupGameView {
 
 	private boolean isCurrentPlayerSelected;
 	private int currentPlayerId;
-	
+
 	private final ListenerManager cancelButtonListenerManager = new ListenerManager();
 	private final ListenerManager startGameButtonListenerManager = new ListenerManager();
 	private final ListenerManager selectedPlayersChangedListenerManager = new ListenerManager();
@@ -38,8 +38,9 @@ public class SetupGameView {
 
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT));
+
 		LinearLayout mainView = new LinearLayout(context);
 		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
@@ -63,8 +64,8 @@ public class SetupGameView {
 		mainView.addView(controlView);
 
 		Button cancelButton = new Button(context);
-		cancelButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
+		LayoutParams cancelButtonLayout = new LayoutParams(150, 50);
+		cancelButton.setLayoutParams(cancelButtonLayout);
 		cancelButton.setText("Cancel");
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -75,8 +76,8 @@ public class SetupGameView {
 		controlView.addView(cancelButton);
 
 		Button startGameButton = new Button(context);
-		startGameButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
+		LayoutParams startGameButtonLayout = new LayoutParams(150, 50);
+		startGameButton.setLayoutParams(startGameButtonLayout);
 		startGameButton.setText("Start Game");
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -89,7 +90,7 @@ public class SetupGameView {
 		allPlayersTable = new TableLayout(context);
 		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
-		allPlayersTable.setColumnStretchable(0, true);
+		allPlayersTable.setColumnStretchable(1, true);
 		mainView.addView(allPlayersTable);
 	}
 
@@ -116,15 +117,16 @@ public class SetupGameView {
 				}
 			});
 			playerRow.addView(playerSelection);
-			
+
 			TextView playerName = new TextView(context);
 			playerName.setText(player.getName());
 			playerName.setTextSize(30);
 			playerName.setTextColor(0xFF000000);
 			playerRow.addView(playerName);
-			
+
 			Button upButton = new Button(context);
-			upButton.setText("Up");
+//			upButton.setLayoutParams(new LayoutParams(50, 50));
+			upButton.setText("+");
 			upButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -133,9 +135,10 @@ public class SetupGameView {
 				}
 			});
 			playerRow.addView(upButton);
-			
+
 			Button downButton = new Button(context);
-			downButton.setText("Down");
+//			downButton.setLayoutParams(new LayoutParams(50, 50));
+			downButton.setText("-");
 			downButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -162,7 +165,7 @@ public class SetupGameView {
 	public void addCancelButtonListener(final Listener listener) {
 		cancelButtonListenerManager.addListener(listener);
 	}
-	
+
 	public int getCurrentPlayerId() {
 		return currentPlayerId;
 	}
@@ -170,7 +173,7 @@ public class SetupGameView {
 	public void addUpButtonListener(Listener listener) {
 		upButtonListenerManager.addListener(listener);
 	}
-	
+
 	public void addDownButtonListener(Listener listener) {
 		downButtonListenerManager.addListener(listener);
 	}

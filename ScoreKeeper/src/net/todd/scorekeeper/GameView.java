@@ -38,8 +38,9 @@ public class GameView {
 
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-		
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
+
 		LinearLayout mainView = new LinearLayout(context);
 		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
@@ -96,15 +97,13 @@ public class GameView {
 		mainView.addView(buttonLayout);
 
 		previousPlayerButton = new Button(context);
-		previousPlayerButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
+		previousPlayerButton.setLayoutParams(new LayoutParams(150, 50));
 		previousPlayerButton.setText("Previous Player");
 		previousPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL);
 		buttonLayout.addView(previousPlayerButton);
 
 		nextPlayerButton = new Button(context);
-		nextPlayerButton.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
+		nextPlayerButton.setLayoutParams(new LayoutParams(150, 50));
 		nextPlayerButton.setText("Next Player");
 		nextPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL);
 		buttonLayout.addView(nextPlayerButton);
@@ -247,7 +246,7 @@ public class GameView {
 					public void onClick(DialogInterface dialog, int which) {
 						gameOverConfirmationListenerManager.notifyListeners();
 					}
-				}).setNegativeButton("Stll Playing", new DialogInterface.OnClickListener() {
+				}).setNegativeButton("Still Playing", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
