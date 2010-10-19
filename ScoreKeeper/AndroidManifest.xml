@@ -16,5 +16,7 @@
 			android:screenOrientation="portrait" />
 		<activity android:name="net.todd.scorekeeper.GameActivity"
 			android:screenOrientation="portrait" />
+		<activity android:name="net.todd.scorekeeper.HistoryActivity"
+			android:screenOrientation="portrait" />
 	</application>
 </manifest> 

@@ -17,6 +17,7 @@ public class MainPagePresenterTest {
 	private Listener quitButtonListener;
 	private Listener managePlayerButtonListener;
 	private Listener startButtonListener;
+	private Listener historyButtonListener;
 	
 	@Before
 	public void setUp() {
@@ -35,6 +36,10 @@ public class MainPagePresenterTest {
 		ArgumentCaptor<Listener> startButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addStartButtonListener(startButtonListenerCaptor.capture());
 		startButtonListener = startButtonListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> historyButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
+		verify(view).addHistoryButtonListener(historyButtonListenerCaptor.capture());
+		historyButtonListener = historyButtonListenerCaptor.getValue();
 		
 		reset(view, model);
 	}
@@ -58,5 +63,12 @@ public class MainPagePresenterTest {
 		startButtonListener.handle();
 		
 		verify(model).goToStartGamePage();
+	}
+	
+	@Test
+	public void goToHisotryPageWhenTheHisotryButtonIsPressed() {
+		historyButtonListener.handle();
+		
+		verify(model).goToHistoryPage();
 	}
 }

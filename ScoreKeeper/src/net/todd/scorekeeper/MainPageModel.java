@@ -25,4 +25,10 @@ public class MainPageModel {
 		Intent intent = intentFactory.createIntent(mainPageActivity, SetupGameActivity.class);
 		mainPageActivity.startActivity(intent);
 	}
+
+	public void goToHistoryPage() {
+		Intent intent = intentFactory.createIntent(mainPageActivity, HistoryActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		mainPageActivity.startActivity(intent);
+	}
 }

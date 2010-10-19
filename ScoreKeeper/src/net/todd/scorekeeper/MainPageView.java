@@ -13,10 +13,11 @@ import android.widget.TextView;
 
 public class MainPageView {
 	private final RelativeLayout mainLayout;
-	private final Button quitButton;
-	private final Button addPlayersButton;
-	private final Button historyButton;
-	private final Button startGameButton;
+
+	private final ListenerManager startGameButtonListenerManager = new ListenerManager();
+	private final ListenerManager addPlayersButtonListenerManager = new ListenerManager();
+	private final ListenerManager quitButtonListenerManager = new ListenerManager();
+	private final ListenerManager historyButtonListenerManager = new ListenerManager();
 
 	public MainPageView(Context context) {
 		mainLayout = new RelativeLayout(context);
@@ -42,25 +43,51 @@ public class MainPageView {
 		TableRow firstRow = new TableRow(context);
 		tableView.addView(firstRow);
 
-		addPlayersButton = new Button(context);
+		Button addPlayersButton = new Button(context);
 		addPlayersButton.setText("Manage Players");
 		addPlayersButton.setTextSize(20);
+		addPlayersButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				addPlayersButtonListenerManager.notifyListeners();
+			}
+		});
 		firstRow.addView(addPlayersButton);
-		historyButton = new Button(context);
+		
+		Button historyButton = new Button(context);
 		historyButton.setText("See History");
 		historyButton.setTextSize(20);
+		historyButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				historyButtonListenerManager.notifyListeners();
+			}
+		});
 		firstRow.addView(historyButton);
 
 		TableRow secondRow = new TableRow(context);
 		tableView.addView(secondRow);
 
-		startGameButton = new Button(context);
+		Button startGameButton = new Button(context);
 		startGameButton.setText("Start Game");
 		startGameButton.setTextSize(20);
+		startGameButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startGameButtonListenerManager.notifyListeners();
+			}
+		});
 		secondRow.addView(startGameButton);
-		quitButton = new Button(context);
+		
+		Button quitButton = new Button(context);
 		quitButton.setText("Quit");
 		quitButton.setTextSize(20);
+		quitButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				quitButtonListenerManager.notifyListeners();
+			}
+		});
 		secondRow.addView(quitButton);
 	}
 
@@ -68,30 +95,19 @@ public class MainPageView {
 		return mainLayout;
 	}
 
-	public void addQuitButtonListener(final Listener listener) {
-		quitButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				listener.handle();
-			}
-		});
+	public void addQuitButtonListener(Listener listener) {
+		quitButtonListenerManager.addListener(listener);
 	}
 
-	public void addManagePlayersButtonListener(final Listener listener) {
-		addPlayersButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				listener.handle();
-			}
-		});
+	public void addManagePlayersButtonListener(Listener listener) {
+		addPlayersButtonListenerManager.addListener(listener);
 	}
 
-	public void addStartButtonListener(final Listener listener) {
-		startGameButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				listener.handle();
-			}
-		});
+	public void addStartButtonListener(Listener listener) {
+		startGameButtonListenerManager.addListener(listener);
+	}
+	
+	public void addHistoryButtonListener(Listener listener) {
+		historyButtonListenerManager.addListener(listener);
 	}
 }

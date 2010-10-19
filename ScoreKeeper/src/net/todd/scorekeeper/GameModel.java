@@ -1,25 +1,34 @@
 package net.todd.scorekeeper;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.Activity;
+import android.content.Intent;
 
 public class GameModel {
 	private final ListenerManager scoreChangedListenerManager = new ListenerManager();
 	private final ListenerManager playerChangeListenerManager = new ListenerManager();
 
 	private final Activity activity;
+	private final GameStore gameStore;
+	private final IntentFactory intentFactory;
+
 	private final ArrayList<Player> selectedPlayers;
 	private final ScoreBoard scoreBoard;
+	private final String gameType;
 
 	private int currentPlayersTurn;
 
 	@SuppressWarnings("unchecked")
-	public GameModel(Activity activity) {
+	public GameModel(Activity activity, GameStore gameStore, IntentFactory intentFactory) {
 		this.activity = activity;
+		this.gameStore = gameStore;
+		this.intentFactory = intentFactory;
 
 		selectedPlayers = (ArrayList<Player>) activity.getIntent().getSerializableExtra(
 				"selectedPlayers");
+		gameType = activity.getIntent().getStringExtra("gameType");
 		scoreBoard = new ScoreBoard(selectedPlayers);
 	}
 
@@ -67,7 +76,8 @@ public class GameModel {
 	}
 
 	public void cancelGame() {
-		activity.finish();
+		Intent intent = intentFactory.createIntent(activity, MainPageActivity.class);
+		activity.startActivity(intent);
 	}
 
 	public void addScoreChangedListener(Listener listener) {
@@ -79,6 +89,13 @@ public class GameModel {
 	}
 
 	public void gameOver() {
-		activity.finish();
+		Game game = new Game();
+		game.setGameOverTimestamp(new Date());
+		game.setGameType(gameType);
+		game.setScoreBoard(scoreBoard);
+		gameStore.addGame(game);
+		
+		Intent intent = intentFactory.createIntent(activity, MainPageActivity.class);
+		activity.startActivity(intent);
 	}
 }

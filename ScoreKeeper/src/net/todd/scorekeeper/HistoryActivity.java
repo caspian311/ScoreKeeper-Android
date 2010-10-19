@@ -3,22 +3,22 @@ package net.todd.scorekeeper;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class GameActivity extends Activity {
-	private GameView view;
+public class HistoryActivity extends Activity {
+	private HistoryView view;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		view = new GameView(this);
-		GameModel model = new GameModel(this, new GameStore(this), new IntentFactory());
-		GamePresenter.create(view, model);
+		view = new HistoryView(this);
+		HistoryModel model = new HistoryModel(this, new GameStore(this), new IntentFactory());
+		HistoryPresenter.create(view, model);
 		
 		setContentView(view.getView());
 	}
-
+	
 	@Override
 	public void onBackPressed() {
-		view.onBackPressed();
+		view.backPressed();
 	}
 }

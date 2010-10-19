@@ -1,10 +1,13 @@
 package net.todd.scorekeeper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ScoreBoard {
+public class ScoreBoard implements Serializable {
+	private static final long serialVersionUID = -9216810547295023938L;
+	
 	private final List<ScoreBoardEntry> scoreBoardEntries;
 
 	public ScoreBoard(List<Player> players) {

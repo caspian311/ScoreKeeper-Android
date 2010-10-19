@@ -23,5 +23,12 @@ public class MainPagePresenter {
 				mainModel.goToStartGamePage();
 			}
 		});
+		
+		mainView.addHistoryButtonListener(new Listener() {
+			@Override
+			public void handle() {
+				mainModel.goToHistoryPage();
+			}
+		});
 	}
 }

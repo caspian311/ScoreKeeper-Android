@@ -36,12 +36,32 @@ public class MainPageModelTest {
 	}
 	
 	@Test
-	public void goingToStartGamePageStartsAnActivityBasedOnThePickPlayersActivity() {
+	public void goingToStartGamePageStartsAnActivityBasedOnTheSetupGameActivity() {
 		Intent intent = mock(Intent.class);
 		doReturn(intent).when(intentFactory).createIntent(activity, SetupGameActivity.class);
 		
 		testObject.goToStartGamePage();
 		
 		verify(activity).startActivity(intent);
+	}
+	
+	@Test
+	public void goingToHistoryPageStartsAnActivityBasedOnHistoryActivity() {
+		Intent intent = mock(Intent.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, HistoryActivity.class);
+		
+		testObject.goToHistoryPage();
+		
+		verify(activity).startActivity(intent);
+	}
+	
+	@Test
+	public void whenGoingToHistoryPageClearActivityHistory() {
+		Intent intent = mock(Intent.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, HistoryActivity.class);
+		
+		testObject.goToHistoryPage();
+
+		verify(intent).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 	}
 }

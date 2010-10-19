@@ -1,14 +1,19 @@
 package net.todd.scorekeeper;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -19,6 +24,11 @@ public class GameModelTest {
 	@Mock
 	private Activity activity;
 	@Mock
+	private GameStore gameStore;
+	@Mock
+	private IntentFactory intentFactory;
+
+	@Mock
 	private Player player1;
 	@Mock
 	private Player player2;
@@ -28,18 +38,21 @@ public class GameModelTest {
 	private GameModel testObject;
 
 	private ArrayList<Player> selectedPlayers;
+	private String gameType;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
 		selectedPlayers = new ArrayList<Player>(Arrays.asList(player1, player2, player3));
-
+		gameType = UUID.randomUUID().toString();
+		
 		Intent intent = mock(Intent.class);
 		doReturn(intent).when(activity).getIntent();
 		doReturn(selectedPlayers).when(intent).getSerializableExtra("selectedPlayers");
+		doReturn(gameType).when(intent).getStringExtra("gameType");
 
-		testObject = new GameModel(activity);
+		testObject = new GameModel(activity, gameStore, intentFactory);
 	}
 
 	@Test
@@ -91,23 +104,43 @@ public class GameModelTest {
 		int secondScore = new Random().nextInt();
 		int thirdScore = new Random().nextInt();
 
-		testObject.nextPlayer();
 		testObject.setScoreForCurrentPlayer(firstScore);
-
 		testObject.nextPlayer();
+
 		testObject.setScoreForCurrentPlayer(secondScore);
-
 		testObject.nextPlayer();
+
 		testObject.setScoreForCurrentPlayer(thirdScore);
-
 		testObject.nextPlayer();
+
 		assertEquals(firstScore, testObject.getCurrentPlayersScore());
-
 		testObject.nextPlayer();
+
 		assertEquals(secondScore, testObject.getCurrentPlayersScore());
-
 		testObject.nextPlayer();
+
 		assertEquals(thirdScore, testObject.getCurrentPlayersScore());
+	}
+	
+	@Test
+	public void afterSettingPlayersScoresTheScoreBoardContainsAllScores() {
+		int firstScore = new Random().nextInt();
+		int secondScore = new Random().nextInt();
+		int thirdScore = new Random().nextInt();
+
+		testObject.setScoreForCurrentPlayer(firstScore);
+		testObject.nextPlayer();
+
+		testObject.setScoreForCurrentPlayer(secondScore);
+		testObject.nextPlayer();
+
+		testObject.setScoreForCurrentPlayer(thirdScore);
+		testObject.nextPlayer();
+
+		ScoreBoard scoreBoard = testObject.getScoreBoard();
+		assertEquals(firstScore, scoreBoard.getScore(player1));
+		assertEquals(secondScore, scoreBoard.getScore(player2));
+		assertEquals(thirdScore, scoreBoard.getScore(player3));
 	}
 
 	@Test
@@ -122,10 +155,13 @@ public class GameModelTest {
 	}
 
 	@Test
-	public void cancellingTheGameFinishesTheActivity() {
+	public void cancellingTheGameGoesToTheMainPage() {
+		Intent intent = mock(Intent.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, MainPageActivity.class);
+		
 		testObject.cancelGame();
 
-		verify(activity).finish();
+		verify(activity).startActivity(intent);
 	}
 
 	@Test
@@ -154,11 +190,51 @@ public class GameModelTest {
 
 		verify(listener).handle();
 	}
-	
+
 	@Test
-	public void whenGameIsOverThenActivityIsFinished() {
+	public void whenGameIsOverSaveGameThenFinishActivity() {
+		Intent intent = mock(Intent.class);
+		doReturn(intent).when(intentFactory).createIntent(activity, MainPageActivity.class);
+		
 		testObject.gameOver();
 
-		verify(activity).finish();
+		InOrder inOrder = inOrder(activity, gameStore);
+		inOrder.verify(gameStore).addGame(any(Game.class));
+		inOrder.verify(activity).startActivity(intent);
+	}
+	
+	@Test
+	public void gameThatIsSavedHasCurrentTimestamp() {
+		testObject.gameOver();
+
+		ArgumentCaptor<Game> gameCaptor = ArgumentCaptor.forClass(Game.class);
+		verify(gameStore).addGame(gameCaptor.capture());
+		Game game = gameCaptor.getValue();
+		
+		assertEquals(new Date().getTime(), game.getGameOverTimestamp().getTime(), 500);
+	}
+	
+	@Test
+	public void gameThatIsSavedHasGameTypeFromIntent() {
+		testObject.gameOver();
+
+		ArgumentCaptor<Game> gameCaptor = ArgumentCaptor.forClass(Game.class);
+		verify(gameStore).addGame(gameCaptor.capture());
+		Game game = gameCaptor.getValue();
+		
+		assertEquals(gameType, game.getGameType());
+	}
+	
+	@Test
+	public void gameThatIsSavedHasScoreBoard() {
+		testObject.gameOver();
+
+		ArgumentCaptor<Game> gameCaptor = ArgumentCaptor.forClass(Game.class);
+		verify(gameStore).addGame(gameCaptor.capture());
+		Game game = gameCaptor.getValue();
+		
+		ScoreBoard scoreBoard = game.getScoreBoard();
+		
+		assertSame(testObject.getScoreBoard(), scoreBoard);
 	}
 }
