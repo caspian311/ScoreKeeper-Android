@@ -36,7 +36,7 @@ public class Index implements EntryPoint, ClickHandler {
 	@Override
 	public void onClick(ClickEvent event) {
 		RESTRequestBuilder restRequestBuilder = new RESTRequestBuilder(RESTRequestBuilder.GET,
-				"http://127.0.0.1:8888/services/history");
+				"http://scorekeeper-backend.appspot.com/services/history");
 		restRequestBuilder.setCallback(new RequestCallback() {
 			@Override
 			public void onResponseReceived(Request request, Response response) {
