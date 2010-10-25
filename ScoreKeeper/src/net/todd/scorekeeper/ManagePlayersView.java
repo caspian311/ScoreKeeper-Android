@@ -31,26 +31,34 @@ public class ManagePlayersView {
 		this.context = context;
 
 		mainScrollView = new ScrollView(context);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		
-		LinearLayout mainView = new LinearLayout(context);
-		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
+		mainScrollView.setFillViewport(true);
+
+		LinearLayout mainView = new LinearLayout(context);
+		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
+		LinearLayout.LayoutParams mainViewLayoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		mainView.setLayoutParams(mainViewLayoutParams);
 		mainView.setOrientation(LinearLayout.VERTICAL);
-		mainView.setBackgroundColor(0xFF3399CC);
+		mainView.setBackgroundColor(UIConstants.BACKGROUND_COLOR);
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
 		title.setText("Manager Players");
-		title.setTextSize(30);
-		title.setTextColor(0xFF000000);
+		title.setTextSize(UIConstants.TEXT_SIZE);
+		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(title);
 
 		tableView = new TableLayout(context);
-		tableView.setLayoutParams(new TableLayout.LayoutParams(
-				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+		tableView.setGravity(Gravity.CENTER_HORIZONTAL);
+		TableLayout.LayoutParams tableViewLayoutParams = new TableLayout.LayoutParams(
+				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+		tableViewLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		tableViewLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		tableView.setLayoutParams(tableViewLayoutParams);
 		tableView.setColumnStretchable(0, true);
 		mainView.addView(tableView);
 
@@ -74,8 +82,12 @@ public class ManagePlayersView {
 		controlsRow.addView(addPlayerButton);
 
 		Button doneButton = new Button(context);
-		doneButton.setLayoutParams(new TableLayout.LayoutParams(
-				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+		doneButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		TableLayout.LayoutParams doneButtonLayoutParams = new TableLayout.LayoutParams(
+				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+		doneButtonLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		doneButtonLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		doneButton.setLayoutParams(doneButtonLayoutParams);
 		doneButton.setText("Done");
 		doneButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -111,8 +123,8 @@ public class ManagePlayersView {
 
 		TextView player = new TextView(context);
 		player.setText(playerName);
-		player.setTextSize(30);
-		player.setTextColor(0xFF000000);
+		player.setTextSize(UIConstants.TEXT_SIZE);
+		player.setTextColor(UIConstants.TEXT_COLOR);
 		playerRow.addView(player);
 
 		Button removePlayerButton = new Button(context);

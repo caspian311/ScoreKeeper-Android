@@ -42,29 +42,37 @@ public class SetupGameView {
 				LayoutParams.MATCH_PARENT));
 
 		LinearLayout mainView = new LinearLayout(context);
-		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
-		mainView.setBackgroundColor(0xFF3399CC);
+		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
+		LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+		mainLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		mainLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		mainView.setLayoutParams(mainLayoutParams);
+		mainView.setBackgroundColor(UIConstants.BACKGROUND_COLOR);
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("Setup the Game");
-		title.setTextSize(30);
-		title.setTextColor(0xFF000000);
+		title.setTextSize(UIConstants.TEXT_SIZE);
+		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(title);
 
 		LinearLayout controlView = new LinearLayout(context);
-		controlView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
-		controlView.setOrientation(LinearLayout.HORIZONTAL);
 		controlView.setGravity(Gravity.CENTER_HORIZONTAL);
+		LinearLayout.LayoutParams controlViewLayouParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		controlViewLayouParams.leftMargin = UIConstants.MARGIN_SIZE;
+		controlViewLayouParams.rightMargin = UIConstants.MARGIN_SIZE;
+		controlView.setLayoutParams(controlViewLayouParams);
+		controlView.setOrientation(LinearLayout.HORIZONTAL);
 		mainView.addView(controlView);
 
 		Button cancelButton = new Button(context);
-		LayoutParams cancelButtonLayout = new LayoutParams(150, 50);
+		LayoutParams cancelButtonLayout = new LayoutParams(UIConstants.BUTTON_WIDTH,
+				UIConstants.BUTTON_HEIGHT);
 		cancelButton.setLayoutParams(cancelButtonLayout);
 		cancelButton.setText("Cancel");
 		cancelButton.setOnClickListener(new OnClickListener() {
@@ -76,7 +84,8 @@ public class SetupGameView {
 		controlView.addView(cancelButton);
 
 		Button startGameButton = new Button(context);
-		LayoutParams startGameButtonLayout = new LayoutParams(150, 50);
+		LayoutParams startGameButtonLayout = new LayoutParams(UIConstants.BUTTON_WIDTH,
+				UIConstants.BUTTON_HEIGHT);
 		startGameButton.setLayoutParams(startGameButtonLayout);
 		startGameButton.setText("Start Game");
 		startGameButton.setOnClickListener(new OnClickListener() {
@@ -90,6 +99,14 @@ public class SetupGameView {
 		allPlayersTable = new TableLayout(context);
 		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
+
+		allPlayersTable.setGravity(Gravity.CENTER_HORIZONTAL);
+		TableLayout.LayoutParams allPlayersTableLayoutParams = new TableLayout.LayoutParams(
+				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+		allPlayersTableLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		allPlayersTableLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		allPlayersTable.setLayoutParams(allPlayersTableLayoutParams);
+
 		allPlayersTable.setColumnStretchable(1, true);
 		mainView.addView(allPlayersTable);
 	}
@@ -120,12 +137,11 @@ public class SetupGameView {
 
 			TextView playerName = new TextView(context);
 			playerName.setText(player.getName());
-			playerName.setTextSize(30);
-			playerName.setTextColor(0xFF000000);
+			playerName.setTextSize(UIConstants.TEXT_SIZE);
+			playerName.setTextColor(UIConstants.TEXT_COLOR);
 			playerRow.addView(playerName);
 
 			Button upButton = new Button(context);
-//			upButton.setLayoutParams(new LayoutParams(50, 50));
 			upButton.setText("+");
 			upButton.setOnClickListener(new OnClickListener() {
 				@Override
@@ -137,7 +153,6 @@ public class SetupGameView {
 			playerRow.addView(upButton);
 
 			Button downButton = new Button(context);
-//			downButton.setLayoutParams(new LayoutParams(50, 50));
 			downButton.setText("-");
 			downButton.setOnClickListener(new OnClickListener() {
 				@Override

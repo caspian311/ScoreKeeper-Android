@@ -30,8 +30,12 @@ public class HistoryView {
 		mainScrollView.setFillViewport(true);
 
 		mainView = new LinearLayout(activity);
-		mainView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		mainView.setGravity(Gravity.LEFT);
+		LinearLayout.LayoutParams mainViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT);
+		mainViewLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		mainViewLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		mainView.setLayoutParams(mainViewLayoutParams);
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainView.setBackgroundColor(0xFF3399CC);
 		mainScrollView.addView(mainView);
@@ -45,8 +49,12 @@ public class HistoryView {
 		mainView.addView(title);
 
 		historyContainer = new LinearLayout(activity);
-		historyContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
+		historyContainer.setGravity(Gravity.LEFT);
+		LinearLayout.LayoutParams historyContainerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+				LinearLayout.LayoutParams.MATCH_PARENT);
+		historyContainerLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		historyContainerLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		historyContainer.setLayoutParams(historyContainerLayoutParams);
 		historyContainer.setOrientation(LinearLayout.VERTICAL);
 		mainView.addView(historyContainer);
 	}
