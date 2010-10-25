@@ -8,6 +8,8 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
@@ -38,7 +40,11 @@ public class Index implements EntryPoint, ClickHandler {
 		restRequestBuilder.setCallback(new RequestCallback() {
 			@Override
 			public void onResponseReceived(Request request, Response response) {
-				results.setText(response.getText());
+				String message = response.getText();
+				
+				JSONValue parsedMessage = JSONParser.parse(message);
+				String name = parsedMessage.isObject().get("name").isString().stringValue();
+				results.setText(name);
 			}
 
 			@Override
