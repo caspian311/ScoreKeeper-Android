@@ -27,21 +27,17 @@ public class Index implements EntryPoint, ClickHandler {
 		RootPanel.get("button").add(button);
 	}
 
-	class RESTRequestBuilder extends RequestBuilder {
-		public RESTRequestBuilder(Method httpMethod, String url) {
-			super(httpMethod, url);
-		}
-	}
-
 	@Override
 	public void onClick(ClickEvent event) {
-		RESTRequestBuilder restRequestBuilder = new RESTRequestBuilder(RESTRequestBuilder.GET,
+		RequestBuilder restRequestBuilder = new RequestBuilder(RequestBuilder.GET,
 				"http://scorekeeper-backend.appspot.com/services/history");
+		restRequestBuilder.setHeader("Content-Type", "application/json");
+		restRequestBuilder.setRequestData("");
 		restRequestBuilder.setCallback(new RequestCallback() {
 			@Override
 			public void onResponseReceived(Request request, Response response) {
 				String message = response.getText();
-				
+
 				JSONValue parsedMessage = JSONParser.parse(message);
 				String name = parsedMessage.isObject().get("name").isString().stringValue();
 				results.setText(name);
@@ -52,7 +48,7 @@ public class Index implements EntryPoint, ClickHandler {
 				results.setText(exception.getMessage());
 			}
 		});
-		
+
 		try {
 			restRequestBuilder.send();
 		} catch (RequestException e) {
