@@ -2,7 +2,6 @@ package net.todd.scorekeeper;
 
 import static org.junit.Assert.*;
 
-import java.util.Random;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -10,7 +9,7 @@ import org.junit.Test;
 public class PlayerTest {
 	@Test
 	public void equalityCheck() {
-		int playerId = new Random().nextInt();
+		String playerId = UUID.randomUUID().toString();
 		String playerName = UUID.randomUUID().toString();
 		
 		Player player1 = new Player(playerId, playerName);
@@ -22,8 +21,8 @@ public class PlayerTest {
 	
 	@Test
 	public void inequalityCheck() {
-		Player player1 = new Player(new Random().nextInt(), UUID.randomUUID().toString());
-		Player player2 = new Player(new Random().nextInt(), UUID.randomUUID().toString());
+		Player player1 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		Player player2 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 		
 		assertFalse(player1.equals(player2));
 	}
@@ -31,15 +30,15 @@ public class PlayerTest {
 	@Test
 	public void inequalityCheckWithNameTheSame() {
 		String name = UUID.randomUUID().toString();
-		Player player1 = new Player(new Random().nextInt(), name);
-		Player player2 = new Player(new Random().nextInt(), name);
+		Player player1 = new Player(UUID.randomUUID().toString(), name);
+		Player player2 = new Player(UUID.randomUUID().toString(), name);
 		
 		assertFalse(player1.equals(player2));
 	}
 	
 	@Test
 	public void inequalityCheckWithIdTheSame() {
-		int playerId = new Random().nextInt();
+		String playerId = UUID.randomUUID().toString();
 		Player player1 = new Player(playerId, UUID.randomUUID().toString());
 		Player player2 = new Player(playerId, UUID.randomUUID().toString());
 		
@@ -48,7 +47,7 @@ public class PlayerTest {
 	
 	@Test
 	public void stringify() {
-		int playerId = new Random().nextInt();
+		String playerId = UUID.randomUUID().toString();
 		String playerName = UUID.randomUUID().toString();
 		Player player = new Player(playerId, playerName);
 		

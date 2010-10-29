@@ -5,7 +5,7 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -63,9 +63,9 @@ public class SetupGamePresenterTest {
 	@Test
 	public void initiallyAllPlayersAreSetOnTheView() {
 		List<Player> allPlayers = new ArrayList<Player>();
-		allPlayers.add(new Player(1, "Peter"));
-		allPlayers.add(new Player(2, "James"));
-		allPlayers.add(new Player(3, "John"));
+		allPlayers.add(new Player("1", "Peter"));
+		allPlayers.add(new Player("2", "James"));
+		allPlayers.add(new Player("3", "John"));
 		doReturn(allPlayers).when(model).getAllPlayers();
 		
 		SetupGamePresenter.create(view, model);
@@ -102,7 +102,7 @@ public class SetupGamePresenterTest {
 	
 	@Test
 	public void whenSelectionChangesOnTheViewCurrentPlayerAndPlayerIsSelectedArePassedToTheModel() {
-		int currentPlayerId = new Random().nextInt();
+		String currentPlayerId = UUID.randomUUID().toString();
 		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
 		doReturn(true).when(view).isCurrentPlayerSelected();
 		
@@ -113,7 +113,7 @@ public class SetupGamePresenterTest {
 	
 	@Test
 	public void whenSelectionChangesOnTheViewCurrentPlayerAndPlayerIsNotSelectedArePassedToTheModel() {
-		int currentPlayerId = new Random().nextInt();
+		String currentPlayerId = UUID.randomUUID().toString();
 		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
 		doReturn(false).when(view).isCurrentPlayerSelected();
 		
@@ -131,7 +131,7 @@ public class SetupGamePresenterTest {
 	
 	@Test
 	public void whenUpIsPressedMoveTheCurrentPlayerUp() {
-		int currentPlayerId = new Random().nextInt();
+		String currentPlayerId = UUID.randomUUID().toString();
 		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
 		
 		upButtonListener.handle();
@@ -141,7 +141,7 @@ public class SetupGamePresenterTest {
 	
 	@Test
 	public void whenDownIsPressedMoveTheCurrentPlayerDown() {
-		int currentPlayerId = new Random().nextInt();
+		String currentPlayerId = UUID.randomUUID().toString();
 		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
 		
 		downButtonListener.handle();

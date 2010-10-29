@@ -19,9 +19,9 @@ public class ScoreBoardTest {
 
 	@Before
 	public void setUp() {
-		player1 = new Player(1, UUID.randomUUID().toString());
-		player2 = new Player(2, UUID.randomUUID().toString());
-		player3 = new Player(3, UUID.randomUUID().toString());
+		player1 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		player2 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		player3 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
 		
 		testObject = new ScoreBoard(Arrays.asList(player1, player2, player3));
 	}

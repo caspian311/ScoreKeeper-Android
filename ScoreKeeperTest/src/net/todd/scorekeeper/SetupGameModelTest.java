@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +27,9 @@ public class SetupGameModelTest {
 	private IntentFactory intentFactory;
 	
 	private List<Player> allPlayers;
-	private int playerOneId;
-	private int playerTwoId;
-	private int playerThreeId;
+	private String playerOneId;
+	private String playerTwoId;
+	private String playerThreeId;
 	private Player player1;
 	private Player player2;
 	private Player player3;
@@ -40,11 +40,11 @@ public class SetupGameModelTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
-		playerOneId = new Random().nextInt();
+		playerOneId = UUID.randomUUID().toString();
 		player1 = new Player(playerOneId, "Peter");
-		playerTwoId = new Random().nextInt();
+		playerTwoId = UUID.randomUUID().toString();
 		player2 = new Player(playerTwoId, "James");
-		playerThreeId = new Random().nextInt();
+		playerThreeId = UUID.randomUUID().toString();
 		player3 = new Player(playerThreeId, "John");
 		
 		allPlayers = Arrays.asList(player1, player2, player3);

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -85,7 +84,7 @@ public class ManagePlayersPresenterTest {
 
 	@Test
 	public void whenRemoveButtonPressedThenModelRemovesPlayerThatViewIndicates() {
-		int playerToRemove = new Random().nextInt();
+		String playerToRemove = UUID.randomUUID().toString();
 		doReturn(playerToRemove).when(view).getPlayerToRemove();
 
 		removePlayerButtonListener.handle();

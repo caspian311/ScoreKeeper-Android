@@ -2,6 +2,7 @@ package net.todd.scorekeeper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import android.content.Context;
 
@@ -29,7 +30,7 @@ public class PlayerStore {
 		persist();
 	}
 	
-	public void removePlayer(int playerId) {
+	public void removePlayer(String playerId) {
 		load();
 		Player playerToRemove = getPlayerById(playerId);
 		players.remove(playerToRemove);
@@ -44,15 +45,15 @@ public class PlayerStore {
 		persistor.persist(players);
 	}
 	
-	public int nextPlayerId() {
-		return persistor.nextId();
+	public String nextPlayerId() {
+		return UUID.randomUUID().toString();
 	}
 
-	public Player getPlayerById(int playerId) {
+	public Player getPlayerById(String playerId) {
 		List<Player> allPlayers = getAllPlayers();
 		Player targetPlayer = null;
 		for (Player player : allPlayers) {
-			if (playerId == player.getId()) {
+			if (playerId.equals(player.getId())) {
 				targetPlayer = player;
 				break;
 			}
@@ -60,10 +61,10 @@ public class PlayerStore {
 		return targetPlayer;
 	}
 
-	public List<Player> getPlayersById(List<Integer> playerIds) {
+	public List<Player> getPlayersById(List<String> playerIds) {
 		List<Player> selectedPlayers = new ArrayList<Player>();
 		List<Player> allPlayers = getAllPlayers();
-		for (Integer playerId : playerIds) {
+		for (String playerId : playerIds) {
 			for (Player player : allPlayers) {
 				if (playerId.equals(player.getId())) {
 					selectedPlayers.add(player);

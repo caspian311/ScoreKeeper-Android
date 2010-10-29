@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -82,7 +81,7 @@ public class ManagePlayersModelTest {
 	
 	@Test
 	public void addPlayerToStoreWithNextPlayerIdFromPlayerStore() {
-		int playerId = new Random().nextInt();
+		String playerId = UUID.randomUUID().toString();
 		doReturn(playerId).when(playerStore).nextPlayerId();
 		String playerName = UUID.randomUUID().toString();
 		
@@ -130,7 +129,7 @@ public class ManagePlayersModelTest {
 	
 	@Test
 	public void removingPlayerByIdRemovesPlayerFromStore() {
-		int playerId = new Random().nextInt();
+		String playerId = UUID.randomUUID().toString();
 		
 		testObject.removePlayer(playerId);
 		
@@ -142,10 +141,10 @@ public class ManagePlayersModelTest {
 		Listener playerChangedListener = mock(Listener.class);
 		testObject.addPlayerChangedListener(playerChangedListener);
 		
-		testObject.removePlayer(new Random().nextInt());
+		testObject.removePlayer(UUID.randomUUID().toString());
 		
 		InOrder inOrder = inOrder(playerChangedListener, playerStore);
-		inOrder.verify(playerStore).removePlayer(anyInt());
+		inOrder.verify(playerStore).removePlayer(anyString());
 		inOrder.verify(playerChangedListener).handle();
 	}
 }

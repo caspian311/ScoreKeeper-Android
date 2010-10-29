@@ -3,19 +3,18 @@ package net.todd.scorekeeper;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
-import java.util.Random;
 import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class PlayerStoreTest extends AbstractStoreTest {
-	private int playerId;
+	private String playerId;
 	private String playerName;
 
 	@Before
 	public void initializePlayerData() throws Exception {
-		playerId = new Random().nextInt();
+		playerId = UUID.randomUUID().toString();
 		playerName = UUID.randomUUID().toString();
 	}
 
@@ -44,11 +43,14 @@ public class PlayerStoreTest extends AbstractStoreTest {
 	}
 
 	@Test
-	public void addingMultipleandDeletingMultiple() {
+	public void addingMultipleAndDeletingMultiple() {
 		PlayerStore testObject = new PlayerStore(getContext());
-		Player player1 = new Player(1, playerName);
-		Player player2 = new Player(2, playerName);
-		Player player3 = new Player(3, playerName);
+		String id1 = UUID.randomUUID().toString();
+		Player player1 = new Player(id1, playerName);
+		String id2 = UUID.randomUUID().toString();
+		Player player2 = new Player(id2, playerName);
+		String id3 = UUID.randomUUID().toString();
+		Player player3 = new Player(id3, playerName);
 
 		testObject.addPlayer(player1);
 		testObject.addPlayer(player2);
@@ -81,14 +83,16 @@ public class PlayerStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void gettingPlayersById() {
-		Player player1 = new Player(1, UUID.randomUUID().toString());
-		Player player2 = new Player(2, UUID.randomUUID().toString());
-		Player player3 = new Player(3, UUID.randomUUID().toString());
+		String playerId1 = UUID.randomUUID().toString();
+		String playerId3 = UUID.randomUUID().toString();
+		Player player1 = new Player(playerId1, UUID.randomUUID().toString());
+		Player player2 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		Player player3 = new Player(playerId3, UUID.randomUUID().toString());
 		new PlayerStore(getContext()).addPlayer(player1);
 		new PlayerStore(getContext()).addPlayer(player2);
 		new PlayerStore(getContext()).addPlayer(player3);
 
 		assertEquals(Arrays.asList(player1, player3),
-				new PlayerStore(getContext()).getPlayersById(Arrays.asList(1, 3)));
+				new PlayerStore(getContext()).getPlayersById(Arrays.asList(playerId1, playerId3)));
 	}
 }

@@ -25,7 +25,7 @@ public class ManagePlayersView {
 	private final ListenerManager playerRemovedListenerManager = new ListenerManager();
 	private final ListenerManager doneButtonListenerManager = new ListenerManager();
 
-	private int playerToRemove;
+	private String playerToRemove;
 
 	public ManagePlayersView(Context context) {
 		this.context = context;
@@ -114,9 +114,8 @@ public class ManagePlayersView {
 		addPlayerButtonListenerManager.addListener(listener);
 	}
 
-	private void addPlayer(final int playerId, String playerName) {
+	private void addPlayer(final String playerId, String playerName) {
 		TableRow playerRow = new TableRow(context);
-		playerRow.setId(playerId);
 		playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
 				TableRow.LayoutParams.WRAP_CONTENT));
 		tableView.addView(playerRow);
@@ -143,7 +142,7 @@ public class ManagePlayersView {
 		playerRemovedListenerManager.addListener(listener);
 	}
 
-	public int getPlayerToRemove() {
+	public String getPlayerToRemove() {
 		return playerToRemove;
 	}
 

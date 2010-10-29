@@ -25,7 +25,7 @@ public class SetupGameView {
 	private final Context context;
 
 	private boolean isCurrentPlayerSelected;
-	private int currentPlayerId;
+	private String currentPlayerId;
 
 	private final ListenerManager cancelButtonListenerManager = new ListenerManager();
 	private final ListenerManager startGameButtonListenerManager = new ListenerManager();
@@ -181,7 +181,7 @@ public class SetupGameView {
 		cancelButtonListenerManager.addListener(listener);
 	}
 
-	public int getCurrentPlayerId() {
+	public String getCurrentPlayerId() {
 		return currentPlayerId;
 	}
 

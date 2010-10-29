@@ -27,7 +27,7 @@ public class ManagePlayersModel {
 		playerChangedListenerManager.addListener(listener);
 	}
 
-	public void removePlayer(int playerToRemove) {
+	public void removePlayer(String playerToRemove) {
 		playerStore.removePlayer(playerToRemove);
 		playerChangedListenerManager.notifyListeners();
 	}

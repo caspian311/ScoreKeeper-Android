@@ -24,7 +24,7 @@ public class SetupGameModel {
 		return allPlayers;
 	}
 
-	public void selectionChanged(int currentPlayer, boolean isCurrentPlayerSelected) {
+	public void selectionChanged(String currentPlayer, boolean isCurrentPlayerSelected) {
 		getPlayerById(currentPlayer).setSelected(isCurrentPlayerSelected);
 	}
 
@@ -54,7 +54,7 @@ public class SetupGameModel {
 		activity.startActivity(intent);
 	}
 
-	public void movePlayerUp(int currentPlayerId) {
+	public void movePlayerUp(String currentPlayerId) {
 		Player player = getPlayerById(currentPlayerId);
 		int currentIndex = allPlayers.indexOf(player);
 		if (currentIndex != 0) {
@@ -64,17 +64,17 @@ public class SetupGameModel {
 		playersOrderChangedListenerManager.notifyListeners();
 	}
 
-	private Player getPlayerById(int currentPlayerId) {
+	private Player getPlayerById(String currentPlayerId) {
 		Player targetPlayer = null;
 		for (Player player : allPlayers) {
-			if (player.getId() == currentPlayerId) {
+			if (player.getId().equals(currentPlayerId)) {
 				targetPlayer = player;
 			}
 		}
 		return targetPlayer;
 	}
 
-	public void movePlayerDown(int currentPlayerId) {
+	public void movePlayerDown(String currentPlayerId) {
 		Player player = getPlayerById(currentPlayerId);
 		int currentIndex = allPlayers.indexOf(player);
 		if (currentIndex != allPlayers.size() - 1) {
