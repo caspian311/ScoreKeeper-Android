@@ -21,12 +21,12 @@ public class MainPageView {
 
 	public MainPageView(Context context) {
 		mainLayout = new RelativeLayout(context);
-		mainLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
 		mainLayout.setBackgroundColor(0xFF3399CC);
 
 		TextView title = new TextView(context);
-		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		title.setText("Score Keeper");
 		title.setTextSize(30);
 		title.setTextColor(0xFF000000);
@@ -34,8 +34,8 @@ public class MainPageView {
 		mainLayout.addView(title);
 
 		TableLayout tableView = new TableLayout(context);
-		tableView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		tableView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
 		tableView.setStretchAllColumns(true);
 		tableView.setGravity(Gravity.CENTER);
 		mainLayout.addView(tableView);

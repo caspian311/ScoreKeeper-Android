@@ -38,13 +38,13 @@ public class SetupGameView {
 
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
 
 		LinearLayout mainView = new LinearLayout(context);
 		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
 		LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 		mainLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		mainLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		mainView.setLayoutParams(mainLayoutParams);
@@ -53,7 +53,7 @@ public class SetupGameView {
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
-		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("Setup the Game");
 		title.setTextSize(UIConstants.TEXT_SIZE);
 		title.setTextColor(UIConstants.TEXT_COLOR);
@@ -63,7 +63,7 @@ public class SetupGameView {
 		LinearLayout controlView = new LinearLayout(context);
 		controlView.setGravity(Gravity.CENTER_HORIZONTAL);
 		LinearLayout.LayoutParams controlViewLayouParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		controlViewLayouParams.leftMargin = UIConstants.MARGIN_SIZE;
 		controlViewLayouParams.rightMargin = UIConstants.MARGIN_SIZE;
 		controlView.setLayoutParams(controlViewLayouParams);
@@ -97,12 +97,12 @@ public class SetupGameView {
 		controlView.addView(startGameButton);
 
 		allPlayersTable = new TableLayout(context);
-		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
 
 		allPlayersTable.setGravity(Gravity.CENTER_HORIZONTAL);
 		TableLayout.LayoutParams allPlayersTableLayoutParams = new TableLayout.LayoutParams(
-				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
 		allPlayersTableLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		allPlayersTableLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		allPlayersTable.setLayoutParams(allPlayersTableLayoutParams);
@@ -119,7 +119,7 @@ public class SetupGameView {
 		allPlayersTable.removeAllViews();
 		for (final Player player : allPlayers) {
 			TableRow playerRow = new TableRow(context);
-			playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+			playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
 					TableRow.LayoutParams.WRAP_CONTENT));
 			allPlayersTable.addView(playerRow);
 

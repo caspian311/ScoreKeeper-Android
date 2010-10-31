@@ -44,7 +44,7 @@ public class GameView {
 		LinearLayout mainView = new LinearLayout(context);
 		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
 		LinearLayout.LayoutParams mainViewLayoutParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 		mainViewLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		mainViewLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		mainView.setLayoutParams(mainViewLayoutParams);
@@ -53,7 +53,7 @@ public class GameView {
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
-		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("Start Game");
 		title.setTextSize(30);
 		title.setTextColor(UIConstants.TEXT_COLOR);
@@ -62,7 +62,7 @@ public class GameView {
 
 		LinearLayout playerData = new LinearLayout(context);
 		playerData.setOrientation(LinearLayout.HORIZONTAL);
-		playerData.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+		playerData.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 		playerData.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(playerData);
@@ -91,13 +91,13 @@ public class GameView {
 		score.setWidth(100);
 		score.setLines(1);
 		score.setGravity(Gravity.CENTER_HORIZONTAL);
-		score.setInputType(InputType.TYPE_CLASS_NUMBER);
+		score.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 		mainView.addView(score);
 
 		LinearLayout buttonLayout = new LinearLayout(context);
 		buttonLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		buttonLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		buttonLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		buttonLayout.setLayoutParams(buttonLayoutParams);
@@ -119,8 +119,12 @@ public class GameView {
 		buttonLayout.addView(nextPlayerButton);
 
 		TextView scoreBoardTitle = new TextView(context);
-		scoreBoardTitle.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
+		scoreBoardTitle.setGravity(Gravity.LEFT);
+		LinearLayout.LayoutParams scoreBoardTitleLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.WRAP_CONTENT);
+		scoreBoardTitleLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		scoreBoardTitleLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		scoreBoardTitle.setLayoutParams(scoreBoardTitleLayoutParams);
 		scoreBoardTitle.setText("Score Board");
 		scoreBoardTitle.setTextSize(24);
 		scoreBoardTitle.setTextColor(UIConstants.TEXT_COLOR);
@@ -129,17 +133,20 @@ public class GameView {
 		scoreBoardTable = new TableLayout(context);
 		scoreBoardTable.setGravity(Gravity.CENTER_HORIZONTAL);
 		TableLayout.LayoutParams scoreBoardLayoutParams = new TableLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		scoreBoardLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardTable.setColumnStretchable(0, true);
 		mainView.addView(scoreBoardTable, scoreBoardLayoutParams);
 
 		Button gameOverButton = new Button(context);
-		gameOverButton.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT));
-		gameOverButton.setText("Game Over");
 		gameOverButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		LinearLayout.LayoutParams gameOverLayoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		gameOverLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		gameOverLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		gameOverButton.setLayoutParams(gameOverLayoutParams);
+		gameOverButton.setText("Game Over");
 		gameOverButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

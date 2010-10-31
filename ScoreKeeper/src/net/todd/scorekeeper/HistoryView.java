@@ -25,14 +25,14 @@ public class HistoryView {
 		this.activity = activity;
 
 		mainScrollView = new ScrollView(activity);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
 		mainScrollView.setFillViewport(true);
 
 		mainView = new LinearLayout(activity);
 		mainView.setGravity(Gravity.LEFT);
-		LinearLayout.LayoutParams mainViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.MATCH_PARENT);
+		LinearLayout.LayoutParams mainViewLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.FILL_PARENT);
 		mainViewLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		mainViewLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		mainView.setLayoutParams(mainViewLayoutParams);
@@ -41,7 +41,7 @@ public class HistoryView {
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(activity);
-		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("History");
 		title.setTextSize(30);
 		title.setTextColor(0xFF000000);
@@ -50,8 +50,8 @@ public class HistoryView {
 
 		historyContainer = new LinearLayout(activity);
 		historyContainer.setGravity(Gravity.LEFT);
-		LinearLayout.LayoutParams historyContainerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.MATCH_PARENT);
+		LinearLayout.LayoutParams historyContainerLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.FILL_PARENT);
 		historyContainerLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		historyContainerLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		historyContainer.setLayoutParams(historyContainerLayoutParams);
@@ -63,7 +63,7 @@ public class HistoryView {
 		historyContainer.removeAllViews();
 		for (Game game : allGames) {
 			LinearLayout topRow = new LinearLayout(activity);
-			topRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+			topRow.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 					LayoutParams.WRAP_CONTENT));
 			topRow.setOrientation(LinearLayout.HORIZONTAL);
 			historyContainer.addView(topRow);
@@ -82,7 +82,7 @@ public class HistoryView {
 			topRow.addView(gameOverTimestamp);
 
 			LinearLayout bottomRow = new LinearLayout(activity);
-			bottomRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+			bottomRow.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 					LayoutParams.WRAP_CONTENT));
 			bottomRow.setOrientation(LinearLayout.HORIZONTAL);
 			historyContainer.addView(bottomRow);

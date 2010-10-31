@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -31,8 +32,8 @@ public class ManagePlayersView {
 		this.context = context;
 
 		mainScrollView = new ScrollView(context);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
 		mainScrollView.setFillViewport(true);
 
 		LinearLayout mainView = new LinearLayout(context);
@@ -48,14 +49,14 @@ public class ManagePlayersView {
 		title.setText("Manager Players");
 		title.setTextSize(UIConstants.TEXT_SIZE);
 		title.setTextColor(UIConstants.TEXT_COLOR);
-		title.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(title);
 
 		tableView = new TableLayout(context);
 		tableView.setGravity(Gravity.CENTER_HORIZONTAL);
 		TableLayout.LayoutParams tableViewLayoutParams = new TableLayout.LayoutParams(
-				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
 		tableViewLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		tableViewLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		tableView.setLayoutParams(tableViewLayoutParams);
@@ -63,11 +64,21 @@ public class ManagePlayersView {
 		mainView.addView(tableView);
 
 		TableRow controlsRow = new TableRow(context);
-		controlsRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+		controlsRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
 				TableRow.LayoutParams.WRAP_CONTENT));
 		tableView.addView(controlsRow);
 
-		playerNameText = new EditText(context);
+		playerNameText = new EditText(context) {
+			@Override
+			public boolean onKeyDown(int keyCode, KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_ENTER) {
+					addPlayerButtonListenerManager.notifyListeners();
+					return true;
+				}
+				
+				return super.onKeyDown(keyCode, event);
+			};
+		};
 		playerNameText.setLines(1);
 		controlsRow.addView(playerNameText);
 
@@ -84,7 +95,7 @@ public class ManagePlayersView {
 		Button doneButton = new Button(context);
 		doneButton.setGravity(Gravity.CENTER_HORIZONTAL);
 		TableLayout.LayoutParams doneButtonLayoutParams = new TableLayout.LayoutParams(
-				TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
 		doneButtonLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		doneButtonLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		doneButton.setLayoutParams(doneButtonLayoutParams);
@@ -116,7 +127,7 @@ public class ManagePlayersView {
 
 	private void addPlayer(final String playerId, String playerName) {
 		TableRow playerRow = new TableRow(context);
-		playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+		playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
 				TableRow.LayoutParams.WRAP_CONTENT));
 		tableView.addView(playerRow);
 
