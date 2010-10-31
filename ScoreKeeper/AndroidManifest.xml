@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="net.todd.scorekeeper" android:versionCode="1"
-	android:versionName="1.1">
+	package="net.todd.scorekeeper" android:versionName="1.2" android:versionCode="2">
 	<application android:icon="@drawable/icon" android:label="ScoreKeeper">
 		<activity android:name="net.todd.scorekeeper.MainPageActivity"
 			android:label="ScoreKeeper" android:screenOrientation="portrait">
