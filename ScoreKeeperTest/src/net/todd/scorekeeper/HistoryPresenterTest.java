@@ -18,6 +18,7 @@ public class HistoryPresenterTest {
 	private HistoryModel model;
 
 	private Listener backPressedListener;
+	private Listener donePressedListener;
 
 	@Before
 	public void setUp() {
@@ -30,6 +31,11 @@ public class HistoryPresenterTest {
 		verify(view).addBackPressedListener(backPressedListenerCaptor.capture());
 		backPressedListener = backPressedListenerCaptor.getValue();
 
+		ArgumentCaptor<Listener> donePressedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addDonePressedListener(donePressedListenerCaptor.capture());
+		donePressedListener = donePressedListenerCaptor.getValue();
+
 		reset(view, model);
 	}
 
@@ -40,6 +46,13 @@ public class HistoryPresenterTest {
 		verify(model).finish();
 	}
 
+	@Test
+	public void whenDoneIsPressedModelFinishesTheActivity() {
+		donePressedListener.handle();
+
+		verify(model).finish();
+	}
+	
 	@Test
 	public void getAllGamesFromModelAndDisplayThemInitially() {
 		List<Game> games = Arrays.asList(mock(Game.class), mock(Game.class), mock(Game.class));

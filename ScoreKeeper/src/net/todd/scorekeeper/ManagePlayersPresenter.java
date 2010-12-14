@@ -31,6 +31,13 @@ public class ManagePlayersPresenter {
 			}
 		});
 
+		view.addBackPressedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.finish();
+			}
+		});
+		
 		view.setPlayers(model.getPlayers());
 	}
 }

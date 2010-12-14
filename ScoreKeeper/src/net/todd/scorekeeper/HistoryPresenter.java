@@ -10,5 +10,12 @@ public class HistoryPresenter {
 				model.finish();
 			}
 		});
+		
+		view.addDonePressedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.finish();
+			}
+		});
 	}
 }

@@ -18,6 +18,7 @@ public class MainPageView {
 	private final ListenerManager addPlayersButtonListenerManager = new ListenerManager();
 	private final ListenerManager quitButtonListenerManager = new ListenerManager();
 	private final ListenerManager historyButtonListenerManager = new ListenerManager();
+	private final ListenerManager backPressedListenerManager = new ListenerManager();
 
 	public MainPageView(Context context) {
 		mainLayout = new RelativeLayout(context);
@@ -109,5 +110,13 @@ public class MainPageView {
 	
 	public void addHistoryButtonListener(Listener listener) {
 		historyButtonListenerManager.addListener(listener);
+	}
+
+	public void backPressed() {
+		backPressedListenerManager.notifyListeners();
+	}
+	
+	public void addBackPressedListener(Listener listener) {
+		backPressedListenerManager.addListener(listener);
 	}
 }

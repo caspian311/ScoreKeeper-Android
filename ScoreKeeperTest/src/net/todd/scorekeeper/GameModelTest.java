@@ -26,7 +26,7 @@ public class GameModelTest {
 	@Mock
 	private GameStore gameStore;
 	@Mock
-	private IntentFactory intentFactory;
+	private PageNavigator pageNavigator;
 
 	@Mock
 	private Player player1;
@@ -52,7 +52,7 @@ public class GameModelTest {
 		doReturn(selectedPlayers).when(intent).getSerializableExtra("selectedPlayers");
 		doReturn(gameType).when(intent).getStringExtra("gameType");
 
-		testObject = new GameModel(activity, gameStore, intentFactory);
+		testObject = new GameModel(activity, gameStore, pageNavigator);
 	}
 
 	@Test
@@ -156,12 +156,9 @@ public class GameModelTest {
 
 	@Test
 	public void cancellingTheGameGoesToTheMainPage() {
-		Intent intent = mock(Intent.class);
-		doReturn(intent).when(intentFactory).createIntent(activity, MainPageActivity.class);
-		
 		testObject.cancelGame();
 
-		verify(activity).startActivity(intent);
+		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
 	}
 
 	@Test
@@ -193,14 +190,11 @@ public class GameModelTest {
 
 	@Test
 	public void whenGameIsOverSaveGameThenFinishActivity() {
-		Intent intent = mock(Intent.class);
-		doReturn(intent).when(intentFactory).createIntent(activity, MainPageActivity.class);
-		
 		testObject.gameOver();
 
-		InOrder inOrder = inOrder(activity, gameStore);
+		InOrder inOrder = inOrder(pageNavigator, gameStore);
 		inOrder.verify(gameStore).addGame(any(Game.class));
-		inOrder.verify(activity).startActivity(intent);
+		inOrder.verify(pageNavigator).navigateToActivity(MainPageActivity.class);
 	}
 	
 	@Test

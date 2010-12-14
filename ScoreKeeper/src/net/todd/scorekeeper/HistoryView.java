@@ -7,14 +7,18 @@ import java.util.List;
 import android.app.Activity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 public class HistoryView {
 	private final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 	private final ListenerManager backPressedListenerManager = new ListenerManager();
+	private final ListenerManager doneButtonListenerManager = new ListenerManager();
 	
 	private final Activity activity;
 	private final LinearLayout mainView;
@@ -57,6 +61,22 @@ public class HistoryView {
 		historyContainer.setLayoutParams(historyContainerLayoutParams);
 		historyContainer.setOrientation(LinearLayout.VERTICAL);
 		mainView.addView(historyContainer);
+		
+		Button doneButton = new Button(activity);
+		doneButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		TableLayout.LayoutParams doneButtonLayoutParams = new TableLayout.LayoutParams(
+				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+		doneButtonLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		doneButtonLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		doneButton.setLayoutParams(doneButtonLayoutParams);
+		doneButton.setText("Done");
+		doneButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				doneButtonListenerManager.notifyListeners();
+			}
+		});
+		mainView.addView(doneButton);
 	}
 
 	public void setHistory(List<Game> allGames) {
@@ -110,6 +130,10 @@ public class HistoryView {
 		backPressedListenerManager.notifyListeners();
 	}
 
+	public void addDonePressedListener(Listener listener) {
+		doneButtonListenerManager.addListener(listener);
+	}
+	
 	public void addBackPressedListener(Listener listener) {
 		backPressedListenerManager.addListener(listener);
 	}

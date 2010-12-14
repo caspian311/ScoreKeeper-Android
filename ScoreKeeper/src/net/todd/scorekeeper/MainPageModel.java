@@ -1,15 +1,11 @@
 package net.todd.scorekeeper;
 
-import android.app.Activity;
-import android.content.Intent;
 
 public class MainPageModel {
-	private final Activity mainPageActivity;
-	private final IntentFactory intentFactory;
+	private final PageNavigator pageNavigator;
 
-	public MainPageModel(Activity activity, IntentFactory intentFactory) {
-		this.mainPageActivity = activity;
-		this.intentFactory = intentFactory;
+	public MainPageModel(PageNavigator pageNavigator) {
+		this.pageNavigator = pageNavigator;
 	}
 	
 	public void quitApplication() {
@@ -17,18 +13,14 @@ public class MainPageModel {
 	}
 
 	public void goToManagePlayerPage() {
-		Intent intent = intentFactory.createIntent(mainPageActivity, ManagePlayersActivity.class);
-		mainPageActivity.startActivity(intent);
+		pageNavigator.navigateToActivity(ManagePlayersActivity.class);
 	}
 	
 	public void goToStartGamePage() {
-		Intent intent = intentFactory.createIntent(mainPageActivity, SetupGameActivity.class);
-		mainPageActivity.startActivity(intent);
+		pageNavigator.navigateToActivity(SetupGameActivity.class);
 	}
 
 	public void goToHistoryPage() {
-		Intent intent = intentFactory.createIntent(mainPageActivity, HistoryActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		mainPageActivity.startActivity(intent);
+		pageNavigator.navigateToActivity(HistoryActivity.class);
 	}
 }

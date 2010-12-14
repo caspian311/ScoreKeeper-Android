@@ -25,6 +25,7 @@ public class ManagePlayersView {
 	private final ListenerManager addPlayerButtonListenerManager = new ListenerManager();
 	private final ListenerManager playerRemovedListenerManager = new ListenerManager();
 	private final ListenerManager doneButtonListenerManager = new ListenerManager();
+	private final ListenerManager backPressedListenerManager = new ListenerManager();
 
 	private String playerToRemove;
 
@@ -173,5 +174,13 @@ public class ManagePlayersView {
 
 	public void addDoneButtonListener(Listener listener) {
 		doneButtonListenerManager.addListener(listener);
+	}
+
+	public void backPressed() {
+		backPressedListenerManager.notifyListeners();
+	}
+	
+	public void addBackPressedListener(Listener listener) {
+		backPressedListenerManager .addListener(listener);
 	}
 }

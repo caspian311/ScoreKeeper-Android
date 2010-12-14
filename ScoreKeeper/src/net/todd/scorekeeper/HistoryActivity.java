@@ -11,7 +11,7 @@ public class HistoryActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		view = new HistoryView(this);
-		HistoryModel model = new HistoryModel(this, new GameStore(this), new IntentFactory());
+		HistoryModel model = new HistoryModel(new GameStore(this), new PageNavigator(this));
 		HistoryPresenter.create(view, model);
 
 		setContentView(view.getView());

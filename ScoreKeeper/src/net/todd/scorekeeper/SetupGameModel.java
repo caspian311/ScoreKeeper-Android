@@ -1,21 +1,19 @@
 package net.todd.scorekeeper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import android.app.Activity;
-import android.content.Intent;
+import java.util.Map;
 
 public class SetupGameModel {
-	private final Activity activity;
-	private final IntentFactory intentFactory;
+	private final PageNavigator pageNavigator;
 
 	private final ListenerManager playersOrderChangedListenerManager = new ListenerManager();
 	private final ArrayList<Player> allPlayers = new ArrayList<Player>();
 
-	public SetupGameModel(Activity activity, PlayerStore playerStore, IntentFactory intentFactory) {
-		this.activity = activity;
-		this.intentFactory = intentFactory;
+	public SetupGameModel(PlayerStore playerStore, PageNavigator pageNavigator) {
+		this.pageNavigator = pageNavigator;
 
 		allPlayers.addAll(playerStore.getAllPlayers());
 	}
@@ -29,7 +27,7 @@ public class SetupGameModel {
 	}
 
 	public void cancel() {
-		activity.finish();
+		pageNavigator.navigateToActivity(MainPageActivity.class);
 	}
 
 	public boolean atLeastTwoPlayersSelected() {
@@ -49,9 +47,10 @@ public class SetupGameModel {
 				selectedPlayers.add(player);
 			}
 		}
-		Intent intent = intentFactory.createIntent(activity, GameActivity.class);
-		intent.putExtra("selectedPlayers", selectedPlayers);
-		activity.startActivity(intent);
+
+		Map<String, Serializable> extras = new HashMap<String, Serializable>();
+		extras.put("selectedPlayers", selectedPlayers);
+		pageNavigator.navigateToActivity(GameActivity.class, extras);
 	}
 
 	public void movePlayerUp(String currentPlayerId) {

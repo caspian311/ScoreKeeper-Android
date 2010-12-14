@@ -3,24 +3,17 @@ package net.todd.scorekeeper;
 import java.util.Collections;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Intent;
-
 public class HistoryModel {
-	private final Activity activity;
 	private final GameStore gameStore;
-	private final IntentFactory intentFactory;
+	private final PageNavigator pageNavigator;
 
-	public HistoryModel(Activity activity, GameStore gameStore, IntentFactory intentFactory) {
-		this.activity = activity;
+	public HistoryModel(GameStore gameStore, PageNavigator pageNavigator) {
 		this.gameStore = gameStore;
-		this.intentFactory = intentFactory;
+		this.pageNavigator = pageNavigator;
 	}
 
 	public void finish() {
-		Intent intent = intentFactory.createIntent(activity, MainPageActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-		activity.startActivity(intent);
+		pageNavigator.navigateToActivity(MainPageActivity.class);
 	}
 
 	public List<Game> getAllGames() {

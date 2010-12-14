@@ -1,6 +1,5 @@
 package net.todd.scorekeeper;
 
-
 public class MainPagePresenter {
 	public static void create(final MainPageView mainView, final MainPageModel mainModel) {
 		mainView.addQuitButtonListener(new Listener() {
@@ -9,25 +8,32 @@ public class MainPagePresenter {
 				mainModel.quitApplication();
 			}
 		});
-		
+
 		mainView.addManagePlayersButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				mainModel.goToManagePlayerPage();
 			}
 		});
-		
+
 		mainView.addStartButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				mainModel.goToStartGamePage();
 			}
 		});
-		
+
 		mainView.addHistoryButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				mainModel.goToHistoryPage();
+			}
+		});
+
+		mainView.addBackPressedListener(new Listener() {
+			@Override
+			public void handle() {
+				mainModel.quitApplication();
 			}
 		});
 	}

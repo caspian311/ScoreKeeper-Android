@@ -15,13 +15,11 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import android.app.Activity;
-
 public class ManagePlayersModelTest {
 	@Mock
-	private Activity activity;
-	@Mock
 	private PlayerStore playerStore;
+	@Mock
+	private PageNavigator pageNavigator;
 	
 	private ManagePlayersModel testObject;
 
@@ -29,14 +27,14 @@ public class ManagePlayersModelTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		
-		testObject = new ManagePlayersModel(activity, playerStore);
+		testObject = new ManagePlayersModel(playerStore, pageNavigator);
 	}
 	
 	@Test
 	public void finishingTheModelFinishesTheActivity() {
 		testObject.finish();
 		
-		verify(activity).finish();
+		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
 	}
 	
 	@Test

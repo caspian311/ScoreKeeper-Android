@@ -28,21 +28,28 @@ public class SetupGamePresenter {
 				}
 			}
 		});
-		
+
 		view.addUpButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.movePlayerUp(view.getCurrentPlayerId());
 			}
 		});
-		
+
 		view.addDownButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				model.movePlayerDown(view.getCurrentPlayerId());
 			}
 		});
-		
+
+		view.addBackPressedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.cancel();
+			}
+		});
+
 		model.addPlayersOrderChangedListener(new Listener() {
 			@Override
 			public void handle() {

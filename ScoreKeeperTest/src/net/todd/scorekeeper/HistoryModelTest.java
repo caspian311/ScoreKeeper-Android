@@ -10,20 +10,14 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import android.app.Activity;
-import android.content.Intent;
-
 public class HistoryModelTest {
-	@Mock
-	private Activity activity;
 	@Mock
 	private GameStore gameStore;
 	@Mock
-	private IntentFactory intentFactory;
+	private PageNavigator pageNavigator;
 
 	private HistoryModel testObject;
 
@@ -31,31 +25,14 @@ public class HistoryModelTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
-		testObject = new HistoryModel(activity, gameStore, intentFactory);
+		testObject = new HistoryModel(gameStore, pageNavigator);
 	}
 
 	@Test
 	public void whenModelFinishesGoToMainPage() {
-		Intent expectedIntent = mock(Intent.class);
-		doReturn(expectedIntent).when(intentFactory).createIntent(activity, MainPageActivity.class);
-		
 		testObject.finish();
 
-		ArgumentCaptor<Intent> intentCaptor = ArgumentCaptor.forClass(Intent.class);
-		verify(activity).startActivity(intentCaptor.capture());
-		Intent actualIntent = intentCaptor.getValue();
-		
-		assertSame(expectedIntent, actualIntent);
-	}
-	
-	@Test
-	public void whenGoingBackToMainPageClearActivityHistory() {
-		Intent intent = mock(Intent.class);
-		doReturn(intent).when(intentFactory).createIntent(activity, MainPageActivity.class);
-		
-		testObject.finish();
-
-		verify(intent).addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
 	}
 	
 	@Test

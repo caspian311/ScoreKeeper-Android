@@ -4,27 +4,24 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
-import android.content.Intent;
 
 public class GameModel {
 	private final ListenerManager scoreChangedListenerManager = new ListenerManager();
 	private final ListenerManager playerChangeListenerManager = new ListenerManager();
 
-	private final Activity activity;
 	private final GameStore gameStore;
-	private final IntentFactory intentFactory;
 
 	private final ArrayList<Player> selectedPlayers;
 	private final ScoreBoard scoreBoard;
 	private final String gameType;
 
 	private int currentPlayersTurn;
+	private final PageNavigator pageNavigator;
 
 	@SuppressWarnings("unchecked")
-	public GameModel(Activity activity, GameStore gameStore, IntentFactory intentFactory) {
-		this.activity = activity;
+	public GameModel(Activity activity, GameStore gameStore, PageNavigator pageNavigator) {
 		this.gameStore = gameStore;
-		this.intentFactory = intentFactory;
+		this.pageNavigator = pageNavigator;
 
 		selectedPlayers = (ArrayList<Player>) activity.getIntent().getSerializableExtra(
 				"selectedPlayers");
@@ -76,8 +73,7 @@ public class GameModel {
 	}
 
 	public void cancelGame() {
-		Intent intent = intentFactory.createIntent(activity, MainPageActivity.class);
-		activity.startActivity(intent);
+		pageNavigator.navigateToActivity(MainPageActivity.class);
 	}
 
 	public void addScoreChangedListener(Listener listener) {
@@ -95,7 +91,6 @@ public class GameModel {
 		game.setScoreBoard(scoreBoard);
 		gameStore.addGame(game);
 		
-		Intent intent = intentFactory.createIntent(activity, MainPageActivity.class);
-		activity.startActivity(intent);
+		pageNavigator.navigateToActivity(MainPageActivity.class);
 	}
 }

@@ -2,17 +2,14 @@ package net.todd.scorekeeper;
 
 import java.util.List;
 
-import android.app.Activity;
-
 public class ManagePlayersModel {
 	private final PlayerStore playerStore;
+	private final PageNavigator pageNavigator;
 
 	private final ListenerManager playerChangedListenerManager = new ListenerManager();
 
-	private final Activity context;
-
-	public ManagePlayersModel(Activity context, PlayerStore playerStore) {
-		this.context = context;
+	public ManagePlayersModel(PlayerStore playerStore, PageNavigator pageNavigator) {
+		this.pageNavigator = pageNavigator;
 		this.playerStore = playerStore;
 	}
 	
@@ -37,6 +34,6 @@ public class ManagePlayersModel {
 	}
 
 	public void finish() {
-		context.finish();
+		pageNavigator.navigateToActivity(MainPageActivity.class);
 	}
 }

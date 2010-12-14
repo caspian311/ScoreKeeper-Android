@@ -18,6 +18,7 @@ public class MainPagePresenterTest {
 	private Listener managePlayerButtonListener;
 	private Listener startButtonListener;
 	private Listener historyButtonListener;
+	private Listener backButtonListener;
 	
 	@Before
 	public void setUp() {
@@ -25,9 +26,13 @@ public class MainPagePresenterTest {
 		
 		MainPagePresenter.create(view, model);
 		
-		ArgumentCaptor<Listener> listenerCaptor = ArgumentCaptor.forClass(Listener.class);
-		verify(view).addQuitButtonListener(listenerCaptor.capture());
-		quitButtonListener = listenerCaptor.getValue();
+		ArgumentCaptor<Listener> quitButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
+		verify(view).addQuitButtonListener(quitButtonListenerCaptor.capture());
+		quitButtonListener = quitButtonListenerCaptor.getValue();
+		
+		ArgumentCaptor<Listener> backButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
+		verify(view).addQuitButtonListener(backButtonListenerCaptor.capture());
+		backButtonListener = backButtonListenerCaptor.getValue();
 		
 		ArgumentCaptor<Listener> managePlayerButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addManagePlayersButtonListener(managePlayerButtonListenerCaptor.capture());
@@ -47,6 +52,13 @@ public class MainPagePresenterTest {
 	@Test
 	public void quitTheApplicationWhenTheQuitButtonIsPressed() {
 		quitButtonListener.handle();
+		
+		verify(model).quitApplication();
+	}
+	
+	@Test
+	public void quitTheApplicationWhenTheBackButtonIsPressed() {
+		backButtonListener.handle();
 		
 		verify(model).quitApplication();
 	}

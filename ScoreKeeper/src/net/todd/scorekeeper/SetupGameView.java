@@ -32,6 +32,7 @@ public class SetupGameView {
 	private final ListenerManager selectedPlayersChangedListenerManager = new ListenerManager();
 	private final ListenerManager upButtonListenerManager = new ListenerManager();
 	private final ListenerManager downButtonListenerManager = new ListenerManager();
+	private final ListenerManager backPressedListenerManager = new ListenerManager();
 
 	public SetupGameView(Context context) {
 		this.context = context;
@@ -201,5 +202,13 @@ public class SetupGameView {
 						dialog.cancel();
 					}
 				}).show();
+	}
+
+	public void backPressed() {
+		backPressedListenerManager.notifyListeners();
+	}
+
+	public void addBackPressedListener(Listener listener) {
+		backPressedListenerManager.addListener(listener);
 	}
 }

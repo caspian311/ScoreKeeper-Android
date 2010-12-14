@@ -26,6 +26,7 @@ public class SetupGamePresenterTest {
 	private Listener upButtonListener;
 	private Listener downButtonListener;
 	private Listener playersOrderChangedListener;
+	private Listener backButtonListener;
 	
 	@Before
 	public void setUp() {
@@ -36,6 +37,10 @@ public class SetupGamePresenterTest {
 		ArgumentCaptor<Listener> cancelButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addCancelButtonListener(cancelButtonListenerCaptor.capture());
 		cancelButtonListener = cancelButtonListenerCaptor.getValue();
+		
+		ArgumentCaptor<Listener> backButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
+		verify(view).addBackPressedListener(backButtonListenerCaptor.capture());
+		backButtonListener = backButtonListenerCaptor.getValue();
 
 		ArgumentCaptor<Listener> selectedPlayersChangedListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addSelectedPlayersChangedListener(selectedPlayersChangedListenerCaptor.capture());
@@ -96,6 +101,13 @@ public class SetupGamePresenterTest {
 	@Test
 	public void whenCancelButtonIsPressedThenCancelTheModel() {
 		cancelButtonListener.handle();
+		
+		verify(model).cancel();
+	}
+	
+	@Test
+	public void whenBackButtonIsPressedThenCancelTheModel() {
+		backButtonListener.handle();
 		
 		verify(model).cancel();
 	}

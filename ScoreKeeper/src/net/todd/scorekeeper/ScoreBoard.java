@@ -8,10 +8,10 @@ import java.util.List;
 public class ScoreBoard implements Serializable {
 	private static final long serialVersionUID = -9216810547295023938L;
 	
-	private final List<ScoreBoardEntry> scoreBoardEntries;
+	private final List<ScoreBoardEntry> scoreBoardEntries = new ArrayList<ScoreBoardEntry>();
 
 	public ScoreBoard(List<Player> players) {
-		scoreBoardEntries = new ArrayList<ScoreBoardEntry>();
+		scoreBoardEntries.clear();
 		for (Player player : players) {
 			scoreBoardEntries.add(new ScoreBoardEntry(player));
 		}

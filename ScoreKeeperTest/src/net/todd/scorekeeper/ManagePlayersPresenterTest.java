@@ -24,6 +24,7 @@ public class ManagePlayersPresenterTest {
 	private Listener removePlayerButtonListener;
 	private Listener playerChangedListener;
 	private Listener doneButtonListener;
+	private Listener backButtonListener;
 
 	@Before
 	public void setUp() {
@@ -50,6 +51,10 @@ public class ManagePlayersPresenterTest {
 		verify(view).addDoneButtonListener(doneButtonListenerCaptor.capture());
 		doneButtonListener = doneButtonListenerCaptor.getValue();
 
+		ArgumentCaptor<Listener> backButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
+		verify(view).addBackPressedListener(backButtonListenerCaptor.capture());
+		backButtonListener = backButtonListenerCaptor.getValue();
+		
 		reset(view, model);
 	}
 
@@ -105,6 +110,13 @@ public class ManagePlayersPresenterTest {
 	@Test
 	public void whenDoneButtonPressedThenModelIsToldToFinish() {
 		doneButtonListener.handle();
+
+		verify(model).finish();
+	}
+	
+	@Test
+	public void whenBackButtonPressedThenModelIsToldToFinish() {
+		backButtonListener.handle();
 
 		verify(model).finish();
 	}

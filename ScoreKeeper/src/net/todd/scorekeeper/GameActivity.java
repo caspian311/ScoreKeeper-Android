@@ -11,7 +11,7 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		view = new GameView(this);
-		GameModel model = new GameModel(this, new GameStore(this), new IntentFactory());
+		GameModel model = new GameModel(this, new GameStore(this), new PageNavigator(this));
 		GamePresenter.create(view, model);
 		
 		setContentView(view.getView());
