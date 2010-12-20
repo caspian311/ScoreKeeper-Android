@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
@@ -17,16 +16,13 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import android.app.Activity;
-import android.content.Intent;
-
 public class GameModelTest {
-	@Mock
-	private Activity activity;
 	@Mock
 	private GameStore gameStore;
 	@Mock
 	private PageNavigator pageNavigator;
+
+	private CurrentGame currentGame;
 
 	@Mock
 	private Player player1;
@@ -37,22 +33,20 @@ public class GameModelTest {
 
 	private GameModel testObject;
 
-	private ArrayList<Player> selectedPlayers;
 	private String gameType;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
-		selectedPlayers = new ArrayList<Player>(Arrays.asList(player1, player2, player3));
 		gameType = UUID.randomUUID().toString();
-		
-		Intent intent = mock(Intent.class);
-		doReturn(intent).when(activity).getIntent();
-		doReturn(selectedPlayers).when(intent).getSerializableExtra("selectedPlayers");
-		doReturn(gameType).when(intent).getStringExtra("gameType");
 
-		testObject = new GameModel(activity, gameStore, pageNavigator);
+		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)));
+		
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+		doReturn(gameType).when(pageNavigator).getExtra("gameType");
+
+		testObject = new GameModel(gameStore, pageNavigator);
 	}
 
 	@Test
@@ -230,5 +224,25 @@ public class GameModelTest {
 		ScoreBoard scoreBoard = game.getScoreBoard();
 		
 		assertSame(testObject.getScoreBoard(), scoreBoard);
+	}
+	
+	@Test
+	public void notifyListenersOfCancellation() {
+		Listener listener = mock(Listener.class);
+		testObject.addCancelGameListener(listener);
+		
+		testObject.cancelGame();
+		
+		verify(listener).handle();
+	}
+	
+	@Test
+	public void notifyListenersOfGameOver() {
+		Listener listener = mock(Listener.class);
+		testObject.addGameOverListener(listener);
+		
+		testObject.gameOver();
+		
+		verify(listener).handle();
 	}
 }

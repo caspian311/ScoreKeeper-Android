@@ -2,31 +2,33 @@ package net.todd.scorekeeper;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import android.app.Activity;
+import java.util.List;
 
 public class GameModel {
 	private final ListenerManager scoreChangedListenerManager = new ListenerManager();
 	private final ListenerManager playerChangeListenerManager = new ListenerManager();
+	private final ListenerManager gameOverListenerManager = new ListenerManager();
+	private final ListenerManager cancellationListenerManager = new ListenerManager();
 
 	private final GameStore gameStore;
 
-	private final ArrayList<Player> selectedPlayers;
+	private final List<Player> selectedPlayers = new ArrayList<Player>();
 	private final ScoreBoard scoreBoard;
 	private final String gameType;
 
 	private int currentPlayersTurn;
 	private final PageNavigator pageNavigator;
 
-	@SuppressWarnings("unchecked")
-	public GameModel(Activity activity, GameStore gameStore, PageNavigator pageNavigator) {
+	public GameModel(GameStore gameStore, PageNavigator pageNavigator) {
 		this.gameStore = gameStore;
 		this.pageNavigator = pageNavigator;
 
-		selectedPlayers = (ArrayList<Player>) activity.getIntent().getSerializableExtra(
-				"selectedPlayers");
-		gameType = activity.getIntent().getStringExtra("gameType");
-		scoreBoard = new ScoreBoard(selectedPlayers);
+		CurrentGame currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
+		scoreBoard = currentGame.getScoreBoard();
+		for (ScoreBoardEntry entry : scoreBoard.getEntries()) {
+			selectedPlayers.add(entry.getPlayer());
+		}
+		gameType = (String)pageNavigator.getExtra("gameType");
 	}
 
 	public void nextPlayer() {
@@ -51,7 +53,7 @@ public class GameModel {
 	public void setScoreForCurrentPlayer(int score) {
 		Integer currentScore = scoreBoard.getScore(getCurrentPlayer());
 		currentScore += score;
-		 scoreBoard.setScore(getCurrentPlayer(), currentScore);
+		scoreBoard.setScore(getCurrentPlayer(), currentScore);
 		scoreChangedListenerManager.notifyListeners();
 	}
 
@@ -73,6 +75,7 @@ public class GameModel {
 	}
 
 	public void cancelGame() {
+		cancellationListenerManager.notifyListeners();
 		pageNavigator.navigateToActivity(MainPageActivity.class);
 	}
 
@@ -90,7 +93,16 @@ public class GameModel {
 		game.setGameType(gameType);
 		game.setScoreBoard(scoreBoard);
 		gameStore.addGame(game);
-		
+
+		gameOverListenerManager.notifyListeners();
 		pageNavigator.navigateToActivity(MainPageActivity.class);
+	}
+
+	public void addGameOverListener(Listener listener) {
+		gameOverListenerManager.addListener(listener);
+	}
+
+	public void addCancelGameListener(Listener listener) {
+		cancellationListenerManager.addListener(listener);
 	}
 }

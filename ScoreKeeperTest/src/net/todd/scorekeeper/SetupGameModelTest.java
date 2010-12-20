@@ -104,7 +104,11 @@ public class SetupGameModelTest {
 		verify(pageNavigator).navigateToActivity(eq(GameActivity.class), extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
 		
-		assertEquals(Arrays.asList(player1, player2), extras.get("selectedPlayers"));
+		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
+		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
+		assertEquals(2, entries.size());
+		assertEquals(player1, entries.get(0).getPlayer());
+		assertEquals(player2, entries.get(1).getPlayer());
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -120,7 +124,10 @@ public class SetupGameModelTest {
 		verify(pageNavigator).navigateToActivity(eq(GameActivity.class), extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
 		
-		assertEquals(Arrays.asList(player2), extras.get("selectedPlayers"));
+		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
+		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
+		assertEquals(1, entries.size());
+		assertEquals(player2, entries.get(0).getPlayer());
 	}
 	
 	@Test

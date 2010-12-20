@@ -9,16 +9,19 @@ public class MainPageActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		CurrentGameStore currentStateStore = new CurrentGameStore(this);
+		PageNavigator pageNavigator = new PageNavigator(this);
 		
-		new ApplicationInitializer(this).initialize();
+		new GameRestorer(currentStateStore, pageNavigator).restoreGameInProgress();
 
 		mainView = new MainPageView(this);
-		MainPageModel mainModel = new MainPageModel(new PageNavigator(this));
+		MainPageModel mainModel = new MainPageModel(currentStateStore, pageNavigator);
 		MainPagePresenter.create(mainView, mainModel);
 
 		setContentView(mainView.getView());
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		mainView.backPressed();

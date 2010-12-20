@@ -47,9 +47,10 @@ public class SetupGameModel {
 				selectedPlayers.add(player);
 			}
 		}
+		CurrentGame currentGame = new CurrentGame(new ScoreBoard(selectedPlayers));
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
-		extras.put("selectedPlayers", selectedPlayers);
+		extras.put("currentGame", currentGame);
 		pageNavigator.navigateToActivity(GameActivity.class, extras);
 	}
 

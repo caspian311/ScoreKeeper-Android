@@ -1,10 +1,16 @@
 package net.todd.scorekeeper;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class MainPageModel {
 	private final PageNavigator pageNavigator;
+	private final CurrentGameStore currentStateStore;
 
-	public MainPageModel(PageNavigator pageNavigator) {
+	public MainPageModel(CurrentGameStore currentGameStore, PageNavigator pageNavigator) {
+		this.currentStateStore = currentGameStore;
 		this.pageNavigator = pageNavigator;
 	}
 	
@@ -17,7 +23,9 @@ public class MainPageModel {
 	}
 	
 	public void goToStartGamePage() {
-		pageNavigator.navigateToActivity(SetupGameActivity.class);
+		Map<String, Serializable> extras = new HashMap<String, Serializable>();
+		extras.put("currentGame", currentStateStore.getCurrentGame());
+		pageNavigator.navigateToActivity(SetupGameActivity.class, extras);
 	}
 
 	public void goToHistoryPage() {

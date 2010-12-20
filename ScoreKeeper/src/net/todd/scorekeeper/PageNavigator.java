@@ -24,6 +24,10 @@ public class PageNavigator {
 		navigateToActivity(targetActivity, Collections.<String, Serializable>emptyMap());
 	}
 
+	public Serializable getExtra(String key) {
+		return Serializable.class.cast(homeActivity.getIntent().getExtras().get(key));
+	}
+	
 	public void navigateToActivity(Class<? extends Activity> targetActivity, Map<String, Serializable> extras) {
 		Intent intent = intentFactory.createIntent(homeActivity, targetActivity);
 		for (String key : extras.keySet()) {
