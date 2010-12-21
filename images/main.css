@@ -1,9 +1,6 @@
 body {
         font-family: arial;
-        background: #ffffff;
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#319bc5', endColorstr='#000000');
-        background: -webkit-gradient(linear, left top, left bottom, from(#319bc5), to(#000000));
-        background: -moz-linear-gradient(top,  #319bc5,  #000000);
+        background: #000000 url('background.png') repeat-x;
 }
 
 .main {
@@ -54,7 +51,6 @@ body {
 }
 
 .footer {
-	width: 1000px;
         font-size: 12pt;
         text-align: center;
         clear: both;
