@@ -28,6 +28,9 @@ public class GameModel {
 		for (ScoreBoardEntry entry : scoreBoard.getEntries()) {
 			selectedPlayers.add(entry.getPlayer());
 		}
+		if (currentGame.getCurrentPlayer() != null) {
+			currentPlayersTurn = selectedPlayers.indexOf(currentGame.getCurrentPlayer());
+		}
 		gameType = (String)pageNavigator.getExtra("gameType");
 	}
 

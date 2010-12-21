@@ -109,6 +109,7 @@ public class SetupGameModelTest {
 		assertEquals(2, entries.size());
 		assertEquals(player1, entries.get(0).getPlayer());
 		assertEquals(player2, entries.get(1).getPlayer());
+		assertEquals(player1, currentGame.getCurrentPlayer());
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

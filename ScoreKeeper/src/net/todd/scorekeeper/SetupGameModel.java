@@ -47,7 +47,7 @@ public class SetupGameModel {
 				selectedPlayers.add(player);
 			}
 		}
-		CurrentGame currentGame = new CurrentGame(new ScoreBoard(selectedPlayers));
+		CurrentGame currentGame = new CurrentGame(new ScoreBoard(selectedPlayers), selectedPlayers.get(0));
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);

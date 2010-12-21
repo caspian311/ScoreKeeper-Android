@@ -2,8 +2,7 @@ package net.todd.scorekeeper;
 
 public class GameWatcher {
 	public static void create(final GameModel model, final CurrentGameStore currentGameStore) {
-		// might need to make this a player changed listener instead
-		model.addScoreChangedListener(new Listener() {
+		model.addPlayerChangedListener(new Listener() {
 			@Override
 			public void handle() {
 				currentGameStore.saveState(model.getScoreBoard(), model.getCurrentPlayer());

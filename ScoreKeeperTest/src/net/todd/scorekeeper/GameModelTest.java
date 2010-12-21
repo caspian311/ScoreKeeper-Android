@@ -41,7 +41,7 @@ public class GameModelTest {
 
 		gameType = UUID.randomUUID().toString();
 
-		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)));
+		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)), player2);
 		
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 		doReturn(gameType).when(pageNavigator).getExtra("gameType");
@@ -51,8 +51,6 @@ public class GameModelTest {
 
 	@Test
 	public void everyTimeYouCallNextPlayerYouGetTheNextPlayer() {
-		assertSame(player1, testObject.getCurrentPlayer());
-		testObject.nextPlayer();
 		assertSame(player2, testObject.getCurrentPlayer());
 		testObject.nextPlayer();
 		assertSame(player3, testObject.getCurrentPlayer());
@@ -62,13 +60,12 @@ public class GameModelTest {
 		assertSame(player2, testObject.getCurrentPlayer());
 		testObject.nextPlayer();
 		assertSame(player3, testObject.getCurrentPlayer());
+		testObject.nextPlayer();
+		assertSame(player1, testObject.getCurrentPlayer());
 	}
 
 	@Test
 	public void everyTimeYouCallPreviousPlayerYouGetThePreviousPlayer() {
-		testObject.previousPlayer();
-		assertSame(player3, testObject.getCurrentPlayer());
-		testObject.previousPlayer();
 		assertSame(player2, testObject.getCurrentPlayer());
 		testObject.previousPlayer();
 		assertSame(player1, testObject.getCurrentPlayer());
@@ -78,6 +75,10 @@ public class GameModelTest {
 		assertSame(player2, testObject.getCurrentPlayer());
 		testObject.previousPlayer();
 		assertSame(player1, testObject.getCurrentPlayer());
+		testObject.previousPlayer();
+		assertSame(player3, testObject.getCurrentPlayer());
+		testObject.previousPlayer();
+		assertSame(player2, testObject.getCurrentPlayer());
 	}
 
 	@Test
@@ -132,9 +133,9 @@ public class GameModelTest {
 		testObject.nextPlayer();
 
 		ScoreBoard scoreBoard = testObject.getScoreBoard();
-		assertEquals(firstScore, scoreBoard.getScore(player1));
-		assertEquals(secondScore, scoreBoard.getScore(player2));
-		assertEquals(thirdScore, scoreBoard.getScore(player3));
+		assertEquals(firstScore, scoreBoard.getScore(player2));
+		assertEquals(secondScore, scoreBoard.getScore(player3));
+		assertEquals(thirdScore, scoreBoard.getScore(player1));
 	}
 
 	@Test
@@ -244,5 +245,19 @@ public class GameModelTest {
 		testObject.gameOver();
 		
 		verify(listener).handle();
+	}
+	
+	@Test
+	public void ifNoCurrentPlayerWasGivenThenAssumeFirstPlayerIsCurrentPlayer() {
+		gameType = UUID.randomUUID().toString();
+
+		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)), null);
+		
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+		doReturn(gameType).when(pageNavigator).getExtra("gameType");
+
+		testObject = new GameModel(gameStore, pageNavigator);
+
+		assertEquals(player1, testObject.getCurrentPlayer());
 	}
 }

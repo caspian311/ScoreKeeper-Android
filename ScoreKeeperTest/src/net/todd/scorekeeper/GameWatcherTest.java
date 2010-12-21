@@ -14,7 +14,7 @@ public class GameWatcherTest {
 	@Mock
 	private CurrentGameStore currentGameStore;
 
-	private Listener scoreChangedListener;
+	private Listener playerChangedListener;
 	private Listener gameOverListener;
 	private Listener cancellationListener;
 
@@ -24,10 +24,10 @@ public class GameWatcherTest {
 
 		GameWatcher.create(model, currentGameStore);
 
-		ArgumentCaptor<Listener> scoreChangedListenerCaptor = ArgumentCaptor
+		ArgumentCaptor<Listener> playerChangedListenerCaptor = ArgumentCaptor
 				.forClass(Listener.class);
-		verify(model).addScoreChangedListener(scoreChangedListenerCaptor.capture());
-		scoreChangedListener = scoreChangedListenerCaptor.getValue();
+		verify(model).addPlayerChangedListener(playerChangedListenerCaptor.capture());
+		playerChangedListener = playerChangedListenerCaptor.getValue();
 
 		ArgumentCaptor<Listener> gameOverListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(model).addGameOverListener(gameOverListenerCaptor.capture());
@@ -54,13 +54,13 @@ public class GameWatcherTest {
 	}
 
 	@Test
-	public void whenScoreChangesUpdateTheGamesCurrentState() {
+	public void whenPlayerChangesUpdateTheGamesCurrentState() {
 		ScoreBoard scoreBoard = mock(ScoreBoard.class);
 		doReturn(scoreBoard).when(model).getScoreBoard();
 		Player currentPlayer = mock(Player.class);
 		doReturn(currentPlayer).when(model).getCurrentPlayer();
 
-		scoreChangedListener.handle();
+		playerChangedListener.handle();
 
 		verify(currentGameStore).saveState(scoreBoard, currentPlayer);
 	}

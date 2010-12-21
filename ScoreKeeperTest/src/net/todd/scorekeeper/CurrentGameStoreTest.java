@@ -42,6 +42,8 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 		assertEquals("3", actualEntries.get(2).getPlayer().getId());
 		assertEquals("caleb", actualEntries.get(2).getPlayer().getName());
 		assertEquals(12, actualEntries.get(2).getScore());
+		assertEquals("2", currentGame.getCurrentPlayer().getId());
+		assertEquals("abbi", currentGame.getCurrentPlayer().getName());
 	}
 	
 	@Test
