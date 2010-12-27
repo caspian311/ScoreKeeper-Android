@@ -4,7 +4,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ScoreKeeper"/>
 	<classpathentry kind="lib" path="mockito-all-1.8.2.jar" sourcepath="/home/mtodd/.m2/repository/org/mockito/mockito-all/1.8.2/mockito-all-1.8.2-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/home/mtodd/.apps/android-sdk-linux_86/platforms/android-8/android.jar"/>
+	<classpathentry kind="lib" path="/home/mtodd/.apps/android-sdk-linux_86/platforms/android-8/android.jar" sourcepath="/home/mtodd/checkout/android"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

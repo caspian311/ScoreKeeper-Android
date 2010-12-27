@@ -12,13 +12,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 public class HistoryView {
 	private final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 	private final ListenerManager backPressedListenerManager = new ListenerManager();
 	private final ListenerManager doneButtonListenerManager = new ListenerManager();
+	private final ListenerManager clearButtonListenerManager = new ListenerManager();
 	
 	private final Activity activity;
 	private final LinearLayout mainView;
@@ -41,14 +41,14 @@ public class HistoryView {
 		mainViewLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		mainView.setLayoutParams(mainViewLayoutParams);
 		mainView.setOrientation(LinearLayout.VERTICAL);
-		mainView.setBackgroundColor(0xFF3399CC);
+		BackgroundUtil.setBackground(mainView);
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(activity);
 		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("History");
-		title.setTextSize(30);
-		title.setTextColor(0xFF000000);
+		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
+		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(title);
 
@@ -63,12 +63,7 @@ public class HistoryView {
 		mainView.addView(historyContainer);
 		
 		Button doneButton = new Button(activity);
-		doneButton.setGravity(Gravity.CENTER_HORIZONTAL);
-		TableLayout.LayoutParams doneButtonLayoutParams = new TableLayout.LayoutParams(
-				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-		doneButtonLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
-		doneButtonLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
-		doneButton.setLayoutParams(doneButtonLayoutParams);
+		ButtonUtilities.setLayout(doneButton);
 		doneButton.setText("Done");
 		doneButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -77,6 +72,17 @@ public class HistoryView {
 			}
 		});
 		mainView.addView(doneButton);
+		
+		Button clearButton = new Button(activity);
+		ButtonUtilities.setLayout(clearButton);
+		clearButton.setText("Clear");
+		clearButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clearButtonListenerManager.notifyListeners();
+			}
+		});
+		mainView.addView(clearButton);
 	}
 
 	public void setHistory(List<Game> allGames) {
@@ -90,15 +96,15 @@ public class HistoryView {
 
 			TextView gameType = new TextView(activity);
 			gameType.setText(game.getGameType());
-			gameType.setTextSize(25);
-			gameType.setTextColor(0xFF000000);
+			gameType.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
+			gameType.setTextColor(UIConstants.TEXT_COLOR);
 			topRow.addView(gameType);
 
 			TextView gameOverTimestamp = new TextView(activity);
 			gameOverTimestamp.setText(dateFormatter.format(game
 					.getGameOverTimestamp()));
-			gameOverTimestamp.setTextSize(20);
-			gameOverTimestamp.setTextColor(0xFF000000);
+			gameOverTimestamp.setTextSize(UIConstants.TEXT_SMALL_SIZE);
+			gameOverTimestamp.setTextColor(UIConstants.TEXT_COLOR);
 			topRow.addView(gameOverTimestamp);
 
 			LinearLayout bottomRow = new LinearLayout(activity);
@@ -119,9 +125,9 @@ public class HistoryView {
 			}
 
 			TextView scoreBoardTextView = new TextView(activity);
-			scoreBoardTextView.setTextColor(0xFF000000);
+			scoreBoardTextView.setTextColor(UIConstants.TEXT_COLOR);
 			scoreBoardTextView.setText(scoreBoardText.toString());
-			scoreBoardTextView.setTextSize(15);
+			scoreBoardTextView.setTextSize(UIConstants.TEXT_TINY_SIZE);
 			bottomRow.addView(scoreBoardTextView);
 		}
 	}
@@ -130,6 +136,10 @@ public class HistoryView {
 		backPressedListenerManager.notifyListeners();
 	}
 
+	public void addClearButtonPressedListener(Listener listener) {
+		clearButtonListenerManager.addListener(listener);
+	}
+	
 	public void addDonePressedListener(Listener listener) {
 		doneButtonListenerManager.addListener(listener);
 	}

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,11 +14,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
 public class MainPageModelTest {
 	@Mock
 	private PageNavigator pageNavigator;
 	@Mock
 	private CurrentGameStore currentGameStore;
+	@Mock
+	private Context context;
 
 	private MainPageModel testObject;
 
@@ -25,7 +32,7 @@ public class MainPageModelTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
-		testObject = new MainPageModel(currentGameStore, pageNavigator);
+		testObject = new MainPageModel(context, currentGameStore, pageNavigator);
 	}
 
 	@Test
@@ -58,5 +65,17 @@ public class MainPageModelTest {
 		testObject.goToHistoryPage();
 
 		verify(pageNavigator).navigateToActivity(HistoryActivity.class);
+	}
+	
+	@Test
+	public void versionNumberStartsWithTheWorldVersion() throws Exception {
+		PackageManager packageManager = mock(PackageManager.class);
+		doReturn(packageManager).when(context).getPackageManager();
+		String packageName = UUID.randomUUID().toString();
+		doReturn(packageName).when(context).getPackageName();
+		PackageInfo packageInfo = mock(PackageInfo.class);
+		doReturn(packageInfo).when(packageManager).getPackageInfo(eq(packageName), anyInt());
+		
+		assertTrue(testObject.getVersion().startsWith("Version "));
 	}
 }

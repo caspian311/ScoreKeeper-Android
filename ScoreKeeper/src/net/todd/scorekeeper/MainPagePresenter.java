@@ -1,40 +1,42 @@
 package net.todd.scorekeeper;
 
 public class MainPagePresenter {
-	public static void create(final MainPageView mainView, final MainPageModel mainModel) {
-		mainView.addQuitButtonListener(new Listener() {
+	public static void create(final MainPageView view, final MainPageModel model) {
+		view.addQuitButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				mainModel.quitApplication();
+				model.quitApplication();
 			}
 		});
 
-		mainView.addManagePlayersButtonListener(new Listener() {
+		view.addManagePlayersButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				mainModel.goToManagePlayerPage();
+				model.goToManagePlayerPage();
 			}
 		});
 
-		mainView.addStartButtonListener(new Listener() {
+		view.addStartButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				mainModel.goToStartGamePage();
+				model.goToStartGamePage();
 			}
 		});
 
-		mainView.addHistoryButtonListener(new Listener() {
+		view.addHistoryButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				mainModel.goToHistoryPage();
+				model.goToHistoryPage();
 			}
 		});
 
-		mainView.addBackPressedListener(new Listener() {
+		view.addBackPressedListener(new Listener() {
 			@Override
 			public void handle() {
-				mainModel.quitApplication();
+				model.quitApplication();
 			}
 		});
+		
+		view.setVersion(model.getVersion());
 	}
 }

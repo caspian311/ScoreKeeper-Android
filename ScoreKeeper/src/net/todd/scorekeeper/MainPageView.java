@@ -20,17 +20,19 @@ public class MainPageView {
 	private final ListenerManager historyButtonListenerManager = new ListenerManager();
 	private final ListenerManager backPressedListenerManager = new ListenerManager();
 
+	private final TextView version;
+
 	public MainPageView(Context context) {
 		mainLayout = new RelativeLayout(context);
 		mainLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT));
-		mainLayout.setBackgroundColor(0xFF3399CC);
+		BackgroundUtil.setBackground(mainLayout);
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		title.setText("Score Keeper");
-		title.setTextSize(30);
-		title.setTextColor(0xFF000000);
+		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
+		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 		mainLayout.addView(title);
 
@@ -54,7 +56,7 @@ public class MainPageView {
 			}
 		});
 		firstRow.addView(addPlayersButton);
-		
+
 		Button historyButton = new Button(context);
 		historyButton.setText("See History");
 		historyButton.setTextSize(20);
@@ -70,7 +72,7 @@ public class MainPageView {
 		tableView.addView(secondRow);
 
 		Button startGameButton = new Button(context);
-		startGameButton.setText("Start Game");
+		startGameButton.setText("New Game");
 		startGameButton.setTextSize(20);
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -79,7 +81,7 @@ public class MainPageView {
 			}
 		});
 		secondRow.addView(startGameButton);
-		
+
 		Button quitButton = new Button(context);
 		quitButton.setText("Quit");
 		quitButton.setTextSize(20);
@@ -90,6 +92,13 @@ public class MainPageView {
 			}
 		});
 		secondRow.addView(quitButton);
+		
+		version = new TextView(context);
+		version.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		version.setTextSize(UIConstants.TEXT_SMALL_SIZE);
+		version.setTextColor(UIConstants.TEXT_COLOR);
+		version.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+		mainLayout.addView(version);
 	}
 
 	public View getView() {
@@ -107,7 +116,7 @@ public class MainPageView {
 	public void addStartButtonListener(Listener listener) {
 		startGameButtonListenerManager.addListener(listener);
 	}
-	
+
 	public void addHistoryButtonListener(Listener listener) {
 		historyButtonListenerManager.addListener(listener);
 	}
@@ -115,8 +124,12 @@ public class MainPageView {
 	public void backPressed() {
 		backPressedListenerManager.notifyListeners();
 	}
-	
+
 	public void addBackPressedListener(Listener listener) {
 		backPressedListenerManager.addListener(listener);
+	}
+	
+	public void setVersion(String versionText) {
+		version.setText(versionText);
 	}
 }

@@ -16,7 +16,7 @@ public class MainPageActivity extends Activity {
 		new GameRestorer(currentStateStore, pageNavigator).restoreGameInProgress();
 
 		mainView = new MainPageView(this);
-		MainPageModel mainModel = new MainPageModel(currentStateStore, pageNavigator);
+		MainPageModel mainModel = new MainPageModel(this, currentStateStore, pageNavigator);
 		MainPagePresenter.create(mainView, mainModel);
 
 		setContentView(mainView.getView());

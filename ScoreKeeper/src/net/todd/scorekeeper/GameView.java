@@ -48,17 +48,9 @@ public class GameView {
 		mainViewLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		mainViewLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		mainView.setLayoutParams(mainViewLayoutParams);
-		mainView.setBackgroundColor(UIConstants.BACKGROUND_COLOR);
+		BackgroundUtil.setBackground(mainView);
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainScrollView.addView(mainView);
-
-		TextView title = new TextView(context);
-		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-		title.setText("Start Game");
-		title.setTextSize(30);
-		title.setTextColor(UIConstants.TEXT_COLOR);
-		title.setGravity(Gravity.CENTER_HORIZONTAL);
-		mainView.addView(title);
 
 		LinearLayout playerData = new LinearLayout(context);
 		playerData.setOrientation(LinearLayout.HORIZONTAL);
@@ -69,7 +61,7 @@ public class GameView {
 
 		playerName = new TextView(context);
 		playerName.setTextColor(UIConstants.TEXT_COLOR);
-		playerName.setTextSize(45);
+		playerName.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		playerName.setGravity(Gravity.CENTER_HORIZONTAL);
 		playerData.addView(playerName);
 
@@ -82,7 +74,7 @@ public class GameView {
 
 		playerScore = new TextView(context);
 		playerScore.setTextColor(UIConstants.TEXT_COLOR);
-		playerScore.setTextSize(45);
+		playerScore.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
 		playerScore.setGravity(Gravity.CENTER_HORIZONTAL);
 		playerData.addView(playerScore);
 
@@ -105,15 +97,13 @@ public class GameView {
 		mainView.addView(buttonLayout);
 
 		previousPlayerButton = new Button(context);
-		previousPlayerButton.setLayoutParams(new LayoutParams(UIConstants.BUTTON_WIDTH,
-				UIConstants.BUTTON_HEIGHT));
+		ButtonUtilities.setLayout(previousPlayerButton);
 		previousPlayerButton.setText("Previous");
 		previousPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL);
 		buttonLayout.addView(previousPlayerButton);
 
 		nextPlayerButton = new Button(context);
-		nextPlayerButton.setLayoutParams(new LayoutParams(UIConstants.BUTTON_WIDTH,
-				UIConstants.BUTTON_HEIGHT));
+		ButtonUtilities.setLayout(nextPlayerButton);
 		nextPlayerButton.setText("Next");
 		nextPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL);
 		buttonLayout.addView(nextPlayerButton);
@@ -141,11 +131,7 @@ public class GameView {
 
 		Button gameOverButton = new Button(context);
 		gameOverButton.setGravity(Gravity.CENTER_HORIZONTAL);
-		LinearLayout.LayoutParams gameOverLayoutParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		gameOverLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
-		gameOverLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
-		gameOverButton.setLayoutParams(gameOverLayoutParams);
+		ButtonUtilities.setLayout(gameOverButton);
 		gameOverButton.setText("Game Over");
 		gameOverButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -209,13 +195,13 @@ public class GameView {
 
 			TextView playerView = new TextView(context);
 			playerView.setText(scoreBoardEntry.getPlayer().getName());
-			playerView.setTextSize(24);
+			playerView.setTextSize(UIConstants.TEXT_SMALL_SIZE);
 			playerView.setTextColor(UIConstants.TEXT_COLOR);
 			playerRow.addView(playerView);
 
 			TextView playerScoreView = new TextView(context);
 			playerScoreView.setText("" + scoreBoardEntry.getScore());
-			playerScoreView.setTextSize(24);
+			playerScoreView.setTextSize(UIConstants.TEXT_SMALL_SIZE);
 			playerScoreView.setTextColor(UIConstants.TEXT_COLOR);
 			playerRow.addView(playerScoreView);
 		}

@@ -2,6 +2,8 @@ package net.todd.scorekeeper;
 
 import static org.mockito.Mockito.*;
 
+import java.util.UUID;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -47,6 +49,16 @@ public class MainPagePresenterTest {
 		historyButtonListener = historyButtonListenerCaptor.getValue();
 		
 		reset(view, model);
+	}
+	
+	@Test
+	public void initiallyPullTheVersionFromTheModelAndPopulateTheView() {
+		String versionText = UUID.randomUUID().toString();
+		doReturn(versionText).when(model).getVersion();
+		
+		MainPagePresenter.create(view, model);
+		
+		verify(view).setVersion(versionText);
 	}
 	
 	@Test

@@ -49,14 +49,14 @@ public class SetupGameView {
 		mainLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		mainLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		mainView.setLayoutParams(mainLayoutParams);
-		mainView.setBackgroundColor(UIConstants.BACKGROUND_COLOR);
+		BackgroundUtil.setBackground(mainView);
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("Setup the Game");
-		title.setTextSize(UIConstants.TEXT_SIZE);
+		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(title);
@@ -72,9 +72,7 @@ public class SetupGameView {
 		mainView.addView(controlView);
 
 		Button cancelButton = new Button(context);
-		LayoutParams cancelButtonLayout = new LayoutParams(UIConstants.BUTTON_WIDTH,
-				UIConstants.BUTTON_HEIGHT);
-		cancelButton.setLayoutParams(cancelButtonLayout);
+		ButtonUtilities.setLayout(cancelButton);
 		cancelButton.setText("Cancel");
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -85,9 +83,7 @@ public class SetupGameView {
 		controlView.addView(cancelButton);
 
 		Button startGameButton = new Button(context);
-		LayoutParams startGameButtonLayout = new LayoutParams(UIConstants.BUTTON_WIDTH,
-				UIConstants.BUTTON_HEIGHT);
-		startGameButton.setLayoutParams(startGameButtonLayout);
+		ButtonUtilities.setLayout(startGameButton);
 		startGameButton.setText("Start Game");
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -138,7 +134,7 @@ public class SetupGameView {
 
 			TextView playerName = new TextView(context);
 			playerName.setText(player.getName());
-			playerName.setTextSize(UIConstants.TEXT_SIZE);
+			playerName.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
 			playerName.setTextColor(UIConstants.TEXT_COLOR);
 			playerRow.addView(playerName);
 

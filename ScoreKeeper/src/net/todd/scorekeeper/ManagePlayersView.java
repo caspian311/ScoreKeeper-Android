@@ -43,12 +43,12 @@ public class ManagePlayersView {
 				LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		mainView.setLayoutParams(mainViewLayoutParams);
 		mainView.setOrientation(LinearLayout.VERTICAL);
-		mainView.setBackgroundColor(UIConstants.BACKGROUND_COLOR);
+		BackgroundUtil.setBackground(mainView);
 		mainScrollView.addView(mainView);
 
 		TextView title = new TextView(context);
 		title.setText("Manager Players");
-		title.setTextSize(UIConstants.TEXT_SIZE);
+		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -134,7 +134,7 @@ public class ManagePlayersView {
 
 		TextView player = new TextView(context);
 		player.setText(playerName);
-		player.setTextSize(UIConstants.TEXT_SIZE);
+		player.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
 		player.setTextColor(UIConstants.TEXT_COLOR);
 		playerRow.addView(player);
 
