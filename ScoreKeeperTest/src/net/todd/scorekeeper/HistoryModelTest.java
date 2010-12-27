@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -34,30 +35,55 @@ public class HistoryModelTest {
 
 		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
 	}
-	
+
 	@Test
 	public void allGamesReturnsAllGamesFromTheGameStoreInOrderWithTheNewsetGameFirstAndOldestGameLast() {
 		Calendar calendar = Calendar.getInstance();
-		
+
 		calendar.set(2010, 7, 15);
 		Date date1 = calendar.getTime();
-		
+
 		calendar.set(2010, 2, 15);
 		Date date2 = calendar.getTime();
-		
+
 		calendar.set(2010, 10, 15);
 		Date date3 = calendar.getTime();
-		
+
 		Game game1 = new Game();
 		game1.setGameOverTimestamp(date1);
 		Game game2 = new Game();
 		game2.setGameOverTimestamp(date2);
 		Game game3 = new Game();
 		game3.setGameOverTimestamp(date3);
-		
+
 		List<Game> expectedGames = Arrays.asList(game1, game2, game3);
 		doReturn(expectedGames).when(gameStore).getAllGames();
 
 		assertEquals(Arrays.asList(game3, game1, game2), testObject.getAllGames());
+	}
+
+	@Test
+	public void clearingHistoryDeletesGamesFromGameStoreThenNotifiesTheHistoryChangedListeners() {
+		Listener listener = mock(Listener.class);
+		testObject.addHistoryChangedListener(listener);
+
+		testObject.clearHistory();
+
+		InOrder inOrder = inOrder(gameStore, listener);
+		inOrder.verify(gameStore).clearAllGames();
+		inOrder.verify(listener).handle();
+	}
+
+	@Test
+	public void removingAGameDeletesThatGameFromGameStoreThenNotifiesTheHistoryChangedListeners() {
+		Listener listener = mock(Listener.class);
+		testObject.addHistoryChangedListener(listener);
+
+		Game selectedGame = mock(Game.class);
+		testObject.removeGame(selectedGame);
+
+		InOrder inOrder = inOrder(gameStore, listener);
+		inOrder.verify(gameStore).deleteGame(selectedGame);
+		inOrder.verify(listener).handle();
 	}
 }

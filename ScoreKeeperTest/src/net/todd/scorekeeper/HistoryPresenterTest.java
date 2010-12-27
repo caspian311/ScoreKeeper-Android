@@ -19,6 +19,11 @@ public class HistoryPresenterTest {
 
 	private Listener backPressedListener;
 	private Listener donePressedListener;
+	private Listener clearButtonPressedListener;
+	private Listener clearHistoryConfirmedListener;
+	private Listener historyChangedListener;
+	private Listener clearGameConfirmationListener;
+	private Listener clearGameButtonListener;
 
 	@Before
 	public void setUp() {
@@ -36,6 +41,33 @@ public class HistoryPresenterTest {
 		verify(view).addDonePressedListener(donePressedListenerCaptor.capture());
 		donePressedListener = donePressedListenerCaptor.getValue();
 
+		ArgumentCaptor<Listener> clearButtonPressedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addClearButtonPressedListener(clearButtonPressedListenerCaptor.capture());
+		clearButtonPressedListener = clearButtonPressedListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> clearHistoryConfirmedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addClearHistoryConfirmationListener(
+				clearHistoryConfirmedListenerCaptor.capture());
+		clearHistoryConfirmedListener = clearHistoryConfirmedListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> historyChangedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(model).addHistoryChangedListener(historyChangedListenerCaptor.capture());
+		historyChangedListener = historyChangedListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> clearHistoryConfirmationListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addClearGameConfirmationListener(
+				clearHistoryConfirmationListenerCaptor.capture());
+		clearGameConfirmationListener = clearHistoryConfirmationListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> clearGameButtonListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addClearGameButtonPressedListener(clearGameButtonListenerCaptor.capture());
+		clearGameButtonListener = clearGameButtonListenerCaptor.getValue();
+
 		reset(view, model);
 	}
 
@@ -52,7 +84,7 @@ public class HistoryPresenterTest {
 
 		verify(model).finish();
 	}
-	
+
 	@Test
 	public void getAllGamesFromModelAndDisplayThemInitially() {
 		List<Game> games = Arrays.asList(mock(Game.class), mock(Game.class), mock(Game.class));
@@ -61,5 +93,46 @@ public class HistoryPresenterTest {
 		HistoryPresenter.create(view, model);
 
 		verify(view).setHistory(games);
+	}
+
+	@Test
+	public void whenClearButtonIsPressedViewShowsTheConfirmDialog() {
+		clearButtonPressedListener.handle();
+
+		verify(view).confirmClearingHistory();
+	}
+
+	@Test
+	public void whenConfirmationIsGivenThenClearTheHistory() {
+		clearHistoryConfirmedListener.handle();
+
+		verify(model).clearHistory();
+	}
+
+	@Test
+	public void whenHistoryChangesThenRepopulateTheHistoryOnTheView() {
+		List<Game> allGames = Arrays.asList(mock(Game.class), mock(Game.class), mock(Game.class));
+		doReturn(allGames).when(model).getAllGames();
+
+		historyChangedListener.handle();
+
+		verify(view).setHistory(allGames);
+	}
+
+	@Test
+	public void whenConfirmationIsGivenToClearTheGameThenRemoveTheSelectedGame() {
+		Game selectedGame = mock(Game.class);
+		doReturn(selectedGame).when(view).getSelectedGame();
+
+		clearGameConfirmationListener.handle();
+
+		verify(model).removeGame(selectedGame);
+	}
+
+	@Test
+	public void whenClearGameButtonIsPressedConfirmTheClearing() {
+		clearGameButtonListener.handle();
+
+		verify(view).confirmClearingGame();
 	}
 }

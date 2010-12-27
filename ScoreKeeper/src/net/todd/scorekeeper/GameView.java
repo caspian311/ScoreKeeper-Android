@@ -110,8 +110,8 @@ public class GameView {
 
 		TextView scoreBoardTitle = new TextView(context);
 		scoreBoardTitle.setGravity(Gravity.LEFT);
-		LinearLayout.LayoutParams scoreBoardTitleLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams scoreBoardTitleLayoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		scoreBoardTitleLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardTitleLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardTitle.setLayoutParams(scoreBoardTitleLayoutParams);
