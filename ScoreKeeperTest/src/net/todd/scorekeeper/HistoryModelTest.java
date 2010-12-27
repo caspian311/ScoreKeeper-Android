@@ -86,4 +86,18 @@ public class HistoryModelTest {
 		inOrder.verify(gameStore).deleteGame(selectedGame);
 		inOrder.verify(listener).handle();
 	}
+
+	@Test
+	public void thereAreNoGamesInHistoryIfTheStoreHasNoGames() {
+		doReturn(Arrays.asList()).when(gameStore).getAllGames();
+
+		assertFalse("there should not be games in history", testObject.areThereGamesInHistory());
+	}
+
+	@Test
+	public void thereAreGamesInHistoryIfTheStoreHasGames() {
+		doReturn(Arrays.asList(mock(Game.class))).when(gameStore).getAllGames();
+
+		assertTrue("there should be games in history", testObject.areThereGamesInHistory());
+	}
 }

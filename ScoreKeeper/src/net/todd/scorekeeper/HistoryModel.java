@@ -36,4 +36,8 @@ public class HistoryModel {
 		gameStore.deleteGame(selectedGame);
 		historyChangedListener.notifyListeners();
 	}
+
+	public boolean areThereGamesInHistory() {
+		return !gameStore.getAllGames().isEmpty();
+	}
 }

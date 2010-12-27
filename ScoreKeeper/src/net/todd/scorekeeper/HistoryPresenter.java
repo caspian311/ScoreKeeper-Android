@@ -2,7 +2,7 @@ package net.todd.scorekeeper;
 
 public class HistoryPresenter {
 	public static void create(final HistoryView view, final HistoryModel model) {
-		view.setHistory(model.getAllGames());
+		updateView(view, model);
 
 		view.addBackPressedListener(new Listener() {
 			@Override
@@ -49,8 +49,13 @@ public class HistoryPresenter {
 		model.addHistoryChangedListener(new Listener() {
 			@Override
 			public void handle() {
-				view.setHistory(model.getAllGames());
+				updateView(view, model);
 			}
 		});
+	}
+
+	private static void updateView(final HistoryView view, final HistoryModel model) {
+		view.setHistory(model.getAllGames());
+		view.setClearButtonEnabled(model.areThereGamesInHistory());
 	}
 }

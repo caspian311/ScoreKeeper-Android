@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -32,6 +33,7 @@ public class HistoryView {
 	private final ScrollView historyContainer;
 
 	private Game selectedGameToRemove;
+	private final Button clearButton;
 
 	public HistoryView(Activity activity) {
 		this.activity = activity;
@@ -72,7 +74,7 @@ public class HistoryView {
 		buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
 		mainView.addView(buttonLayout);
 
-		Button clearButton = new Button(activity);
+		clearButton = new Button(activity);
 		ButtonUtilities.setLayout(clearButton);
 		clearButton.setText("Clear");
 		clearButton.setOnClickListener(new OnClickListener() {
@@ -115,8 +117,9 @@ public class HistoryView {
 			gameOverTimestamp.setTextColor(UIConstants.TEXT_COLOR);
 			firstGameRow.addView(gameOverTimestamp);
 
-			Button removeGameButton = new Button(activity);
-			removeGameButton.setText("x");
+			ImageButton removeGameButton = new ImageButton(activity);
+			removeGameButton.setImageDrawable(activity.getResources()
+					.getDrawable(R.drawable.delete));
 			removeGameButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -163,6 +166,10 @@ public class HistoryView {
 				borderGameRow.addView(line);
 			}
 		}
+	}
+
+	public void setClearButtonEnabled(boolean isEnabled) {
+		clearButton.setEnabled(isEnabled);
 	}
 
 	public void backPressed() {

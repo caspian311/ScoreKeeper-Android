@@ -135,4 +135,40 @@ public class HistoryPresenterTest {
 
 		verify(view).confirmClearingGame();
 	}
+
+	@Test
+	public void initiallyIfThereAreGamesInHistoryThenEnableTheClearButton() {
+		doReturn(true).when(model).areThereGamesInHistory();
+
+		HistoryPresenter.create(view, model);
+
+		verify(view).setClearButtonEnabled(true);
+	}
+
+	@Test
+	public void initiallyIfThereAreNoGamesInHistoryThenDisableTheClearButton() {
+		doReturn(false).when(model).areThereGamesInHistory();
+
+		HistoryPresenter.create(view, model);
+
+		verify(view).setClearButtonEnabled(false);
+	}
+
+	@Test
+	public void whenHistoryHasChangedAndThereAreGamesInHistoryThenEnableTheClearButton() {
+		doReturn(true).when(model).areThereGamesInHistory();
+
+		historyChangedListener.handle();
+
+		verify(view).setClearButtonEnabled(true);
+	}
+
+	@Test
+	public void whenHistoryHasChangedAndThereAreNoGamesInHistoryThenDisableTheClearButton() {
+		doReturn(false).when(model).areThereGamesInHistory();
+
+		historyChangedListener.handle();
+
+		verify(view).setClearButtonEnabled(false);
+	}
 }
