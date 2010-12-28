@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -138,8 +139,8 @@ public class SetupGameView {
 			playerName.setTextColor(UIConstants.TEXT_COLOR);
 			playerRow.addView(playerName);
 
-			Button upButton = new Button(context);
-			upButton.setText("+");
+			ImageButton upButton = new ImageButton(context);
+			upButton.setImageDrawable(context.getResources().getDrawable(R.drawable.add));
 			upButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -149,8 +150,8 @@ public class SetupGameView {
 			});
 			playerRow.addView(upButton);
 
-			Button downButton = new Button(context);
-			downButton.setText("-");
+			ImageButton downButton = new ImageButton(context);
+			downButton.setImageDrawable(context.getResources().getDrawable(R.drawable.minus));
 			downButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
