@@ -34,6 +34,8 @@ public class HistoryView {
 
 	private Game selectedGameToRemove;
 	private final Button clearButton;
+	private final LinearLayout buttonLayout;
+	private final TextView title;
 
 	public HistoryView(Activity activity) {
 		this.activity = activity;
@@ -48,7 +50,7 @@ public class HistoryView {
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		BackgroundUtil.setBackground(mainView);
 
-		TextView title = new TextView(activity);
+		title = new TextView(activity);
 		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		title.setText("History");
 		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
@@ -57,14 +59,9 @@ public class HistoryView {
 		mainView.addView(title);
 
 		historyContainer = new ScrollView(activity);
-		LinearLayout.LayoutParams historyContainerLayoutParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT, 300);
-		historyContainerLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
-		historyContainerLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
-		historyContainer.setLayoutParams(historyContainerLayoutParams);
 		mainView.addView(historyContainer);
 
-		LinearLayout buttonLayout = new LinearLayout(activity);
+		buttonLayout = new LinearLayout(activity);
 		buttonLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -105,6 +102,14 @@ public class HistoryView {
 				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT));
 		historyTable.setColumnStretchable(0, true);
 		historyContainer.addView(historyTable);
+
+		int totalHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
+		int resultingHeight = totalHeight - 210;
+		LinearLayout.LayoutParams historyContainerLayoutParams = new LinearLayout.LayoutParams(
+				LinearLayout.LayoutParams.FILL_PARENT, resultingHeight);
+		historyContainerLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
+		historyContainerLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
+		historyContainer.setLayoutParams(historyContainerLayoutParams);
 
 		for (int gameIndex = 0; gameIndex < allGames.size(); gameIndex++) {
 			final Game game = allGames.get(gameIndex);
