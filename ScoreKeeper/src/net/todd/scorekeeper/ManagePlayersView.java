@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -76,15 +77,15 @@ public class ManagePlayersView {
 					addPlayerButtonListenerManager.notifyListeners();
 					return true;
 				}
-				
+
 				return super.onKeyDown(keyCode, event);
 			};
 		};
 		playerNameText.setLines(1);
 		controlsRow.addView(playerNameText);
 
-		Button addPlayerButton = new Button(context);
-		addPlayerButton.setText("Add Player");
+		ImageButton addPlayerButton = new ImageButton(context);
+		addPlayerButton.setImageDrawable(context.getResources().getDrawable(R.drawable.add));
 		addPlayerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -138,8 +139,8 @@ public class ManagePlayersView {
 		player.setTextColor(UIConstants.TEXT_COLOR);
 		playerRow.addView(player);
 
-		Button removePlayerButton = new Button(context);
-		removePlayerButton.setText("Remove");
+		ImageButton removePlayerButton = new ImageButton(context);
+		removePlayerButton.setImageDrawable(context.getResources().getDrawable(R.drawable.delete));
 		removePlayerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -179,8 +180,8 @@ public class ManagePlayersView {
 	public void backPressed() {
 		backPressedListenerManager.notifyListeners();
 	}
-	
+
 	public void addBackPressedListener(Listener listener) {
-		backPressedListenerManager .addListener(listener);
+		backPressedListenerManager.addListener(listener);
 	}
 }
