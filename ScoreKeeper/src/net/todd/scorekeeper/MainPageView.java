@@ -92,7 +92,7 @@ public class MainPageView {
 			}
 		});
 		secondRow.addView(quitButton);
-		
+
 		version = new TextView(context);
 		version.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		version.setTextSize(UIConstants.TEXT_SMALL_SIZE);
@@ -128,7 +128,7 @@ public class MainPageView {
 	public void addBackPressedListener(Listener listener) {
 		backPressedListenerManager.addListener(listener);
 	}
-	
+
 	public void setVersion(String versionText) {
 		version.setText(versionText);
 	}

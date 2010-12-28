@@ -68,7 +68,7 @@ public class GameView {
 		TextView colonText = new TextView(context);
 		colonText.setGravity(Gravity.CENTER_HORIZONTAL);
 		colonText.setTextColor(UIConstants.TEXT_COLOR);
-		colonText.setTextSize(45);
+		colonText.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		colonText.setText(" : ");
 		playerData.addView(colonText);
 
