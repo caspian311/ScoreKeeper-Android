@@ -3,6 +3,8 @@ package net.todd.scorekeeper;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.todd.scorekeeper.data.Game;
+import net.todd.scorekeeper.data.Persistor;
 import android.content.Context;
 
 public class GameStore {

@@ -1,6 +1,8 @@
 package net.todd.scorekeeper;
 
 import static org.mockito.Mockito.*;
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -64,14 +66,14 @@ public class GameWatcherTest {
 
 		verify(currentGameStore).saveState(scoreBoard, currentPlayer);
 	}
-	
+
 	@Test
 	public void whenGamesIsOverThenTheCurrentStateIsCleared() {
 		gameOverListener.handle();
 
 		verify(currentGameStore).clearState();
 	}
-	
+
 	@Test
 	public void whenGamesIsCancelledThenTheCurrentStateIsCleared() {
 		cancellationListener.handle();

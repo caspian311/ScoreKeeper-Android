@@ -1,4 +1,4 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import java.io.FileNotFoundException;
 import java.io.ObjectInputStream;
@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.todd.scorekeeper.Logger;
 import android.content.Context;
 
 public class Persistor<T> {
@@ -16,32 +17,17 @@ public class Persistor<T> {
 		return new Persistor<T>(clazz, context);
 	}
 
-	public Persistor(Class<T> clazz, Context context) {
+	private Persistor(Class<T> clazz, Context context) {
 		this.clazz = clazz;
 		this.context = context;
 	}
 
 	public void persist(List<T> items) {
-		save(getDataFilename(), items);
-	}
-
-	public int nextId() {
-		int currentId = loadCurrentId();
-		int nextId = currentId + 1;
-		saveCurrentId(nextId);
-		return nextId;
-	}
-
-	private void saveCurrentId(int currentId) {
-		save(getIdFilename(), currentId);
-	}
-
-	private void save(String filename, Object object) {
 		ObjectOutputStream oos = null;
 		try {
-			oos = new ObjectOutputStream(context.openFileOutput(filename,
+			oos = new ObjectOutputStream(context.openFileOutput(getDataFilename(),
 					Context.MODE_PRIVATE));
-			oos.writeObject(object);
+			oos.writeObject(items);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
@@ -50,21 +36,6 @@ public class Persistor<T> {
 			} catch (Exception e) {
 			}
 		}
-	}
-
-	private int loadCurrentId() {
-		Integer id = 0;
-		if (doesFileExist(getIdFilename())) {
-			try {
-				ObjectInputStream ois = new ObjectInputStream(
-						context.openFileInput(getIdFilename()));
-				id = ((Integer) ois.readObject()).intValue();
-			} catch (Exception e) {
-				Logger.error(getClass().getName(), "Could not load the id file for: "
-						+ getIdFilename(), e);
-			}
-		}
-		return id;
 	}
 
 	private boolean doesFileExist(String filename) {
@@ -82,8 +53,7 @@ public class Persistor<T> {
 		if (doesFileExist(getDataFilename())) {
 			ObjectInputStream ois = null;
 			try {
-				ois = new ObjectInputStream(
-						context.openFileInput(getDataFilename()));
+				ois = new ObjectInputStream(context.openFileInput(getDataFilename()));
 				List<?> itemsFromFile = (List<?>) ois.readObject();
 				for (Object object : itemsFromFile) {
 					items.add(clazz.cast(object));
@@ -99,10 +69,6 @@ public class Persistor<T> {
 			}
 		}
 		return items;
-	}
-
-	private String getIdFilename() {
-		return clazz.getName() + ".id";
 	}
 
 	private String getDataFilename() {

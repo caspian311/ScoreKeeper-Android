@@ -1,16 +1,15 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Deprecated
 public class Game implements Serializable, Comparable<Game> {
 	private static final long serialVersionUID = -4703874076017365877L;
-
+	
 	private Date gameOverTimestamp;
 	private String gameType;
 	private ScoreBoard scoreBoard;
-
+	
 	public Date getGameOverTimestamp() {
 		return gameOverTimestamp;
 	}
@@ -71,7 +70,7 @@ public class Game implements Serializable, Comparable<Game> {
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public int compareTo(Game that) {
 		return that.getGameOverTimestamp().compareTo(this.getGameOverTimestamp());

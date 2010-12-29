@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import net.todd.scorekeeper.data.Game;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

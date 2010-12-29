@@ -1,14 +1,13 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Deprecated
 public class ScoreBoard implements Serializable {
 	private static final long serialVersionUID = -9216810547295023938L;
-
+	
 	private final List<ScoreBoardEntry> scoreBoardEntries = new ArrayList<ScoreBoardEntry>();
 
 	public ScoreBoard(List<Player> players) {

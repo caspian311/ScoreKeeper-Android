@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.UUID;
 
+import net.todd.scorekeeper.data.Player;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +22,8 @@ public class PlayerStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void initiallyThereAreNoPlayers() {
-		assertTrue("players should be empty", new PlayerStore(getContext()).getAllPlayers().isEmpty());
+		assertTrue("players should be empty", new PlayerStore(getContext()).getAllPlayers()
+				.isEmpty());
 	}
 
 	@Test
@@ -69,7 +72,8 @@ public class PlayerStoreTest extends AbstractStoreTest {
 	public void removingAPlayerThatWasNeverAddedDoesntDoAnything() {
 		new PlayerStore(getContext()).removePlayer(playerId);
 
-		assertTrue("players should be empty", new PlayerStore(getContext()).getAllPlayers().isEmpty());
+		assertTrue("players should be empty", new PlayerStore(getContext()).getAllPlayers()
+				.isEmpty());
 	}
 
 	@Test

@@ -3,6 +3,8 @@ package net.todd.scorekeeper;
 import java.util.Collections;
 import java.util.List;
 
+import net.todd.scorekeeper.data.Game;
+
 public class HistoryModel {
 	private final GameStore gameStore;
 	private final PageNavigator pageNavigator;

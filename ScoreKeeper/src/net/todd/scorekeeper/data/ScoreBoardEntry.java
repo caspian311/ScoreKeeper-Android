@@ -1,11 +1,11 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import java.io.Serializable;
 
-@Deprecated
+
 public class ScoreBoardEntry implements Serializable, Comparable<ScoreBoardEntry> {
 	private static final long serialVersionUID = 490726045699984371L;
-
+	
 	private final Player player;
 	private int score;
 

@@ -5,6 +5,11 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.todd.scorekeeper.data.CurrentGame;
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
+
 import org.junit.Test;
 
 public class CurrentGameStoreTest extends AbstractStoreTest {
@@ -12,13 +17,13 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 	public void initiallyThereIsNoCurrentGame() {
 		assertNull(new CurrentGameStore(getContext()).getCurrentGame());
 	}
-	
+
 	@Test
 	public void currentGameDataShouldBeAvailableAfterSavingTheState() {
 		Player player1 = new Player("1", "matt");
 		Player player2 = new Player("2", "abbi");
-		Player player3= new Player("3", "caleb");
-		
+		Player player3 = new Player("3", "caleb");
+
 		List<Player> players = new ArrayList<Player>();
 		players.add(player1);
 		players.add(player2);
@@ -45,12 +50,12 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 		assertEquals("2", currentGame.getCurrentPlayer().getId());
 		assertEquals("abbi", currentGame.getCurrentPlayer().getName());
 	}
-	
+
 	@Test
 	public void currentGameDataShouldNotBeAvailableAfterClearingTheState() {
 		Player player1 = new Player("1", "matt");
 		Player player2 = new Player("2", "abbi");
-		
+
 		List<Player> players = new ArrayList<Player>();
 		players.add(player1);
 		players.add(player2);
@@ -60,7 +65,7 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 		new CurrentGameStore(getContext()).saveState(scoreBoard, player2);
 
 		new CurrentGameStore(getContext()).clearState();
-		
+
 		assertNull(new CurrentGameStore(getContext()).getCurrentGame());
 	}
 

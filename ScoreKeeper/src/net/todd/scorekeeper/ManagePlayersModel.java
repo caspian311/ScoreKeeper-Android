@@ -2,6 +2,8 @@ package net.todd.scorekeeper;
 
 import java.util.List;
 
+import net.todd.scorekeeper.data.Player;
+
 public class ManagePlayersModel {
 	private final PlayerStore playerStore;
 	private final PageNavigator pageNavigator;
@@ -12,7 +14,7 @@ public class ManagePlayersModel {
 		this.pageNavigator = pageNavigator;
 		this.playerStore = playerStore;
 	}
-	
+
 	public void addPlayer(String playerName) {
 		if (playerName != null && playerName.length() > 0) {
 			playerStore.addPlayer(new Player(playerStore.nextPlayerId(), playerName));

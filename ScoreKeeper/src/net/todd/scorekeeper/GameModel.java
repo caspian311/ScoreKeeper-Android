@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import net.todd.scorekeeper.data.CurrentGame;
+import net.todd.scorekeeper.data.Game;
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
+
 public class GameModel {
 	private final ListenerManager scoreChangedListenerManager = new ListenerManager();
 	private final ListenerManager playerChangeListenerManager = new ListenerManager();
@@ -31,7 +37,7 @@ public class GameModel {
 		if (currentGame.getCurrentPlayer() != null) {
 			currentPlayersTurn = selectedPlayers.indexOf(currentGame.getCurrentPlayer());
 		}
-		gameType = (String)pageNavigator.getExtra("gameType");
+		gameType = (String) pageNavigator.getExtra("gameType");
 	}
 
 	public void nextPlayer() {

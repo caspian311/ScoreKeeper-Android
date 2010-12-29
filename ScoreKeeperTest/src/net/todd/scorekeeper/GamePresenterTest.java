@@ -5,6 +5,9 @@ import static org.mockito.Mockito.*;
 
 import java.util.Random;
 
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

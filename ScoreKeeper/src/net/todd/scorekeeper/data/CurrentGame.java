@@ -1,13 +1,11 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import java.io.Serializable;
 
-@Deprecated
 public class CurrentGame implements Serializable {
-	private static final long serialVersionUID = -9165656166149475667L;
+	private static final long serialVersionUID = 5432426044479529331L;
 
 	private final ScoreBoard scoreBoard;
-
 	private final Player currentPlayer;
 
 	public CurrentGame(ScoreBoard scoreBoard, Player currentPlayer) {

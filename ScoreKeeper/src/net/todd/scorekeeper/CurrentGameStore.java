@@ -3,6 +3,10 @@ package net.todd.scorekeeper;
 import java.util.Arrays;
 import java.util.List;
 
+import net.todd.scorekeeper.data.CurrentGame;
+import net.todd.scorekeeper.data.Persistor;
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
 import android.content.Context;
 
 public class CurrentGameStore {
@@ -13,11 +17,11 @@ public class CurrentGameStore {
 	}
 
 	public void clearState() {
-		persistor.persist(Arrays.<CurrentGame>asList());
+		persistor.persist(Arrays.<CurrentGame> asList());
 	}
 
 	public void saveState(ScoreBoard scoreBoard, Player currentPlayer) {
-		persistor.persist(Arrays.<CurrentGame>asList(new CurrentGame(scoreBoard, currentPlayer)));
+		persistor.persist(Arrays.<CurrentGame> asList(new CurrentGame(scoreBoard, currentPlayer)));
 	}
 
 	public CurrentGame getCurrentGame() {

@@ -1,11 +1,10 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import java.io.Serializable;
 
-@Deprecated
 public class Player implements Serializable {
 	private static final long serialVersionUID = -3804201764603746312L;
-
+	
 	private final String id;
 	private final String name;
 
@@ -15,15 +14,15 @@ public class Player implements Serializable {
 		this.id = id;
 		this.name = name;
 	}
-
+	
 	public String getId() {
 		return id;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
@@ -31,7 +30,7 @@ public class Player implements Serializable {
 	public boolean istSelected() {
 		return selected;
 	}
-
+	
 	@Override
 	public String toString() {
 		return id + ":" + name;
@@ -70,5 +69,6 @@ public class Player implements Serializable {
 			return false;
 		return true;
 	}
-
+	
+	
 }

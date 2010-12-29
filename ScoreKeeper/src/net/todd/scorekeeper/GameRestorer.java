@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.todd.scorekeeper.data.CurrentGame;
 
 public class GameRestorer {
 	private final CurrentGameStore currentGameStore;

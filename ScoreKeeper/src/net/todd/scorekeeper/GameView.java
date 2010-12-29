@@ -1,5 +1,8 @@
 package net.todd.scorekeeper;
 
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

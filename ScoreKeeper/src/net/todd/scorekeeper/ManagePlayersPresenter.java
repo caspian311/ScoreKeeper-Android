@@ -1,5 +1,6 @@
 package net.todd.scorekeeper;
 
+
 public class ManagePlayersPresenter {
 	public static void create(final ManagePlayersView view, final ManagePlayersModel model) {
 		view.addAddPlayerButtonListener(new Listener() {
@@ -37,7 +38,7 @@ public class ManagePlayersPresenter {
 				model.finish();
 			}
 		});
-		
+
 		view.setPlayers(model.getPlayers());
 	}
 }

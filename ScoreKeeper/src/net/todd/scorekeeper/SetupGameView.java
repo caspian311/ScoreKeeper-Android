@@ -2,6 +2,7 @@ package net.todd.scorekeeper;
 
 import java.util.List;
 
+import net.todd.scorekeeper.data.Player;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

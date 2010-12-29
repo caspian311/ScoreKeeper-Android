@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 
+import net.todd.scorekeeper.data.CurrentGame;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -66,7 +68,7 @@ public class MainPageModelTest {
 
 		verify(pageNavigator).navigateToActivity(HistoryActivity.class);
 	}
-	
+
 	@Test
 	public void versionNumberStartsWithTheWorldVersion() throws Exception {
 		PackageManager packageManager = mock(PackageManager.class);
@@ -75,7 +77,7 @@ public class MainPageModelTest {
 		doReturn(packageName).when(context).getPackageName();
 		PackageInfo packageInfo = mock(PackageInfo.class);
 		doReturn(packageInfo).when(packageManager).getPackageInfo(eq(packageName), anyInt());
-		
+
 		assertTrue(testObject.getVersion().startsWith("Version "));
 	}
 }

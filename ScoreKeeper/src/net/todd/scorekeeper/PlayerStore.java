@@ -4,32 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.todd.scorekeeper.data.Persistor;
+import net.todd.scorekeeper.data.Player;
 import android.content.Context;
 
 public class PlayerStore {
 	private List<Player> players;
 	private final Persistor<Player> persistor;
-	
+
 	public PlayerStore(Context context) {
 		this(Persistor.create(Player.class, context));
 	}
-	
+
 	PlayerStore(Persistor<Player> persistor) {
 		this.persistor = persistor;
 	}
 
 	public List<Player> getAllPlayers() {
 		load();
-		
+
 		return players;
 	}
-	
+
 	public void addPlayer(Player player) {
 		load();
 		players.add(player);
 		persist();
 	}
-	
+
 	public void removePlayer(String playerId) {
 		load();
 		Player playerToRemove = getPlayerById(playerId);
@@ -40,11 +42,11 @@ public class PlayerStore {
 	private void load() {
 		players = persistor.load();
 	}
-	
+
 	private void persist() {
 		persistor.persist(players);
 	}
-	
+
 	public String nextPlayerId() {
 		return UUID.randomUUID().toString();
 	}

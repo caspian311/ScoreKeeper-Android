@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.todd.scorekeeper.data.CurrentGame;
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -21,7 +25,7 @@ public class SetupGameModelTest {
 	private PlayerStore playerStore;
 	@Mock
 	private PageNavigator pageNavigator;
-	
+
 	private List<Player> allPlayers;
 	private String playerOneId;
 	private String playerTwoId;
@@ -31,7 +35,7 @@ public class SetupGameModelTest {
 	private Player player3;
 
 	private SetupGameModel testObject;
-	
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
@@ -42,7 +46,7 @@ public class SetupGameModelTest {
 		player2 = new Player(playerTwoId, "James");
 		playerThreeId = UUID.randomUUID().toString();
 		player3 = new Player(playerThreeId, "John");
-		
+
 		allPlayers = Arrays.asList(player1, player2, player3);
 		doReturn(allPlayers).when(playerStore).getAllPlayers();
 
@@ -103,7 +107,7 @@ public class SetupGameModelTest {
 		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
 		verify(pageNavigator).navigateToActivity(eq(GameActivity.class), extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
-		
+
 		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
 		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
 		assertEquals(2, entries.size());
@@ -111,7 +115,7 @@ public class SetupGameModelTest {
 		assertEquals(player2, entries.get(1).getPlayer());
 		assertEquals(player1, currentGame.getCurrentPlayer());
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void ifTwoPlayersAreSelectedAndOneIsDeselectedThenTheSelectedPlayersAreOnlyTheSelectedPlayers() {
@@ -124,20 +128,20 @@ public class SetupGameModelTest {
 		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
 		verify(pageNavigator).navigateToActivity(eq(GameActivity.class), extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
-		
+
 		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
 		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
 		assertEquals(1, entries.size());
 		assertEquals(player2, entries.get(0).getPlayer());
 	}
-	
+
 	@Test
 	public void cancellingFinishesTheActivity() {
 		testObject.cancel();
-		
+
 		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
 	}
-	
+
 	@Test
 	public void movingAPlayerDown() {
 		testObject.movePlayerDown(playerOneId);
@@ -145,15 +149,15 @@ public class SetupGameModelTest {
 
 		assertEquals(Arrays.asList(player2, player1, player3), players);
 	}
-	
+
 	@Test
 	public void movingAPlayerUp() {
 		testObject.movePlayerUp(playerThreeId);
 		List<Player> players = testObject.getAllPlayers();
-		
+
 		assertEquals(Arrays.asList(player1, player3, player2), players);
 	}
-	
+
 	@Test
 	public void movingTheLowestPlayerDownDoesNothing() {
 		testObject.movePlayerDown(playerThreeId);
@@ -161,7 +165,7 @@ public class SetupGameModelTest {
 
 		assertEquals(Arrays.asList(player1, player2, player3), players);
 	}
-	
+
 	@Test
 	public void movingTheHighestPlayerUpDoesNothing() {
 		testObject.movePlayerUp(playerOneId);
@@ -169,7 +173,7 @@ public class SetupGameModelTest {
 
 		assertEquals(Arrays.asList(player1, player2, player3), players);
 	}
-	
+
 	@Test
 	public void movingAPlayerDownNotifiesThatThePlayersOrderChanged() {
 		Listener listener = mock(Listener.class);

@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.todd.scorekeeper.data.CurrentGame;
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
+
 public class SetupGameModel {
 	private final PageNavigator pageNavigator;
 
@@ -47,7 +51,8 @@ public class SetupGameModel {
 				selectedPlayers.add(player);
 			}
 		}
-		CurrentGame currentGame = new CurrentGame(new ScoreBoard(selectedPlayers), selectedPlayers.get(0));
+		CurrentGame currentGame = new CurrentGame(new ScoreBoard(selectedPlayers),
+				selectedPlayers.get(0));
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);

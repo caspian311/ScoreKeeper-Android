@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import net.todd.scorekeeper.data.Game;
+
 import org.junit.Test;
 
 public class GameStoreTest extends AbstractStoreTest {

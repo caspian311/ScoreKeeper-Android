@@ -9,6 +9,11 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
+import net.todd.scorekeeper.data.CurrentGame;
+import net.todd.scorekeeper.data.Game;
+import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -41,8 +46,9 @@ public class GameModelTest {
 
 		gameType = UUID.randomUUID().toString();
 
-		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)), player2);
-		
+		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)),
+				player2);
+
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 		doReturn(gameType).when(pageNavigator).getExtra("gameType");
 
@@ -116,7 +122,7 @@ public class GameModelTest {
 
 		assertEquals(thirdScore, testObject.getCurrentPlayersScore());
 	}
-	
+
 	@Test
 	public void afterSettingPlayersScoresTheScoreBoardContainsAllScores() {
 		int firstScore = new Random().nextInt();
@@ -191,7 +197,7 @@ public class GameModelTest {
 		inOrder.verify(gameStore).addGame(any(Game.class));
 		inOrder.verify(pageNavigator).navigateToActivity(MainPageActivity.class);
 	}
-	
+
 	@Test
 	public void gameThatIsSavedHasCurrentTimestamp() {
 		testObject.gameOver();
@@ -199,10 +205,10 @@ public class GameModelTest {
 		ArgumentCaptor<Game> gameCaptor = ArgumentCaptor.forClass(Game.class);
 		verify(gameStore).addGame(gameCaptor.capture());
 		Game game = gameCaptor.getValue();
-		
+
 		assertEquals(new Date().getTime(), game.getGameOverTimestamp().getTime(), 500);
 	}
-	
+
 	@Test
 	public void gameThatIsSavedHasGameTypeFromIntent() {
 		testObject.gameOver();
@@ -210,10 +216,10 @@ public class GameModelTest {
 		ArgumentCaptor<Game> gameCaptor = ArgumentCaptor.forClass(Game.class);
 		verify(gameStore).addGame(gameCaptor.capture());
 		Game game = gameCaptor.getValue();
-		
+
 		assertEquals(gameType, game.getGameType());
 	}
-	
+
 	@Test
 	public void gameThatIsSavedHasScoreBoard() {
 		testObject.gameOver();
@@ -221,38 +227,39 @@ public class GameModelTest {
 		ArgumentCaptor<Game> gameCaptor = ArgumentCaptor.forClass(Game.class);
 		verify(gameStore).addGame(gameCaptor.capture());
 		Game game = gameCaptor.getValue();
-		
+
 		ScoreBoard scoreBoard = game.getScoreBoard();
-		
+
 		assertSame(testObject.getScoreBoard(), scoreBoard);
 	}
-	
+
 	@Test
 	public void notifyListenersOfCancellation() {
 		Listener listener = mock(Listener.class);
 		testObject.addCancelGameListener(listener);
-		
+
 		testObject.cancelGame();
-		
+
 		verify(listener).handle();
 	}
-	
+
 	@Test
 	public void notifyListenersOfGameOver() {
 		Listener listener = mock(Listener.class);
 		testObject.addGameOverListener(listener);
-		
+
 		testObject.gameOver();
-		
+
 		verify(listener).handle();
 	}
-	
+
 	@Test
 	public void ifNoCurrentPlayerWasGivenThenAssumeFirstPlayerIsCurrentPlayer() {
 		gameType = UUID.randomUUID().toString();
 
-		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)), null);
-		
+		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)),
+				null);
+
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 		doReturn(gameType).when(pageNavigator).getExtra("gameType");
 

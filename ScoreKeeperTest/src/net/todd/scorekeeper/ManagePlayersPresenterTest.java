@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import net.todd.scorekeeper.data.Player;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -54,7 +56,7 @@ public class ManagePlayersPresenterTest {
 		ArgumentCaptor<Listener> backButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addBackPressedListener(backButtonListenerCaptor.capture());
 		backButtonListener = backButtonListenerCaptor.getValue();
-		
+
 		reset(view, model);
 	}
 
@@ -113,7 +115,7 @@ public class ManagePlayersPresenterTest {
 
 		verify(model).finish();
 	}
-	
+
 	@Test
 	public void whenBackButtonPressedThenModelIsToldToFinish() {
 		backButtonListener.handle();
