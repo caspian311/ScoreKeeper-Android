@@ -42,6 +42,16 @@ public class XmlPersistor<T> {
 		}
 	}
 
+	private boolean doesFileHaveData(String filename) {
+		boolean doesFileHaveData = false;
+		try {
+			FileInputStream input = context.openFileInput(filename);
+			doesFileHaveData = input.available() > 0;
+		} catch (Exception e) {
+		}
+		return doesFileHaveData;
+	}
+
 	private boolean doesFileExist(String filename) {
 		boolean doesFileExist = false;
 		try {
@@ -54,7 +64,7 @@ public class XmlPersistor<T> {
 
 	public List<T> load() {
 		List<T> items = new ArrayList<T>();
-		if (doesFileExist(getDataFilename())) {
+		if (doesFileExist(getDataFilename()) && doesFileHaveData(getDataFilename())) {
 			FileInputStream input = null;
 			try {
 				input = context.openFileInput(getDataFilename());

@@ -18,7 +18,7 @@ public class CurrentGameStore {
 	}
 
 	public void clearState() {
-		persistor.persist(Arrays.<CurrentGame> asList());
+		persistor.persist(new ArrayList<CurrentGame>());
 	}
 
 	public void saveState(ScoreBoard scoreBoard, Player currentPlayer) {

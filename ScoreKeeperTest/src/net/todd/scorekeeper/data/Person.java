@@ -3,7 +3,7 @@ package net.todd.scorekeeper.data;
 import org.simpleframework.xml.Element;
 
 public class Person {
-	@Element
+	@Element(required = false)
 	private String name;
 
 	public void setName(String name) {

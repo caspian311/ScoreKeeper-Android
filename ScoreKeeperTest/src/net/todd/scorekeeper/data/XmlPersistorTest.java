@@ -120,7 +120,7 @@ public class XmlPersistorTest {
 	@Test
 	public void savingStuffSavesItToCorrectFile() throws FileNotFoundException {
 		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
-		persistor.persist(Arrays.asList(new Person()));
+		persistor.persist(new ArrayList<Person>(Arrays.asList(new Person())));
 
 		ArgumentCaptor<String> outputFilenameCaptor = ArgumentCaptor.forClass(String.class);
 		ArgumentCaptor<Integer> outputFileModeCaptor = ArgumentCaptor.forClass(Integer.class);
@@ -136,7 +136,7 @@ public class XmlPersistorTest {
 	@Test
 	public void loadingStuffLoadsFromTheCorrectFile() throws FileNotFoundException {
 		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
-		persistor.persist(Arrays.asList(new Person()));
+		persistor.persist(new ArrayList<Person>(Arrays.asList(new Person())));
 		persistor.load();
 
 		ArgumentCaptor<String> inputFilenameCaptor = ArgumentCaptor.forClass(String.class);

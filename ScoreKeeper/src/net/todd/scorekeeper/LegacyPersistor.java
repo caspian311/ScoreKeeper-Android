@@ -1,5 +1,6 @@
 package net.todd.scorekeeper;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,15 +9,16 @@ import java.util.List;
 
 import android.content.Context;
 
-public class Persistor<T> {
+@Deprecated
+public class LegacyPersistor<T> {
 	private final Class<T> clazz;
 	private final Context context;
 
-	public static <T> Persistor<T> create(Class<T> clazz, Context context) {
-		return new Persistor<T>(clazz, context);
+	public static <T> LegacyPersistor<T> create(Class<T> clazz, Context context) {
+		return new LegacyPersistor<T>(clazz, context);
 	}
 
-	public Persistor(Class<T> clazz, Context context) {
+	public LegacyPersistor(Class<T> clazz, Context context) {
 		this.clazz = clazz;
 		this.context = context;
 	}
@@ -39,8 +41,7 @@ public class Persistor<T> {
 	private void save(String filename, Object object) {
 		ObjectOutputStream oos = null;
 		try {
-			oos = new ObjectOutputStream(context.openFileOutput(filename,
-					Context.MODE_PRIVATE));
+			oos = new ObjectOutputStream(context.openFileOutput(filename, Context.MODE_PRIVATE));
 			oos.writeObject(object);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -77,13 +78,22 @@ public class Persistor<T> {
 		return doesFileExist;
 	}
 
+	private boolean doesFileHaveData(String filename) {
+		boolean doesFileHaveData = false;
+		try {
+			FileInputStream input = context.openFileInput(filename);
+			doesFileHaveData = input.available() > 0;
+		} catch (Exception e) {
+		}
+		return doesFileHaveData;
+	}
+
 	public List<T> load() {
 		List<T> items = new ArrayList<T>();
-		if (doesFileExist(getDataFilename())) {
+		if (doesFileExist(getDataFilename()) && doesFileHaveData(getDataFilename())) {
 			ObjectInputStream ois = null;
 			try {
-				ois = new ObjectInputStream(
-						context.openFileInput(getDataFilename()));
+				ois = new ObjectInputStream(context.openFileInput(getDataFilename()));
 				List<?> itemsFromFile = (List<?>) ois.readObject();
 				for (Object object : itemsFromFile) {
 					items.add(clazz.cast(object));
