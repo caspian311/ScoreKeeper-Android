@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.todd.scorekeeper.data.XmlPersistor;
 import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.XmlPersistor;
 import android.content.Context;
 
 public class PlayerStore {
 	private List<Player> players;
-	private final XmlPersistor<Player> persistor;
+	private final Persistor<Player> persistor;
 
 	public PlayerStore(Context context) {
 		this(XmlPersistor.create(Player.class, context));
 	}
 
-	PlayerStore(XmlPersistor<Player> persistor) {
+	PlayerStore(Persistor<Player> persistor) {
 		this.persistor = persistor;
 	}
 

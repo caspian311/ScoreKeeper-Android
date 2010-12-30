@@ -26,7 +26,7 @@ import org.mockito.stubbing.Answer;
 import android.content.Context;
 
 @SuppressWarnings("deprecation")
-public class LegacyPersistorTest {
+public class ObjectSerializerPersistorTest {
 	private Context context;
 	private File tempFile;
 	private String inputFilename;
@@ -72,7 +72,7 @@ public class LegacyPersistorTest {
 
 	@Test
 	public void loadedListOfEntitiesIsEmptyInitially() {
-		LegacyPersistor<Person> persistor = LegacyPersistor.create(Person.class, context);
+		Persistor<Person> persistor = ObjectSerializerPersistor.create(Person.class, context);
 		List<Person> personList = persistor.load();
 
 		assertTrue("Person list should be empty", personList.isEmpty());
@@ -80,7 +80,7 @@ public class LegacyPersistorTest {
 
 	@Test
 	public void savingEntityThenLoadingItBackYeildsSameObject() {
-		LegacyPersistor<Person> persistor = LegacyPersistor.create(Person.class, context);
+		Persistor<Person> persistor = ObjectSerializerPersistor.create(Person.class, context);
 		Person person1 = new Person();
 		person1.setName(UUID.randomUUID().toString());
 		Person person2 = new Person();
@@ -88,7 +88,7 @@ public class LegacyPersistorTest {
 		List<Person> items = new ArrayList<Person>(Arrays.asList(person1, person2));
 		persistor.persist(items);
 
-		LegacyPersistor<Person> anotherPersistor = LegacyPersistor.create(Person.class, context);
+		Persistor<Person> anotherPersistor = ObjectSerializerPersistor.create(Person.class, context);
 		List<Person> personList = anotherPersistor.load();
 
 		assertEquals(2, personList.size());
@@ -98,7 +98,7 @@ public class LegacyPersistorTest {
 
 	@Test
 	public void savingStuffSavesItToTheFile() {
-		LegacyPersistor<Person> persistor = LegacyPersistor.create(Person.class, context);
+		Persistor<Person> persistor = ObjectSerializerPersistor.create(Person.class, context);
 		Person person1 = new Person();
 		person1.setName(UUID.randomUUID().toString());
 		Person person2 = new Person();
@@ -119,7 +119,7 @@ public class LegacyPersistorTest {
 
 	@Test
 	public void savingStuffSavesItToCorrectFile() throws FileNotFoundException {
-		LegacyPersistor<Person> persistor = LegacyPersistor.create(Person.class, context);
+		Persistor<Person> persistor = ObjectSerializerPersistor.create(Person.class, context);
 		persistor.persist(Arrays.asList(new Person()));
 
 		ArgumentCaptor<String> outputFilenameCaptor = ArgumentCaptor.forClass(String.class);
@@ -135,7 +135,7 @@ public class LegacyPersistorTest {
 
 	@Test
 	public void loadingStuffLoadsFromTheCorrectFile() throws FileNotFoundException {
-		LegacyPersistor<Person> persistor = LegacyPersistor.create(Person.class, context);
+		Persistor<Person> persistor = ObjectSerializerPersistor.create(Person.class, context);
 		persistor.persist(Arrays.asList(new Person()));
 		persistor.load();
 

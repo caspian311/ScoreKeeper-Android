@@ -8,7 +8,7 @@ import net.todd.scorekeeper.data.XmlPersistor;
 import android.content.Context;
 
 public class GameStore {
-	private final XmlPersistor<Game> persistor;
+	private final Persistor<Game> persistor;
 	private List<Game> games;
 
 	public GameStore(Context context) {

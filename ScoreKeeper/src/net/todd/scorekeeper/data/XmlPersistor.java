@@ -1,34 +1,31 @@
 package net.todd.scorekeeper.data;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.todd.scorekeeper.Logger;
+import net.todd.scorekeeper.Persistor;
 
 import org.simpleframework.xml.core.Persister;
 
 import android.content.Context;
 
-public class XmlPersistor<T> {
-	private final Class<T> clazz;
-	private final Context context;
-
-	public static <T> XmlPersistor<T> create(Class<T> clazz, Context context) {
+public class XmlPersistor<T> extends Persistor<T> {
+	public static <T> Persistor<T> create(Class<T> clazz, Context context) {
 		return new XmlPersistor<T>(clazz, context);
 	}
 
 	private XmlPersistor(Class<T> clazz, Context context) {
-		this.clazz = clazz;
-		this.context = context;
+		super(clazz, context);
 	}
 
+	@Override
 	public void persist(List<T> items) {
 		FileOutputStream output = null;
 		try {
-			output = context.openFileOutput(getDataFilename(), Context.MODE_PRIVATE);
+			output = getContext().openFileOutput(getDataFilename(), Context.MODE_PRIVATE);
 			CollectionOfItems<T> collectionOfItems = new CollectionOfItems<T>();
 			collectionOfItems.setItems(items);
 			new Persister().write(collectionOfItems, output);
@@ -42,37 +39,18 @@ public class XmlPersistor<T> {
 		}
 	}
 
-	private boolean doesFileHaveData(String filename) {
-		boolean doesFileHaveData = false;
-		try {
-			FileInputStream input = context.openFileInput(filename);
-			doesFileHaveData = input.available() > 0;
-		} catch (Exception e) {
-		}
-		return doesFileHaveData;
-	}
-
-	private boolean doesFileExist(String filename) {
-		boolean doesFileExist = false;
-		try {
-			context.openFileInput(filename);
-			doesFileExist = true;
-		} catch (FileNotFoundException e) {
-		}
-		return doesFileExist;
-	}
-
+	@Override
 	public List<T> load() {
 		List<T> items = new ArrayList<T>();
 		if (doesFileExist(getDataFilename()) && doesFileHaveData(getDataFilename())) {
 			FileInputStream input = null;
 			try {
-				input = context.openFileInput(getDataFilename());
+				input = getContext().openFileInput(getDataFilename());
 				@SuppressWarnings("unchecked")
 				CollectionOfItems<T> collectionOfItems = new Persister().read(
 						CollectionOfItems.class, input);
 				for (Object object : collectionOfItems.getItems()) {
-					items.add(clazz.cast(object));
+					items.add(getClazz().cast(object));
 				}
 			} catch (Exception e) {
 				Logger.error(getClass().getName(), "Could not restore data from file: "
@@ -85,9 +63,5 @@ public class XmlPersistor<T> {
 			}
 		}
 		return items;
-	}
-
-	private String getDataFilename() {
-		return clazz.getName() + ".data";
 	}
 }

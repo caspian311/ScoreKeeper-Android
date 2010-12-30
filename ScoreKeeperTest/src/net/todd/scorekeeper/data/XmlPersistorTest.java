@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.todd.scorekeeper.Logger;
+import net.todd.scorekeeper.Persistor;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -72,7 +73,7 @@ public class XmlPersistorTest {
 
 	@Test
 	public void loadedListOfEntitiesIsEmptyInitially() {
-		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
+		Persistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		List<Person> personList = persistor.load();
 
 		assertTrue("Person list should be empty", personList.isEmpty());
@@ -80,7 +81,7 @@ public class XmlPersistorTest {
 
 	@Test
 	public void savingEntityThenLoadingItBackYeildsSameObject() {
-		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
+		Persistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		Person person1 = new Person();
 		person1.setName(UUID.randomUUID().toString());
 		Person person2 = new Person();
@@ -88,7 +89,7 @@ public class XmlPersistorTest {
 		List<Person> items = new ArrayList<Person>(Arrays.asList(person1, person2));
 		persistor.persist(items);
 
-		XmlPersistor<Person> anotherPersistor = XmlPersistor.create(Person.class, context);
+		Persistor<Person> anotherPersistor = XmlPersistor.create(Person.class, context);
 		List<Person> personList = anotherPersistor.load();
 
 		assertEquals(2, personList.size());
@@ -98,7 +99,7 @@ public class XmlPersistorTest {
 
 	@Test
 	public void savingStuffSavesItToTheFile() {
-		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
+		Persistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		Person person1 = new Person();
 		person1.setName(UUID.randomUUID().toString());
 		Person person2 = new Person();
@@ -119,7 +120,7 @@ public class XmlPersistorTest {
 
 	@Test
 	public void savingStuffSavesItToCorrectFile() throws FileNotFoundException {
-		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
+		Persistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		persistor.persist(new ArrayList<Person>(Arrays.asList(new Person())));
 
 		ArgumentCaptor<String> outputFilenameCaptor = ArgumentCaptor.forClass(String.class);
@@ -135,7 +136,7 @@ public class XmlPersistorTest {
 
 	@Test
 	public void loadingStuffLoadsFromTheCorrectFile() throws FileNotFoundException {
-		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
+		Persistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		persistor.persist(new ArrayList<Person>(Arrays.asList(new Person())));
 		persistor.load();
 

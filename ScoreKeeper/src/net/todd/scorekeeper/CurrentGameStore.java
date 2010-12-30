@@ -11,7 +11,7 @@ import net.todd.scorekeeper.data.XmlPersistor;
 import android.content.Context;
 
 public class CurrentGameStore {
-	private final XmlPersistor<CurrentGame> persistor;
+	private final Persistor<CurrentGame> persistor;
 
 	public CurrentGameStore(Context context) {
 		persistor = XmlPersistor.create(CurrentGame.class, context);
