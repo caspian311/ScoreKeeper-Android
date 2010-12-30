@@ -2,14 +2,21 @@ package net.todd.scorekeeper.data;
 
 import java.io.Serializable;
 
+import org.simpleframework.xml.Element;
+
 public class CurrentGame implements Serializable {
 	private static final long serialVersionUID = 5432426044479529331L;
 
-	private final ScoreBoard scoreBoard;
-	private final Player currentPlayer;
+	@Element
+	private ScoreBoard scoreBoard;
+	@Element
+	private Player currentPlayer;
 
-	public CurrentGame(ScoreBoard scoreBoard, Player currentPlayer) {
+	public void setScoreBoard(ScoreBoard scoreBoard) {
 		this.scoreBoard = scoreBoard;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
 

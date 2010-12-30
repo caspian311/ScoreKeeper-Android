@@ -8,13 +8,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import net.todd.scorekeeper.Logger;
-import net.todd.scorekeeper.data.Persistor;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,7 +26,7 @@ import org.mockito.stubbing.Answer;
 
 import android.content.Context;
 
-public class PersistorTest {
+public class XmlPersistorTest {
 	private Context context;
 	private File tempFile;
 	private String inputFilename;
@@ -73,7 +72,7 @@ public class PersistorTest {
 
 	@Test
 	public void loadedListOfEntitiesIsEmptyInitially() {
-		Persistor<Person> persistor = Persistor.create(Person.class, context);
+		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		List<Person> personList = persistor.load();
 
 		assertTrue("Person list should be empty", personList.isEmpty());
@@ -81,15 +80,15 @@ public class PersistorTest {
 
 	@Test
 	public void savingEntityThenLoadingItBackYeildsSameObject() {
-		Persistor<Person> persistor = Persistor.create(Person.class, context);
+		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		Person person1 = new Person();
 		person1.setName(UUID.randomUUID().toString());
 		Person person2 = new Person();
 		person2.setName(UUID.randomUUID().toString());
-		List<Person> items = Arrays.asList(person1, person2);
+		List<Person> items = new ArrayList<Person>(Arrays.asList(person1, person2));
 		persistor.persist(items);
 
-		Persistor<Person> anotherPersistor = Persistor.create(Person.class, context);
+		XmlPersistor<Person> anotherPersistor = XmlPersistor.create(Person.class, context);
 		List<Person> personList = anotherPersistor.load();
 
 		assertEquals(2, personList.size());
@@ -99,14 +98,18 @@ public class PersistorTest {
 
 	@Test
 	public void savingStuffSavesItToTheFile() {
-		Persistor<Person> persistor = Persistor.create(Person.class, context);
-		List<Person> items = Arrays.asList(new Person());
+		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
+		Person person1 = new Person();
+		person1.setName(UUID.randomUUID().toString());
+		Person person2 = new Person();
+		person2.setName(UUID.randomUUID().toString());
+		List<Person> items = Arrays.asList(person1);
 		persistor.persist(items);
 
 		assertTrue(tempFile.exists());
 		long originalSize = tempFile.length();
 
-		List<Person> newItems = Arrays.asList(new Person(), new Person());
+		List<Person> newItems = Arrays.asList(person1, person2);
 		persistor.persist(newItems);
 
 		long newSize = tempFile.length();
@@ -116,7 +119,7 @@ public class PersistorTest {
 
 	@Test
 	public void savingStuffSavesItToCorrectFile() throws FileNotFoundException {
-		Persistor<Person> persistor = Persistor.create(Person.class, context);
+		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		persistor.persist(Arrays.asList(new Person()));
 
 		ArgumentCaptor<String> outputFilenameCaptor = ArgumentCaptor.forClass(String.class);
@@ -132,7 +135,7 @@ public class PersistorTest {
 
 	@Test
 	public void loadingStuffLoadsFromTheCorrectFile() throws FileNotFoundException {
-		Persistor<Person> persistor = Persistor.create(Person.class, context);
+		XmlPersistor<Person> persistor = XmlPersistor.create(Person.class, context);
 		persistor.persist(Arrays.asList(new Person()));
 		persistor.load();
 
@@ -141,40 +144,5 @@ public class PersistorTest {
 		inputFilename = inputFilenameCaptor.getValue();
 
 		assertEquals(Person.class.getName() + ".data", inputFilename);
-	}
-
-	private static class Person implements Serializable {
-		private static final long serialVersionUID = 3120568188872493283L;
-
-		private String name;
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((name == null) ? 0 : name.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Person other = (Person) obj;
-			if (name == null) {
-				if (other.name != null)
-					return false;
-			} else if (!name.equals(other.name))
-				return false;
-			return true;
-		}
 	}
 }

@@ -41,11 +41,17 @@ public class SetupGameModelTest {
 		MockitoAnnotations.initMocks(this);
 
 		playerOneId = UUID.randomUUID().toString();
-		player1 = new Player(playerOneId, "Peter");
+		player1 = new Player();
+		player1.setId(playerOneId);
+		player1.setName("Peter");
 		playerTwoId = UUID.randomUUID().toString();
-		player2 = new Player(playerTwoId, "James");
+		player2 = new Player();
+		player2.setId(playerTwoId);
+		player2.setName("James");
 		playerThreeId = UUID.randomUUID().toString();
-		player3 = new Player(playerThreeId, "John");
+		player3 = new Player();
+		player3.setId(playerThreeId);
+		player3.setName("John");
 
 		allPlayers = Arrays.asList(player1, player2, player3);
 		doReturn(allPlayers).when(playerStore).getAllPlayers();

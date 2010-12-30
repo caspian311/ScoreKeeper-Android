@@ -74,10 +74,16 @@ public class SetupGamePresenterTest {
 
 	@Test
 	public void initiallyAllPlayersAreSetOnTheView() {
-		List<Player> allPlayers = new ArrayList<Player>();
-		allPlayers.add(new Player("1", "Peter"));
-		allPlayers.add(new Player("2", "James"));
-		allPlayers.add(new Player("3", "John"));
+		Player player1 = new Player();
+		player1.setId("1");
+		player1.setName("Peter");
+		Player player2 = new Player();
+		player2.setId("2");
+		player2.setName("James");
+		Player player3 = new Player();
+		player3.setId("3");
+		player3.setName("John");
+		List<Player> allPlayers = new ArrayList<Player>(Arrays.asList(player1, player2, player3));
 		doReturn(allPlayers).when(model).getAllPlayers();
 
 		SetupGamePresenter.create(view, model);

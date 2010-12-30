@@ -5,15 +5,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.simpleframework.xml.ElementList;
+
 public class ScoreBoard implements Serializable {
 	private static final long serialVersionUID = -9216810547295023938L;
-	
-	private final List<ScoreBoardEntry> scoreBoardEntries = new ArrayList<ScoreBoardEntry>();
 
-	public ScoreBoard(List<Player> players) {
+	@ElementList
+	private List<ScoreBoardEntry> scoreBoardEntries;
+
+	public ScoreBoard() {
+		scoreBoardEntries = new ArrayList<ScoreBoardEntry>();
+	}
+
+	public void setPlayers(List<Player> players) {
 		scoreBoardEntries.clear();
 		for (Player player : players) {
-			scoreBoardEntries.add(new ScoreBoardEntry(player));
+			ScoreBoardEntry scoreBoardEntry = new ScoreBoardEntry();
+			scoreBoardEntry.setPlayer(player);
+			scoreBoardEntries.add(scoreBoardEntry);
 		}
 	}
 

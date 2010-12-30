@@ -37,7 +37,7 @@ public class SetupGameModel {
 	public boolean atLeastTwoPlayersSelected() {
 		int count = 0;
 		for (Player player : allPlayers) {
-			if (player.istSelected()) {
+			if (player.isSelected()) {
 				count++;
 			}
 		}
@@ -47,12 +47,15 @@ public class SetupGameModel {
 	public void startGame() {
 		ArrayList<Player> selectedPlayers = new ArrayList<Player>();
 		for (Player player : allPlayers) {
-			if (player.istSelected()) {
+			if (player.isSelected()) {
 				selectedPlayers.add(player);
 			}
 		}
-		CurrentGame currentGame = new CurrentGame(new ScoreBoard(selectedPlayers),
-				selectedPlayers.get(0));
+		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setPlayers(selectedPlayers);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setCurrentPlayer(selectedPlayers.get(0));
+		currentGame.setScoreBoard(scoreBoard);
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);

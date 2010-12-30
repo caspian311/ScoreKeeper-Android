@@ -123,7 +123,7 @@ public class SetupGameView {
 			allPlayersTable.addView(playerRow);
 
 			CheckBox playerSelection = new CheckBox(context);
-			playerSelection.setChecked(player.istSelected());
+			playerSelection.setChecked(player.isSelected());
 			playerSelection.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

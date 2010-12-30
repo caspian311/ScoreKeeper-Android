@@ -20,15 +20,22 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void currentGameDataShouldBeAvailableAfterSavingTheState() {
-		Player player1 = new Player("1", "matt");
-		Player player2 = new Player("2", "abbi");
-		Player player3 = new Player("3", "caleb");
+		Player player1 = new Player();
+		player1.setId("1");
+		player1.setName("matt");
+		Player player2 = new Player();
+		player2.setId("2");
+		player2.setName("abbi");
+		Player player3 = new Player();
+		player3.setId("3");
+		player3.setName("caleb");
 
 		List<Player> players = new ArrayList<Player>();
 		players.add(player1);
 		players.add(player2);
 		players.add(player3);
-		ScoreBoard scoreBoard = new ScoreBoard(players);
+		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setPlayers(players);
 		scoreBoard.setScore(player1, 56);
 		scoreBoard.setScore(player2, 34);
 		scoreBoard.setScore(player3, 12);
@@ -53,13 +60,18 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void currentGameDataShouldNotBeAvailableAfterClearingTheState() {
-		Player player1 = new Player("1", "matt");
-		Player player2 = new Player("2", "abbi");
+		Player player1 = new Player();
+		player1.setId("1");
+		player1.setName("matt");
+		Player player2 = new Player();
+		player2.setId("2");
+		player2.setName("abbi");
 
 		List<Player> players = new ArrayList<Player>();
 		players.add(player1);
 		players.add(player2);
-		ScoreBoard scoreBoard = new ScoreBoard(players);
+		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setPlayers(players);
 		scoreBoard.setScore(player1, 12);
 		scoreBoard.setScore(player2, 34);
 		new CurrentGameStore(getContext()).saveState(scoreBoard, player2);

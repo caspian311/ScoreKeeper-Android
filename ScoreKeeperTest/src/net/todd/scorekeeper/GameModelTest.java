@@ -46,8 +46,11 @@ public class GameModelTest {
 
 		gameType = UUID.randomUUID().toString();
 
-		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)),
-				player2);
+		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setPlayers(Arrays.asList(player1, player2, player3));
+		currentGame = new CurrentGame();
+		currentGame.setCurrentPlayer(player2);
+		currentGame.setScoreBoard(scoreBoard);
 
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 		doReturn(gameType).when(pageNavigator).getExtra("gameType");
@@ -257,8 +260,10 @@ public class GameModelTest {
 	public void ifNoCurrentPlayerWasGivenThenAssumeFirstPlayerIsCurrentPlayer() {
 		gameType = UUID.randomUUID().toString();
 
-		currentGame = new CurrentGame(new ScoreBoard(Arrays.asList(player1, player2, player3)),
-				null);
+		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setPlayers(Arrays.asList(player1, player2, player3));
+		currentGame = new CurrentGame();
+		currentGame.setScoreBoard(scoreBoard);
 
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 		doReturn(gameType).when(pageNavigator).getExtra("gameType");

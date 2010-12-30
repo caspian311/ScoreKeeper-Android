@@ -23,11 +23,18 @@ public class ScoreBoardTest {
 
 	@Before
 	public void setUp() {
-		player1 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-		player2 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-		player3 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+		player1 = new Player();
+		player1.setId(UUID.randomUUID().toString());
+		player1.setName(UUID.randomUUID().toString());
+		player2 = new Player();
+		player2.setId(UUID.randomUUID().toString());
+		player2.setName(UUID.randomUUID().toString());
+		player3 = new Player();
+		player3.setId(UUID.randomUUID().toString());
+		player3.setName(UUID.randomUUID().toString());
 
-		testObject = new ScoreBoard(Arrays.asList(player1, player2, player3));
+		testObject = new ScoreBoard();
+		testObject.setPlayers(Arrays.asList(player1, player2, player3));
 	}
 
 	@Test

@@ -28,7 +28,9 @@ public class PlayerStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void afterAddingAPlayerThenPlayerShouldBeReturnedInTheAllPlayersCall() {
-		Player player = new Player(playerId, playerName);
+		Player player = new Player();
+		player.setId(playerId);
+		player.setName(playerName);
 		new PlayerStore(getContext()).addPlayer(player);
 
 		assertEquals(Arrays.asList(player), new PlayerStore(getContext()).getAllPlayers());
@@ -36,7 +38,9 @@ public class PlayerStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void afterAddingAPlayerThenRemovingThatPlayerThenAllPlayersCallShouldBeEmpty() {
-		Player player = new Player(playerId, playerName);
+		Player player = new Player();
+		player.setId(playerId);
+		player.setName(playerName);
 		new PlayerStore(getContext()).addPlayer(player);
 		assertEquals(1, new PlayerStore(getContext()).getAllPlayers().size());
 
@@ -49,11 +53,17 @@ public class PlayerStoreTest extends AbstractStoreTest {
 	public void addingMultipleAndDeletingMultiple() {
 		PlayerStore testObject = new PlayerStore(getContext());
 		String id1 = UUID.randomUUID().toString();
-		Player player1 = new Player(id1, playerName);
+		Player player1 = new Player();
+		player1.setId(id1);
+		player1.setName(playerName);
 		String id2 = UUID.randomUUID().toString();
-		Player player2 = new Player(id2, playerName);
+		Player player2 = new Player();
+		player2.setId(id2);
+		player2.setName(playerName);
 		String id3 = UUID.randomUUID().toString();
-		Player player3 = new Player(id3, playerName);
+		Player player3 = new Player();
+		player3.setId(id3);
+		player3.setName(playerName);
 
 		testObject.addPlayer(player1);
 		testObject.addPlayer(player2);
@@ -78,7 +88,9 @@ public class PlayerStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void gettingPlayerById() {
-		Player expectedPlayer = new Player(playerId, playerName);
+		Player expectedPlayer = new Player();
+		expectedPlayer.setId(playerId);
+		expectedPlayer.setName(playerName);
 		new PlayerStore(getContext()).addPlayer(expectedPlayer);
 		Player actualPlayer = new PlayerStore(getContext()).getPlayerById(playerId);
 
@@ -89,9 +101,15 @@ public class PlayerStoreTest extends AbstractStoreTest {
 	public void gettingPlayersById() {
 		String playerId1 = UUID.randomUUID().toString();
 		String playerId3 = UUID.randomUUID().toString();
-		Player player1 = new Player(playerId1, UUID.randomUUID().toString());
-		Player player2 = new Player(UUID.randomUUID().toString(), UUID.randomUUID().toString());
-		Player player3 = new Player(playerId3, UUID.randomUUID().toString());
+		Player player1 = new Player();
+		player1.setId(playerId1);
+		player1.setName(UUID.randomUUID().toString());
+		Player player2 = new Player();
+		player2.setId(UUID.randomUUID().toString());
+		player2.setName(UUID.randomUUID().toString());
+		Player player3 = new Player();
+		player3.setId(playerId3);
+		player3.setName(UUID.randomUUID().toString());
 		new PlayerStore(getContext()).addPlayer(player1);
 		new PlayerStore(getContext()).addPlayer(player2);
 		new PlayerStore(getContext()).addPlayer(player3);

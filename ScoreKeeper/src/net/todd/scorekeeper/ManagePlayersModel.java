@@ -17,7 +17,10 @@ public class ManagePlayersModel {
 
 	public void addPlayer(String playerName) {
 		if (playerName != null && playerName.length() > 0) {
-			playerStore.addPlayer(new Player(playerStore.nextPlayerId(), playerName));
+			Player player = new Player();
+			player.setId(playerStore.nextPlayerId());
+			player.setName(playerName);
+			playerStore.addPlayer(player);
 			playerChangedListenerManager.notifyListeners();
 		}
 	}

@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.todd.scorekeeper.data.Game;
-import net.todd.scorekeeper.data.Persistor;
+import net.todd.scorekeeper.data.XmlPersistor;
 import android.content.Context;
 
 public class GameStore {
-	private final Persistor<Game> persistor;
+	private final XmlPersistor<Game> persistor;
 	private List<Game> games;
 
 	public GameStore(Context context) {
-		persistor = Persistor.create(Game.class, context);
+		persistor = XmlPersistor.create(Game.class, context);
 	}
 
 	public List<Game> getAllGames() {

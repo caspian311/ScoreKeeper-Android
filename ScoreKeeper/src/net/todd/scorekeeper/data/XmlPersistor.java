@@ -1,38 +1,42 @@
 package net.todd.scorekeeper.data;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.todd.scorekeeper.Logger;
+
+import org.simpleframework.xml.core.Persister;
+
 import android.content.Context;
 
-public class Persistor<T> {
+public class XmlPersistor<T> {
 	private final Class<T> clazz;
 	private final Context context;
 
-	public static <T> Persistor<T> create(Class<T> clazz, Context context) {
-		return new Persistor<T>(clazz, context);
+	public static <T> XmlPersistor<T> create(Class<T> clazz, Context context) {
+		return new XmlPersistor<T>(clazz, context);
 	}
 
-	private Persistor(Class<T> clazz, Context context) {
+	private XmlPersistor(Class<T> clazz, Context context) {
 		this.clazz = clazz;
 		this.context = context;
 	}
 
 	public void persist(List<T> items) {
-		ObjectOutputStream oos = null;
+		FileOutputStream output = null;
 		try {
-			oos = new ObjectOutputStream(context.openFileOutput(getDataFilename(),
-					Context.MODE_PRIVATE));
-			oos.writeObject(items);
+			output = context.openFileOutput(getDataFilename(), Context.MODE_PRIVATE);
+			CollectionOfItems<T> collectionOfItems = new CollectionOfItems<T>();
+			collectionOfItems.setItems(items);
+			new Persister().write(collectionOfItems, output);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			Logger.error("error", e.getMessage(), e);
 		} finally {
 			try {
-				oos.close();
+				output.close();
 			} catch (Exception e) {
 			}
 		}
@@ -51,11 +55,13 @@ public class Persistor<T> {
 	public List<T> load() {
 		List<T> items = new ArrayList<T>();
 		if (doesFileExist(getDataFilename())) {
-			ObjectInputStream ois = null;
+			FileInputStream input = null;
 			try {
-				ois = new ObjectInputStream(context.openFileInput(getDataFilename()));
-				List<?> itemsFromFile = (List<?>) ois.readObject();
-				for (Object object : itemsFromFile) {
+				input = context.openFileInput(getDataFilename());
+				@SuppressWarnings("unchecked")
+				CollectionOfItems<T> collectionOfItems = new Persister().read(
+						CollectionOfItems.class, input);
+				for (Object object : collectionOfItems.getItems()) {
 					items.add(clazz.cast(object));
 				}
 			} catch (Exception e) {
@@ -63,7 +69,7 @@ public class Persistor<T> {
 						+ getDataFilename(), e);
 			} finally {
 				try {
-					ois.close();
+					input.close();
 				} catch (Exception e) {
 				}
 			}
