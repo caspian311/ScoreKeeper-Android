@@ -2,16 +2,11 @@ package net.todd.scorekeeper.data;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import net.todd.scorekeeper.Game;
 import net.todd.scorekeeper.ObjectSerializerPersistor;
 import net.todd.scorekeeper.Persistor;
-import net.todd.scorekeeper.Player;
-import net.todd.scorekeeper.ScoreBoard;
-import net.todd.scorekeeper.ScoreBoardEntry;
 import android.content.Context;
 
 @SuppressWarnings("deprecation")
@@ -42,14 +37,6 @@ public class DataConverter {
 	private final Context context;
 	private final List<ClassConversionBean> knownConversionBeans;
 
-	public DataConverter(Context context) {
-		this(context, Arrays.asList(new ClassConversionBean(Game.class,
-				net.todd.scorekeeper.data.Game.class), new ClassConversionBean(ScoreBoard.class,
-				net.todd.scorekeeper.data.ScoreBoard.class), new ClassConversionBean(
-				ScoreBoardEntry.class, net.todd.scorekeeper.data.ScoreBoardEntry.class),
-				new ClassConversionBean(Player.class, net.todd.scorekeeper.data.Player.class)));
-	}
-
 	public DataConverter(Context context, List<ClassConversionBean> knownConversionBeans) {
 		this.context = context;
 		this.knownConversionBeans = knownConversionBeans;
@@ -59,17 +46,19 @@ public class DataConverter {
 		Persistor<T> source = ObjectSerializerPersistor.create(fromClass, context);
 		Persistor<S> target = XmlPersistor.create(toClass, context);
 		List<T> originalObjects = source.load();
-		List<S> translatedObjects = new ArrayList<S>();
-		for (T original : originalObjects) {
-			try {
-				Object translated = translateObject(original);
-				translatedObjects.add(toClass.cast(translated));
-			} catch (Exception e) {
-				throw new RuntimeException("Data conversion failed", e);
+		if (!originalObjects.isEmpty()) {
+			List<S> translatedObjects = new ArrayList<S>();
+			for (T original : originalObjects) {
+				try {
+					Object translated = translateObject(original);
+					translatedObjects.add(toClass.cast(translated));
+				} catch (Exception e) {
+					throw new RuntimeException("Data conversion failed", e);
+				}
 			}
+			target.persist(translatedObjects);
+			source.persist(new ArrayList<T>());
 		}
-		target.persist(translatedObjects);
-		source.persist(new ArrayList<T>());
 	}
 
 	private Object translateObject(Object original) throws Exception {
