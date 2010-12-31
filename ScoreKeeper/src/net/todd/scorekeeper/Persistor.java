@@ -43,10 +43,6 @@ public abstract class Persistor<T> {
 		return context;
 	}
 
-	protected String getDataFilename() {
-		return getClazz().getName() + ".data";
-	}
-
 	protected Class<T> getClazz() {
 		return clazz;
 	}

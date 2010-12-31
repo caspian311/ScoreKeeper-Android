@@ -46,8 +46,7 @@ public class ObjectSerializerPersistor<T> extends Persistor<T> {
 					items.add(getClazz().cast(object));
 				}
 			} catch (Exception e) {
-				Logger.error(getClass().getName(), "Could not restore data from file: "
-						+ getDataFilename(), e);
+				throw new RuntimeException(e);
 			} finally {
 				try {
 					ois.close();
@@ -56,5 +55,9 @@ public class ObjectSerializerPersistor<T> extends Persistor<T> {
 			}
 		}
 		return items;
+	}
+
+	private String getDataFilename() {
+		return getClazz().getName() + ".data";
 	}
 }

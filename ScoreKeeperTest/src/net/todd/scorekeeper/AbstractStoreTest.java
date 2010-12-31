@@ -29,7 +29,7 @@ public abstract class AbstractStoreTest {
 	public static void tearDownLogger() {
 		Logger.setTestMode(false);
 	}
-	
+
 	@Before
 	public void setUpContextAndTempFile() throws Exception {
 		tempFile = File.createTempFile(getClass().getName(), ".data");
@@ -57,8 +57,8 @@ public abstract class AbstractStoreTest {
 	public void tearDown() throws Exception {
 		tempFile.delete();
 	}
-	
-	Context getContext() {
+
+	protected Context getContext() {
 		return context;
 	}
 }

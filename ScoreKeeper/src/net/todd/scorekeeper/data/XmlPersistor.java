@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.todd.scorekeeper.Logger;
 import net.todd.scorekeeper.Persistor;
 
 import org.simpleframework.xml.core.Persister;
@@ -30,7 +29,7 @@ public class XmlPersistor<T> extends Persistor<T> {
 			collectionOfItems.setItems(items);
 			new Persister().write(collectionOfItems, output);
 		} catch (Exception e) {
-			Logger.error("error", e.getMessage(), e);
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				output.close();
@@ -53,8 +52,7 @@ public class XmlPersistor<T> extends Persistor<T> {
 					items.add(getClazz().cast(object));
 				}
 			} catch (Exception e) {
-				Logger.error(getClass().getName(), "Could not restore data from file: "
-						+ getDataFilename(), e);
+				throw new RuntimeException(e);
 			} finally {
 				try {
 					input.close();
@@ -63,5 +61,9 @@ public class XmlPersistor<T> extends Persistor<T> {
 			}
 		}
 		return items;
+	}
+
+	private String getDataFilename() {
+		return getClazz().getName() + ".xml";
 	}
 }

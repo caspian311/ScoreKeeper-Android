@@ -130,7 +130,7 @@ public class XmlPersistorTest {
 		outputFilename = outputFilenameCaptor.getValue();
 		outputFileMode = outputFileModeCaptor.getValue();
 
-		assertEquals(Person.class.getName() + ".data", outputFilename);
+		assertEquals(Person.class.getName() + ".xml", outputFilename);
 		assertEquals(Context.MODE_PRIVATE, outputFileMode);
 	}
 
@@ -144,6 +144,6 @@ public class XmlPersistorTest {
 		verify(context, atLeastOnce()).openFileInput(inputFilenameCaptor.capture());
 		inputFilename = inputFilenameCaptor.getValue();
 
-		assertEquals(Person.class.getName() + ".data", inputFilename);
+		assertEquals(Person.class.getName() + ".xml", inputFilename);
 	}
 }

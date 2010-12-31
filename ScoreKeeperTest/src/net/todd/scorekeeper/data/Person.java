@@ -1,13 +1,21 @@
 package net.todd.scorekeeper.data;
 
+import java.io.Serializable;
+
 import org.simpleframework.xml.Element;
 
-public class Person {
+public class Person implements Serializable {
+	private static final long serialVersionUID = 8802968054180136515L;
+
 	@Element(required = false)
 	private String name;
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	@Override
