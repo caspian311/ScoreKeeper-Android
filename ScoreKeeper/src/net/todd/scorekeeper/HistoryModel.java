@@ -16,7 +16,7 @@ public class HistoryModel {
 	}
 
 	public void finish() {
-		pageNavigator.navigateToActivity(MainPageActivity.class);
+		pageNavigator.navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	public List<Game> getAllGames() {

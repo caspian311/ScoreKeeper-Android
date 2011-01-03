@@ -5,20 +5,22 @@ public class GameWatcher {
 		model.addPlayerChangedListener(new Listener() {
 			@Override
 			public void handle() {
-				currentGameStore.saveState(model.getScoreBoard(), model.getCurrentPlayer());
+				currentGameStore.saveState(model.getGameName(), model.getScoreBoard(),
+						model.getCurrentPlayer());
 			}
 		});
-		
+
 		Listener gameEndedListener = new Listener() {
 			@Override
 			public void handle() {
 				currentGameStore.clearState();
 			}
 		};
-		
+
 		model.addGameOverListener(gameEndedListener);
 		model.addCancelGameListener(gameEndedListener);
-		
-		currentGameStore.saveState(model.getScoreBoard(), model.getCurrentPlayer());
+
+		currentGameStore.saveState(model.getGameName(), model.getScoreBoard(),
+				model.getCurrentPlayer());
 	}
 }

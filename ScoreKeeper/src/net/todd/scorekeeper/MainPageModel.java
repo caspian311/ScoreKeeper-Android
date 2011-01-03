@@ -26,17 +26,17 @@ public class MainPageModel {
 	}
 
 	public void goToManagePlayerPage() {
-		pageNavigator.navigateToActivity(ManagePlayersActivity.class);
+		pageNavigator.navigateToActivityAndFinish(ManagePlayersActivity.class);
 	}
 
 	public void goToStartGamePage() {
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentStateStore.getCurrentGame());
-		pageNavigator.navigateToActivity(SetupGameActivity.class, extras);
+		pageNavigator.navigateToActivityAndFinish(SetupGameActivity.class, extras);
 	}
 
 	public void goToHistoryPage() {
-		pageNavigator.navigateToActivity(HistoryActivity.class);
+		pageNavigator.navigateToActivityAndFinish(HistoryActivity.class);
 	}
 
 	public String getVersion() {

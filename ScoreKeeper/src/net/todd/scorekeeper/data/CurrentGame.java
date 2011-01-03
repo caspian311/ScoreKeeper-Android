@@ -11,6 +11,8 @@ public class CurrentGame implements Serializable {
 	private ScoreBoard scoreBoard;
 	@Element
 	private Player currentPlayer;
+	@Element
+	private String gameName;
 
 	public void setScoreBoard(ScoreBoard scoreBoard) {
 		this.scoreBoard = scoreBoard;
@@ -26,5 +28,13 @@ public class CurrentGame implements Serializable {
 
 	public Player getCurrentPlayer() {
 		return currentPlayer;
+	}
+
+	public String getGameName() {
+		return gameName;
+	}
+
+	public void setGameName(String gameType) {
+		this.gameName = gameType;
 	}
 }

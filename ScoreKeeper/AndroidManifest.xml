@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="net.todd.scorekeeper" android:versionCode="8" android:versionName="1.7">
-	<application android:icon="@drawable/icon" android:label="ScoreKeeper" android:debuggable="true">
+	package="net.todd.scorekeeper" android:versionCode="8"
+	android:versionName="1.7">
+	<application android:icon="@drawable/icon" android:label="ScoreKeeper"
+		android:debuggable="true">
 		<activity android:name="net.todd.scorekeeper.MainPageActivity"
 			android:label="ScoreKeeper" android:screenOrientation="portrait">
 			<intent-filter>
@@ -13,10 +15,14 @@
 			android:screenOrientation="portrait" />
 		<activity android:name="net.todd.scorekeeper.SetupGameActivity"
 			android:screenOrientation="portrait" />
+		<activity android:name="net.todd.scorekeeper.AddPlayersToGameActivity"
+			android:screenOrientation="portrait" />
+		<activity android:name="net.todd.scorekeeper.OrderPlayersActivity"
+			android:screenOrientation="portrait" />
 		<activity android:name="net.todd.scorekeeper.GameActivity"
 			android:screenOrientation="portrait" />
 		<activity android:name="net.todd.scorekeeper.HistoryActivity"
 			android:screenOrientation="portrait" />
 	</application>
-<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7"></uses-sdk>
+	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7"></uses-sdk>
 </manifest> 

@@ -11,88 +11,96 @@ import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
 
 public class SetupGameModel {
+	private final ListenerManager stateChangedListenerManager = new ListenerManager();
+
 	private final PageNavigator pageNavigator;
+	private final List<Player> selectedPlayers = new ArrayList<Player>();
 
-	private final ListenerManager playersOrderChangedListenerManager = new ListenerManager();
-	private final ArrayList<Player> allPlayers = new ArrayList<Player>();
+	private String gameName;
 
-	public SetupGameModel(PlayerStore playerStore, PageNavigator pageNavigator) {
+	public SetupGameModel(PageNavigator pageNavigator) {
 		this.pageNavigator = pageNavigator;
 
-		allPlayers.addAll(playerStore.getAllPlayers());
-	}
-
-	public List<Player> getAllPlayers() {
-		return allPlayers;
-	}
-
-	public void selectionChanged(String currentPlayer, boolean isCurrentPlayerSelected) {
-		getPlayerById(currentPlayer).setSelected(isCurrentPlayerSelected);
+		CurrentGame currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
+		if (currentGame != null) {
+			gameName = currentGame.getGameName();
+		} else {
+			gameName = "";
+		}
 	}
 
 	public void cancel() {
-		pageNavigator.navigateToActivity(MainPageActivity.class);
-	}
-
-	public boolean atLeastTwoPlayersSelected() {
-		int count = 0;
-		for (Player player : allPlayers) {
-			if (player.isSelected()) {
-				count++;
-			}
-		}
-		return count >= 2;
+		pageNavigator.navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	public void startGame() {
-		ArrayList<Player> selectedPlayers = new ArrayList<Player>();
-		for (Player player : allPlayers) {
-			if (player.isSelected()) {
-				selectedPlayers.add(player);
-			}
-		}
+		pageNavigator.navigateToActivityAndFinish(GameActivity.class,
+				createExtrasMapWithCurrentGame());
+	}
+
+	private Map<String, Serializable> createExtrasMapWithCurrentGame() {
 		ScoreBoard scoreBoard = new ScoreBoard();
 		scoreBoard.setPlayers(selectedPlayers);
 		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(gameName);
 		currentGame.setCurrentPlayer(selectedPlayers.get(0));
 		currentGame.setScoreBoard(scoreBoard);
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);
-		pageNavigator.navigateToActivity(GameActivity.class, extras);
+		return extras;
 	}
 
-	public void movePlayerUp(String currentPlayerId) {
-		Player player = getPlayerById(currentPlayerId);
-		int currentIndex = allPlayers.indexOf(player);
-		if (currentIndex != 0) {
-			allPlayers.remove(player);
-			allPlayers.add(currentIndex - 1, player);
+	public void goToAddPlayersScreen() {
+		pageNavigator.navigateToActivityButDontFinish(AddPlayersToGameActivity.class,
+				createExtrasMapWithCurrentGame());
+	}
+
+	public boolean arePlayersAddedToGame() {
+		return selectedPlayers.size() >= 2;
+	}
+
+	public boolean isGameSetupComplete() {
+		return arePlayersAddedToGame() && isGameNamePopulated();
+	}
+
+	private boolean isGameNamePopulated() {
+		return gameName != null && gameName.length() > 0;
+	}
+
+	public void setPlayers(List<Player> players) {
+		if (!players.equals(selectedPlayers)) {
+			selectedPlayers.addAll(players);
+			stateChangedListenerManager.notifyListeners();
 		}
-		playersOrderChangedListenerManager.notifyListeners();
 	}
 
-	private Player getPlayerById(String currentPlayerId) {
-		Player targetPlayer = null;
-		for (Player player : allPlayers) {
-			if (player.getId().equals(currentPlayerId)) {
-				targetPlayer = player;
-			}
+	public void addStateChangedListener(Listener listener) {
+		stateChangedListenerManager.addListener(listener);
+	}
+
+	public List<Player> getSelectedPlayers() {
+		return selectedPlayers;
+	}
+
+	public void setGameName(String gameName) {
+		if (this.gameName == null || !this.gameName.equals(gameName)) {
+			this.gameName = gameName;
+			stateChangedListenerManager.notifyListeners();
 		}
-		return targetPlayer;
 	}
 
-	public void movePlayerDown(String currentPlayerId) {
-		Player player = getPlayerById(currentPlayerId);
-		int currentIndex = allPlayers.indexOf(player);
-		if (currentIndex != allPlayers.size() - 1) {
-			allPlayers.remove(player);
-			allPlayers.add(currentIndex + 1, player);
-		}
-		playersOrderChangedListenerManager.notifyListeners();
+	public String getGameName() {
+		return gameName;
 	}
 
-	public void addPlayersOrderChangedListener(Listener listener) {
-		playersOrderChangedListenerManager.addListener(listener);
+	public void goToOrderPlayersScreen() {
+		pageNavigator.navigateToActivityButDontFinish(OrderPlayersActivity.class,
+				createExtrasMapWithCurrentGame());
+	}
+
+	public Scoring getScoring() {
+		// TODO
+		return null;
 	}
 }

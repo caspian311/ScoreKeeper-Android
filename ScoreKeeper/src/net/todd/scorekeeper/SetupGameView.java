@@ -1,44 +1,37 @@
 package net.todd.scorekeeper;
 
-import java.util.List;
-
-import net.todd.scorekeeper.data.Player;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class SetupGameView {
-	private final ScrollView mainScrollView;
-	private final TableLayout allPlayersTable;
-	private final Context context;
-
-	private boolean isCurrentPlayerSelected;
-	private String currentPlayerId;
-
-	private final ListenerManager cancelButtonListenerManager = new ListenerManager();
-	private final ListenerManager startGameButtonListenerManager = new ListenerManager();
-	private final ListenerManager selectedPlayersChangedListenerManager = new ListenerManager();
-	private final ListenerManager upButtonListenerManager = new ListenerManager();
-	private final ListenerManager downButtonListenerManager = new ListenerManager();
 	private final ListenerManager backPressedListenerManager = new ListenerManager();
+	private final ListenerManager addPlayersButtonPressedListenerManager = new ListenerManager();
+	private final ListenerManager orderPlayersButtonPressedListenerManager = new ListenerManager();
+	private final ListenerManager scoringChangedListenerManager = new ListenerManager();
+	private final ListenerManager startGameButtonPressedListenerManager = new ListenerManager();
+	private final ListenerManager gameNameChangedListenerManager = new ListenerManager();
+
+	private final ScrollView mainScrollView;
+	private final Button orderPlayersButton;
+	private final Button startGameButton;
+	private EditText gameNameText;
+	private Spinner scoringSpinner;
 
 	public SetupGameView(Context context) {
-		this.context = context;
-
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
 		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
@@ -63,143 +56,128 @@ public class SetupGameView {
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(title);
 
-		LinearLayout controlView = new LinearLayout(context);
-		controlView.setGravity(Gravity.CENTER_HORIZONTAL);
-		LinearLayout.LayoutParams controlViewLayouParams = new LinearLayout.LayoutParams(
-				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		controlViewLayouParams.leftMargin = UIConstants.MARGIN_SIZE;
-		controlViewLayouParams.rightMargin = UIConstants.MARGIN_SIZE;
-		controlView.setLayoutParams(controlViewLayouParams);
-		controlView.setOrientation(LinearLayout.HORIZONTAL);
-		mainView.addView(controlView);
+		TextView gameNameLabel = new TextView(context);
+		gameNameLabel.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT));
+		gameNameLabel.setTextSize(UIConstants.TEXT_SMALL_SIZE);
+		gameNameLabel.setText("Game name:");
+		gameNameLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+		mainView.addView(gameNameLabel);
 
-		Button cancelButton = new Button(context);
-		ButtonUtilities.setLayout(cancelButton);
-		cancelButton.setText("Cancel");
-		cancelButton.setOnClickListener(new OnClickListener() {
+		gameNameText = new EditText(context);
+		LinearLayout.LayoutParams gameTextLayout = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		gameTextLayout.leftMargin = UIConstants.MARGIN_SIZE;
+		gameTextLayout.rightMargin = UIConstants.MARGIN_SIZE;
+		gameNameText.setGravity(Gravity.CENTER_HORIZONTAL);
+		gameNameText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void onClick(View v) {
-				cancelButtonListenerManager.notifyListeners();
+			public void afterTextChanged(Editable arg0) {
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				gameNameChangedListenerManager.notifyListeners();
 			}
 		});
-		controlView.addView(cancelButton);
+		gameNameText.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				gameNameChangedListenerManager.notifyListeners();
+				return false;
+			}
+		});
+		gameNameText.setLayoutParams(gameTextLayout);
+		mainView.addView(gameNameText);
 
-		Button startGameButton = new Button(context);
-		ButtonUtilities.setLayout(startGameButton);
+		TextView gameNameExplanationLabel = new TextView(context);
+		LinearLayout.LayoutParams gameNameExplanationLayout = new LinearLayout.LayoutParams(
+				new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		gameNameExplanationLayout.bottomMargin = UIConstants.MARGIN_SIZE;
+		gameNameExplanationLayout.leftMargin = UIConstants.MARGIN_SIZE;
+		gameNameExplanationLayout.rightMargin = UIConstants.MARGIN_SIZE;
+		gameNameExplanationLabel.setLayoutParams(gameNameExplanationLayout);
+		gameNameExplanationLabel.setTextSize(UIConstants.TEXT_TINY_SIZE);
+		gameNameExplanationLabel.setText("(ex. Scrabble, Rook, Farkle, etc.)");
+		gameNameExplanationLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+		mainView.addView(gameNameExplanationLabel);
+
+		Button addPlayersButton = new Button(context);
+		LinearLayout.LayoutParams addPlayersButtonLayout = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, UIConstants.BUTTON_HEIGHT);
+		addPlayersButtonLayout.bottomMargin = UIConstants.MARGIN_SIZE;
+		addPlayersButtonLayout.leftMargin = UIConstants.MARGIN_SIZE;
+		addPlayersButtonLayout.rightMargin = UIConstants.MARGIN_SIZE;
+		addPlayersButton.setLayoutParams(addPlayersButtonLayout);
+		addPlayersButton.setText("Add Players >");
+		addPlayersButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		addPlayersButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				addPlayersButtonPressedListenerManager.notifyListeners();
+			}
+		});
+		mainView.addView(addPlayersButton);
+
+		orderPlayersButton = new Button(context);
+		LinearLayout.LayoutParams orderPlayersButtonLayout = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, UIConstants.BUTTON_HEIGHT);
+		orderPlayersButtonLayout.bottomMargin = UIConstants.MARGIN_SIZE;
+		orderPlayersButtonLayout.leftMargin = UIConstants.MARGIN_SIZE;
+		orderPlayersButtonLayout.rightMargin = UIConstants.MARGIN_SIZE;
+		orderPlayersButton.setLayoutParams(orderPlayersButtonLayout);
+		orderPlayersButton.setText("Order Players >");
+		orderPlayersButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		orderPlayersButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				orderPlayersButtonPressedListenerManager.notifyListeners();
+			}
+		});
+		mainView.addView(orderPlayersButton);
+
+		TextView scoringLabel = new TextView(context);
+		scoringLabel.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT));
+		scoringLabel.setTextSize(UIConstants.TEXT_SMALL_SIZE);
+		scoringLabel.setText("Scoring:");
+		scoringLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+		mainView.addView(scoringLabel);
+
+		scoringSpinner = new Spinner(context);
+		scoringSpinner.setAdapter(new ArrayAdapter<Scoring>(context,
+				android.R.layout.simple_spinner_item, Scoring.values()));
+		LinearLayout.LayoutParams spinnerLayout = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		spinnerLayout.bottomMargin = UIConstants.MARGIN_SIZE;
+		spinnerLayout.leftMargin = UIConstants.MARGIN_SIZE;
+		spinnerLayout.rightMargin = UIConstants.MARGIN_SIZE;
+		scoringSpinner.setLayoutParams(spinnerLayout);
+		mainView.addView(scoringSpinner);
+
+		startGameButton = new Button(context);
+		LinearLayout.LayoutParams startGameLayout = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, UIConstants.BUTTON_HEIGHT);
+		startGameLayout.leftMargin = UIConstants.MARGIN_SIZE;
+		startGameLayout.rightMargin = UIConstants.MARGIN_SIZE;
+		startGameButton.setLayoutParams(startGameLayout);
 		startGameButton.setText("Start Game");
+		startGameButton.setGravity(Gravity.CENTER_HORIZONTAL);
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startGameButtonListenerManager.notifyListeners();
+				startGameButtonPressedListenerManager.notifyListeners();
 			}
 		});
-		controlView.addView(startGameButton);
-
-		allPlayersTable = new TableLayout(context);
-		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
-
-		allPlayersTable.setGravity(Gravity.CENTER_HORIZONTAL);
-		TableLayout.LayoutParams allPlayersTableLayoutParams = new TableLayout.LayoutParams(
-				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-		allPlayersTableLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
-		allPlayersTableLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
-		allPlayersTable.setLayoutParams(allPlayersTableLayoutParams);
-
-		allPlayersTable.setColumnStretchable(1, true);
-		mainView.addView(allPlayersTable);
+		mainView.addView(startGameButton);
 	}
 
 	public View getView() {
 		return mainScrollView;
-	}
-
-	public void setAllPlayers(List<Player> allPlayers) {
-		allPlayersTable.removeAllViews();
-		for (final Player player : allPlayers) {
-			TableRow playerRow = new TableRow(context);
-			playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
-					TableRow.LayoutParams.WRAP_CONTENT));
-			allPlayersTable.addView(playerRow);
-
-			CheckBox playerSelection = new CheckBox(context);
-			playerSelection.setChecked(player.isSelected());
-			playerSelection.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					isCurrentPlayerSelected = isChecked;
-					currentPlayerId = player.getId();
-					selectedPlayersChangedListenerManager.notifyListeners();
-				}
-			});
-			playerRow.addView(playerSelection);
-
-			TextView playerName = new TextView(context);
-			playerName.setText(player.getName());
-			playerName.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
-			playerName.setTextColor(UIConstants.TEXT_COLOR);
-			playerRow.addView(playerName);
-
-			ImageButton upButton = new ImageButton(context);
-			upButton.setImageDrawable(context.getResources().getDrawable(R.drawable.add));
-			upButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					currentPlayerId = player.getId();
-					upButtonListenerManager.notifyListeners();
-				}
-			});
-			playerRow.addView(upButton);
-
-			ImageButton downButton = new ImageButton(context);
-			downButton.setImageDrawable(context.getResources().getDrawable(R.drawable.minus));
-			downButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					currentPlayerId = player.getId();
-					downButtonListenerManager.notifyListeners();
-				}
-			});
-			playerRow.addView(downButton);
-		}
-	}
-
-	public void addSelectedPlayersChangedListener(Listener listener) {
-		selectedPlayersChangedListenerManager.addListener(listener);
-	}
-
-	public boolean isCurrentPlayerSelected() {
-		return isCurrentPlayerSelected;
-	}
-
-	public void addStartGameButtonListener(final Listener listener) {
-		startGameButtonListenerManager.addListener(listener);
-	}
-
-	public void addCancelButtonListener(final Listener listener) {
-		cancelButtonListenerManager.addListener(listener);
-	}
-
-	public String getCurrentPlayerId() {
-		return currentPlayerId;
-	}
-
-	public void addUpButtonListener(Listener listener) {
-		upButtonListenerManager.addListener(listener);
-	}
-
-	public void addDownButtonListener(Listener listener) {
-		downButtonListenerManager.addListener(listener);
-	}
-
-	public void popupErrorMessage() {
-		new AlertDialog.Builder(context).setMessage("You must select at least 2 players.")
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				}).show();
 	}
 
 	public void backPressed() {
@@ -208,5 +186,54 @@ public class SetupGameView {
 
 	public void addBackPressedListener(Listener listener) {
 		backPressedListenerManager.addListener(listener);
+	}
+
+	public void addAddPlayersButtonPressedListener(Listener listener) {
+		addPlayersButtonPressedListenerManager.addListener(listener);
+	}
+
+	public void addOrderPlayersPressedListener(Listener listener) {
+		orderPlayersButtonPressedListenerManager.addListener(listener);
+	}
+
+	public void addScoringChangedListener(Listener listener) {
+		scoringChangedListenerManager.addListener(listener);
+	}
+
+	public void addStartGamePressedListener(Listener listener) {
+		startGameButtonPressedListenerManager.addListener(listener);
+	}
+
+	public void setStartGameButtonEnabled(boolean isEnabled) {
+		startGameButton.setEnabled(isEnabled);
+	}
+
+	public void setOrderPlayersButtonEnabled(boolean isEnabled) {
+		orderPlayersButton.setEnabled(isEnabled);
+	}
+
+	public void addGameNameChangedListener(Listener listener) {
+		gameNameChangedListenerManager.addListener(listener);
+	}
+
+	public String getGameName() {
+		return gameNameText.getText().toString();
+	}
+
+	public void setGameName(String gameName) {
+		gameNameText.setText(gameName);
+	}
+
+	public void setScoring(Scoring scoring) {
+		for (int i = 0; i < scoringSpinner.getCount(); i++) {
+			if (scoringSpinner.getItemAtPosition(i) == scoring) {
+				scoringSpinner.setSelection(i);
+				break;
+			}
+		}
+	}
+
+	public Scoring getScoring() {
+		return Scoring.class.cast(scoringSpinner.getSelectedItem());
 	}
 }

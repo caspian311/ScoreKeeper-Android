@@ -85,7 +85,7 @@ public class GameModel {
 
 	public void cancelGame() {
 		cancellationListenerManager.notifyListeners();
-		pageNavigator.navigateToActivity(MainPageActivity.class);
+		pageNavigator.navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	public void addScoreChangedListener(Listener listener) {
@@ -104,7 +104,7 @@ public class GameModel {
 		gameStore.addGame(game);
 
 		gameOverListenerManager.notifyListeners();
-		pageNavigator.navigateToActivity(MainPageActivity.class);
+		pageNavigator.navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	public void addGameOverListener(Listener listener) {
@@ -113,5 +113,10 @@ public class GameModel {
 
 	public void addCancelGameListener(Listener listener) {
 		cancellationListenerManager.addListener(listener);
+	}
+
+	public String getGameName() {
+		// TODO
+		return null;
 	}
 }

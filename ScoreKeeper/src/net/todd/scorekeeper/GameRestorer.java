@@ -20,7 +20,7 @@ public class GameRestorer {
 		if (currentGame != null) {
 			Map<String, Serializable> extras = new HashMap<String, Serializable>();
 			extras.put("currentGame", currentGame);
-			pageNavigator.navigateToActivity(GameActivity.class, extras);
+			pageNavigator.navigateToActivityAndFinish(GameActivity.class, extras);
 		}
 	}
 }

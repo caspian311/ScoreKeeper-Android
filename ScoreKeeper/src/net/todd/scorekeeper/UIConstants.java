@@ -8,7 +8,7 @@ public class UIConstants {
 	public static final float TEXT_SMALL_SIZE = 20;
 	public static final float TEXT_TINY_SIZE = 15;
 	public static final int BUTTON_WIDTH = 200;
-	public static final int BUTTON_HEIGHT = 80;
+	public static final int BUTTON_HEIGHT = 60;
 	public static final int BACKGROUND_COLOR1 = 0xFF000000;
 	public static final int BACKGROUND_COLOR2 = 0xFF3399CC;
 }

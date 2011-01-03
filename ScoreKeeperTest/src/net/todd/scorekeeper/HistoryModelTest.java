@@ -35,7 +35,7 @@ public class HistoryModelTest {
 	public void whenModelFinishesGoToMainPage() {
 		testObject.finish();
 
-		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
+		verify(pageNavigator).navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	@Test

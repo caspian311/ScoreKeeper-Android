@@ -39,6 +39,6 @@ public class ManagePlayersModel {
 	}
 
 	public void finish() {
-		pageNavigator.navigateToActivity(MainPageActivity.class);
+		pageNavigator.navigateToActivityAndFinish(MainPageActivity.class);
 	}
 }

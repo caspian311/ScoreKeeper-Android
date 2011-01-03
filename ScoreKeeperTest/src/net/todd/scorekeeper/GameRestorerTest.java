@@ -39,7 +39,7 @@ public class GameRestorerTest {
 		testObject.restoreGameInProgress();
 
 		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivity(eq(GameActivity.class), extrasCaptor.capture());
+		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class), extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
 
 		assertEquals(currentGame, extras.get("currentGame"));
@@ -52,6 +52,6 @@ public class GameRestorerTest {
 
 		testObject.restoreGameInProgress();
 
-		verify(pageNavigator, never()).navigateToActivity(eq(GameActivity.class), anyMap());
+		verify(pageNavigator, never()).navigateToActivityAndFinish(eq(GameActivity.class), anyMap());
 	}
 }

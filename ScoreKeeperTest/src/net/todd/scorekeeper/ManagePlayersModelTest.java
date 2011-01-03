@@ -36,7 +36,7 @@ public class ManagePlayersModelTest {
 	public void finishingTheModelFinishesTheActivity() {
 		testObject.finish();
 
-		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
+		verify(pageNavigator).navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	@Test

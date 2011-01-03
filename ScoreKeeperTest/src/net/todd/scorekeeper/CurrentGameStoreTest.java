@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
@@ -20,6 +21,8 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void currentGameDataShouldBeAvailableAfterSavingTheState() {
+		String expectedGameName = UUID.randomUUID().toString();
+
 		Player player1 = new Player();
 		player1.setId("1");
 		player1.setName("matt");
@@ -39,11 +42,13 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 		scoreBoard.setScore(player1, 56);
 		scoreBoard.setScore(player2, 34);
 		scoreBoard.setScore(player3, 12);
-		new CurrentGameStore(getContext()).saveState(scoreBoard, player2);
+		new CurrentGameStore(getContext()).saveState(expectedGameName, scoreBoard, player2);
 
 		CurrentGame currentGame = new CurrentGameStore(getContext()).getCurrentGame();
+		String actualGameName = currentGame.getGameName();
 		ScoreBoard actualScoreBoard = currentGame.getScoreBoard();
 		List<ScoreBoardEntry> actualEntries = actualScoreBoard.getEntries();
+		assertEquals(expectedGameName, actualGameName);
 		assertEquals(3, actualEntries.size());
 		assertEquals("1", actualEntries.get(0).getPlayer().getId());
 		assertEquals("matt", actualEntries.get(0).getPlayer().getName());
@@ -60,6 +65,8 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 
 	@Test
 	public void currentGameDataShouldNotBeAvailableAfterClearingTheState() {
+		String gameName = UUID.randomUUID().toString();
+
 		Player player1 = new Player();
 		player1.setId("1");
 		player1.setName("matt");
@@ -74,7 +81,7 @@ public class CurrentGameStoreTest extends AbstractStoreTest {
 		scoreBoard.setPlayers(players);
 		scoreBoard.setScore(player1, 12);
 		scoreBoard.setScore(player2, 34);
-		new CurrentGameStore(getContext()).saveState(scoreBoard, player2);
+		new CurrentGameStore(getContext()).saveState(gameName, scoreBoard, player2);
 
 		new CurrentGameStore(getContext()).clearState();
 

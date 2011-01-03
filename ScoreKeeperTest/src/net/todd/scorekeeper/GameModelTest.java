@@ -162,7 +162,7 @@ public class GameModelTest {
 	public void cancellingTheGameGoesToTheMainPage() {
 		testObject.cancelGame();
 
-		verify(pageNavigator).navigateToActivity(MainPageActivity.class);
+		verify(pageNavigator).navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	@Test
@@ -198,7 +198,7 @@ public class GameModelTest {
 
 		InOrder inOrder = inOrder(pageNavigator, gameStore);
 		inOrder.verify(gameStore).addGame(any(Game.class));
-		inOrder.verify(pageNavigator).navigateToActivity(MainPageActivity.class);
+		inOrder.verify(pageNavigator).navigateToActivityAndFinish(MainPageActivity.class);
 	}
 
 	@Test

@@ -21,8 +21,9 @@ public class CurrentGameStore {
 		persistor.persist(new ArrayList<CurrentGame>());
 	}
 
-	public void saveState(ScoreBoard scoreBoard, Player currentPlayer) {
+	public void saveState(String gameName, ScoreBoard scoreBoard, Player currentPlayer) {
 		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(gameName);
 		currentGame.setScoreBoard(scoreBoard);
 		currentGame.setCurrentPlayer(currentPlayer);
 		persistor.persist(new ArrayList<CurrentGame>(Arrays.<CurrentGame> asList(currentGame)));

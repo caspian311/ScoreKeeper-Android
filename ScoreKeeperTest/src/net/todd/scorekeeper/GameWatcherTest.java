@@ -1,6 +1,9 @@
 package net.todd.scorekeeper;
 
 import static org.mockito.Mockito.*;
+
+import java.util.UUID;
+
 import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
 
@@ -45,6 +48,8 @@ public class GameWatcherTest {
 
 	@Test
 	public void whenGameStartsNotifyTheCurrentStateStoreWithCorrectInformation() {
+		String gameName = UUID.randomUUID().toString();
+		doReturn(gameName).when(model).getGameName();
 		ScoreBoard scoreBoard = mock(ScoreBoard.class);
 		doReturn(scoreBoard).when(model).getScoreBoard();
 		Player currentPlayer = mock(Player.class);
@@ -52,11 +57,13 @@ public class GameWatcherTest {
 
 		GameWatcher.create(model, currentGameStore);
 
-		verify(currentGameStore).saveState(scoreBoard, currentPlayer);
+		verify(currentGameStore).saveState(gameName, scoreBoard, currentPlayer);
 	}
 
 	@Test
 	public void whenPlayerChangesUpdateTheGamesCurrentState() {
+		String gameName = UUID.randomUUID().toString();
+		doReturn(gameName).when(model).getGameName();
 		ScoreBoard scoreBoard = mock(ScoreBoard.class);
 		doReturn(scoreBoard).when(model).getScoreBoard();
 		Player currentPlayer = mock(Player.class);
@@ -64,7 +71,7 @@ public class GameWatcherTest {
 
 		playerChangedListener.handle();
 
-		verify(currentGameStore).saveState(scoreBoard, currentPlayer);
+		verify(currentGameStore).saveState(gameName, scoreBoard, currentPlayer);
 	}
 
 	@Test

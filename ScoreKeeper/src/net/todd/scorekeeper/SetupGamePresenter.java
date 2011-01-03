@@ -2,46 +2,10 @@ package net.todd.scorekeeper;
 
 public class SetupGamePresenter {
 	public static void create(final SetupGameView view, final SetupGameModel model) {
-		view.setAllPlayers(model.getAllPlayers());
-
-		view.addSelectedPlayersChangedListener(new Listener() {
-			@Override
-			public void handle() {
-				model.selectionChanged(view.getCurrentPlayerId(), view.isCurrentPlayerSelected());
-			}
-		});
-
-		view.addCancelButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				model.cancel();
-			}
-		});
-
-		view.addStartGameButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				if (model.atLeastTwoPlayersSelected()) {
-					model.startGame();
-				} else {
-					view.popupErrorMessage();
-				}
-			}
-		});
-
-		view.addUpButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				model.movePlayerUp(view.getCurrentPlayerId());
-			}
-		});
-
-		view.addDownButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				model.movePlayerDown(view.getCurrentPlayerId());
-			}
-		});
+		view.setOrderPlayersButtonEnabled(model.arePlayersAddedToGame());
+		view.setStartGameButtonEnabled(model.isGameSetupComplete());
+		view.setGameName(model.getGameName());
+		view.setScoring(model.getScoring());
 
 		view.addBackPressedListener(new Listener() {
 			@Override
@@ -50,10 +14,39 @@ public class SetupGamePresenter {
 			}
 		});
 
-		model.addPlayersOrderChangedListener(new Listener() {
+		view.addAddPlayersButtonPressedListener(new Listener() {
 			@Override
 			public void handle() {
-				view.setAllPlayers(model.getAllPlayers());
+				model.goToAddPlayersScreen();
+			}
+		});
+
+		view.addStartGamePressedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.startGame();
+			}
+		});
+
+		view.addGameNameChangedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.setGameName(view.getGameName());
+			}
+		});
+
+		view.addOrderPlayersPressedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.goToOrderPlayersScreen();
+			}
+		});
+
+		model.addStateChangedListener(new Listener() {
+			@Override
+			public void handle() {
+				view.setStartGameButtonEnabled(model.isGameSetupComplete());
+				view.setOrderPlayersButtonEnabled(model.arePlayersAddedToGame());
 			}
 		});
 	}

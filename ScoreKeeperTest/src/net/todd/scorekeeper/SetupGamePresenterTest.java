@@ -2,12 +2,7 @@ package net.todd.scorekeeper;
 
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-
-import net.todd.scorekeeper.data.Player;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,14 +16,12 @@ public class SetupGamePresenterTest {
 	@Mock
 	private SetupGameModel model;
 
-	private Listener cancelButtonListener;
-	private Listener selectedPlayersChangedListener;
-
-	private Listener startButtonListener;
-	private Listener upButtonListener;
-	private Listener downButtonListener;
-	private Listener playersOrderChangedListener;
 	private Listener backButtonListener;
+	private Listener addPlayersButtonListener;
+	private Listener modelStateChangedListener;
+	private Listener startGameButtonListener;
+	private Listener gameNameChangedListener;
+	private Listener orderPlayersButtonListener;
 
 	@Before
 	public void setUp() {
@@ -36,86 +29,50 @@ public class SetupGamePresenterTest {
 
 		SetupGamePresenter.create(view, model);
 
-		ArgumentCaptor<Listener> cancelButtonListenerCaptor = ArgumentCaptor
-				.forClass(Listener.class);
-		verify(view).addCancelButtonListener(cancelButtonListenerCaptor.capture());
-		cancelButtonListener = cancelButtonListenerCaptor.getValue();
-
 		ArgumentCaptor<Listener> backButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
 		verify(view).addBackPressedListener(backButtonListenerCaptor.capture());
 		backButtonListener = backButtonListenerCaptor.getValue();
 
-		ArgumentCaptor<Listener> selectedPlayersChangedListenerCaptor = ArgumentCaptor
+		ArgumentCaptor<Listener> addPlayersButtonListenerCaptor = ArgumentCaptor
 				.forClass(Listener.class);
-		verify(view).addSelectedPlayersChangedListener(
-				selectedPlayersChangedListenerCaptor.capture());
-		selectedPlayersChangedListener = selectedPlayersChangedListenerCaptor.getValue();
+		verify(view).addAddPlayersButtonPressedListener(addPlayersButtonListenerCaptor.capture());
+		addPlayersButtonListener = addPlayersButtonListenerCaptor.getValue();
 
-		ArgumentCaptor<Listener> startButtonListenerCaptor = ArgumentCaptor
+		ArgumentCaptor<Listener> orderPlayersButtonListenerCaptor = ArgumentCaptor
 				.forClass(Listener.class);
-		verify(view).addStartGameButtonListener(startButtonListenerCaptor.capture());
-		startButtonListener = startButtonListenerCaptor.getValue();
+		verify(view).addOrderPlayersPressedListener(orderPlayersButtonListenerCaptor.capture());
+		orderPlayersButtonListener = orderPlayersButtonListenerCaptor.getValue();
 
-		ArgumentCaptor<Listener> upButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
-		verify(view).addUpButtonListener(upButtonListenerCaptor.capture());
-		upButtonListener = upButtonListenerCaptor.getValue();
-
-		ArgumentCaptor<Listener> downButtonListenerCaptor = ArgumentCaptor.forClass(Listener.class);
-		verify(view).addDownButtonListener(downButtonListenerCaptor.capture());
-		downButtonListener = downButtonListenerCaptor.getValue();
-
-		ArgumentCaptor<Listener> playersOrderChangedListenerCaptor = ArgumentCaptor
+		ArgumentCaptor<Listener> startGameButtonListenerCaptor = ArgumentCaptor
 				.forClass(Listener.class);
-		verify(model).addPlayersOrderChangedListener(playersOrderChangedListenerCaptor.capture());
-		playersOrderChangedListener = playersOrderChangedListenerCaptor.getValue();
+		verify(view).addStartGamePressedListener(startGameButtonListenerCaptor.capture());
+		startGameButtonListener = startGameButtonListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> gameNameChangedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addGameNameChangedListener(gameNameChangedListenerCaptor.capture());
+		gameNameChangedListener = gameNameChangedListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> gameStateChangedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(model).addStateChangedListener(gameStateChangedListenerCaptor.capture());
+		modelStateChangedListener = gameStateChangedListenerCaptor.getValue();
 
 		reset(view, model);
 	}
 
 	@Test
-	public void initiallyAllPlayersAreSetOnTheView() {
-		Player player1 = new Player();
-		player1.setId("1");
-		player1.setName("Peter");
-		Player player2 = new Player();
-		player2.setId("2");
-		player2.setName("James");
-		Player player3 = new Player();
-		player3.setId("3");
-		player3.setName("John");
-		List<Player> allPlayers = new ArrayList<Player>(Arrays.asList(player1, player2, player3));
-		doReturn(allPlayers).when(model).getAllPlayers();
+	public void initiallyPullValuesFromModelAndPopulateView() {
+		String gameName = UUID.randomUUID().toString();
+		doReturn(gameName).when(model).getGameName();
+
+		Scoring scoring = Scoring.HIGH;
+		doReturn(scoring).when(model).getScoring();
 
 		SetupGamePresenter.create(view, model);
 
-		verify(view).setAllPlayers(allPlayers);
-	}
-
-	@Test
-	public void whenStartButtonIsPressedStartTheGame() {
-		doReturn(false).when(model).atLeastTwoPlayersSelected();
-
-		startButtonListener.handle();
-
-		verify(model, never()).startGame();
-		verify(view).popupErrorMessage();
-	}
-
-	@Test
-	public void whenNextButtonIsPressedAndAtLeastThanTwoPlayersAreSelectedThenGoToTheNextPage() {
-		doReturn(true).when(model).atLeastTwoPlayersSelected();
-
-		startButtonListener.handle();
-
-		verify(model).startGame();
-		verify(view, never()).popupErrorMessage();
-	}
-
-	@Test
-	public void whenCancelButtonIsPressedThenCancelTheModel() {
-		cancelButtonListener.handle();
-
-		verify(model).cancel();
+		verify(view).setGameName(gameName);
+		verify(view).setScoring(scoring);
 	}
 
 	@Test
@@ -126,62 +83,105 @@ public class SetupGamePresenterTest {
 	}
 
 	@Test
-	public void whenSelectionChangesOnTheViewCurrentPlayerAndPlayerIsSelectedArePassedToTheModel() {
-		String currentPlayerId = UUID.randomUUID().toString();
-		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
-		doReturn(true).when(view).isCurrentPlayerSelected();
+	public void whenAddPlayersButtonIsPressedThenGoToTheAddPlayersScreen() {
+		addPlayersButtonListener.handle();
 
-		selectedPlayersChangedListener.handle();
-
-		verify(model).selectionChanged(currentPlayerId, true);
+		verify(model).goToAddPlayersScreen();
 	}
 
 	@Test
-	public void whenSelectionChangesOnTheViewCurrentPlayerAndPlayerIsNotSelectedArePassedToTheModel() {
-		String currentPlayerId = UUID.randomUUID().toString();
-		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
-		doReturn(false).when(view).isCurrentPlayerSelected();
+	public void initiallyIfThereAreNoPlayersAddedToTheGameThenDisableTheOrderPlayersButton() {
+		doReturn(false).when(model).arePlayersAddedToGame();
 
-		selectedPlayersChangedListener.handle();
+		SetupGamePresenter.create(view, model);
 
-		verify(model).selectionChanged(currentPlayerId, false);
+		verify(view).setOrderPlayersButtonEnabled(false);
 	}
 
 	@Test
-	public void whenBackButtonIsPressedCancelTheModel() {
-		cancelButtonListener.handle();
+	public void initiallyIfThereArePlayersAddedToTheGameThenEnableTheOrderPlayersButton() {
+		doReturn(true).when(model).arePlayersAddedToGame();
 
-		verify(model).cancel();
+		SetupGamePresenter.create(view, model);
+
+		verify(view).setOrderPlayersButtonEnabled(true);
 	}
 
 	@Test
-	public void whenUpIsPressedMoveTheCurrentPlayerUp() {
-		String currentPlayerId = UUID.randomUUID().toString();
-		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
+	public void initiallyIfTheTheGameIsCompleteThenEnableTheStartGameButton() {
+		doReturn(true).when(model).isGameSetupComplete();
 
-		upButtonListener.handle();
+		SetupGamePresenter.create(view, model);
 
-		verify(model).movePlayerUp(currentPlayerId);
+		verify(view).setStartGameButtonEnabled(true);
 	}
 
 	@Test
-	public void whenDownIsPressedMoveTheCurrentPlayerDown() {
-		String currentPlayerId = UUID.randomUUID().toString();
-		doReturn(currentPlayerId).when(view).getCurrentPlayerId();
+	public void initiallyIfTheTheGameIsNotCompleteThenDisableTheStartGameButton() {
+		doReturn(false).when(model).isGameSetupComplete();
 
-		downButtonListener.handle();
+		SetupGamePresenter.create(view, model);
 
-		verify(model).movePlayerDown(currentPlayerId);
+		verify(view).setStartGameButtonEnabled(false);
 	}
 
 	@Test
-	public void whenPlayersOrderChangesThenUpdateViewWithlistOfPlayersFromModel() {
-		List<Player> players = Arrays.asList(mock(Player.class), mock(Player.class),
-				mock(Player.class));
-		doReturn(players).when(model).getAllPlayers();
+	public void whenTheModelStateChangesAndTheGameIsNotSetupCompletelyThenDisableTheStartGameButton() {
+		doReturn(false).when(model).isGameSetupComplete();
 
-		playersOrderChangedListener.handle();
+		modelStateChangedListener.handle();
 
-		verify(view).setAllPlayers(players);
+		verify(view).setStartGameButtonEnabled(false);
+	}
+
+	@Test
+	public void whenTheModelStateChangesAndTheGameIsSetupCompletelyThenEnableTheStartGameButton() {
+		doReturn(true).when(model).isGameSetupComplete();
+
+		modelStateChangedListener.handle();
+
+		verify(view).setStartGameButtonEnabled(true);
+	}
+
+	@Test
+	public void whenTheModelStateChangesAndThereAreNoPlayersAddedThenDisableTheOrderPlayersButton() {
+		doReturn(false).when(model).arePlayersAddedToGame();
+
+		modelStateChangedListener.handle();
+
+		verify(view).setOrderPlayersButtonEnabled(false);
+	}
+
+	@Test
+	public void whenTheModelStateChangesAndThereArePlayersAddedThenEnableTheOrderPlayersButton() {
+		doReturn(true).when(model).arePlayersAddedToGame();
+
+		modelStateChangedListener.handle();
+
+		verify(view).setOrderPlayersButtonEnabled(true);
+	}
+
+	@Test
+	public void whenStartGameButtonIsPressedThenStartTheGame() {
+		startGameButtonListener.handle();
+
+		verify(model).startGame();
+	}
+
+	@Test
+	public void whenGameNameChangesThenSetTheGameNameOnTheModel() {
+		String gameName = UUID.randomUUID().toString();
+		doReturn(gameName).when(view).getGameName();
+
+		gameNameChangedListener.handle();
+
+		verify(model).setGameName(gameName);
+	}
+
+	@Test
+	public void whenOrderPlayersButtonIsPressedThenGoToOrderPlayersScreen() {
+		orderPlayersButtonListener.handle();
+
+		verify(model).goToOrderPlayersScreen();
 	}
 }

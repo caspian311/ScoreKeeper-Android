@@ -41,7 +41,7 @@ public class MainPageModelTest {
 	public void goingToManagePlayersPageStartsAnActivityBasedOnTheManagePlayersActivity() {
 		testObject.goToManagePlayerPage();
 
-		verify(pageNavigator).navigateToActivity(ManagePlayersActivity.class);
+		verify(pageNavigator).navigateToActivityAndFinish(ManagePlayersActivity.class);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -53,7 +53,7 @@ public class MainPageModelTest {
 		testObject.goToStartGamePage();
 
 		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivity(eq(SetupGameActivity.class),
+		verify(pageNavigator).navigateToActivityAndFinish(eq(SetupGameActivity.class),
 				extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
 
@@ -66,7 +66,7 @@ public class MainPageModelTest {
 	public void goingToHistoryPageStartsAnActivityBasedOnHistoryActivity() {
 		testObject.goToHistoryPage();
 
-		verify(pageNavigator).navigateToActivity(HistoryActivity.class);
+		verify(pageNavigator).navigateToActivityAndFinish(HistoryActivity.class);
 	}
 
 	@Test
