@@ -11,9 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -29,9 +26,7 @@ public class OrderPlayersView {
 	private boolean isCurrentPlayerSelected;
 	private String currentPlayerId;
 
-	private final ListenerManager cancelButtonListenerManager = new ListenerManager();
-	private final ListenerManager startGameButtonListenerManager = new ListenerManager();
-	private final ListenerManager selectedPlayersChangedListenerManager = new ListenerManager();
+	private final ListenerManager doneButtonListenerManager = new ListenerManager();
 	private final ListenerManager upButtonListenerManager = new ListenerManager();
 	private final ListenerManager downButtonListenerManager = new ListenerManager();
 	private final ListenerManager backPressedListenerManager = new ListenerManager();
@@ -57,7 +52,7 @@ public class OrderPlayersView {
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-		title.setText("Order the Players");
+		title.setText("Order Players");
 		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -73,27 +68,17 @@ public class OrderPlayersView {
 		controlView.setOrientation(LinearLayout.HORIZONTAL);
 		mainView.addView(controlView);
 
-		Button cancelButton = new Button(context);
-		ButtonUtilities.setLayout(cancelButton);
-		cancelButton.setText("Cancel");
-		cancelButton.setOnClickListener(new OnClickListener() {
+		Button doneButton = new Button(context);
+		doneButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				UIConstants.BUTTON_HEIGHT));
+		doneButton.setText("Done");
+		doneButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				cancelButtonListenerManager.notifyListeners();
+				doneButtonListenerManager.notifyListeners();
 			}
 		});
-		controlView.addView(cancelButton);
-
-		Button startGameButton = new Button(context);
-		ButtonUtilities.setLayout(startGameButton);
-		startGameButton.setText("Start Game");
-		startGameButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startGameButtonListenerManager.notifyListeners();
-			}
-		});
-		controlView.addView(startGameButton);
+		controlView.addView(doneButton);
 
 		allPlayersTable = new TableLayout(context);
 		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
@@ -106,7 +91,7 @@ public class OrderPlayersView {
 		allPlayersTableLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		allPlayersTable.setLayoutParams(allPlayersTableLayoutParams);
 
-		allPlayersTable.setColumnStretchable(1, true);
+		allPlayersTable.setColumnStretchable(2, true);
 		mainView.addView(allPlayersTable);
 	}
 
@@ -121,24 +106,6 @@ public class OrderPlayersView {
 			playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
 					TableRow.LayoutParams.WRAP_CONTENT));
 			allPlayersTable.addView(playerRow);
-
-			CheckBox playerSelection = new CheckBox(context);
-			playerSelection.setChecked(player.isSelected());
-			playerSelection.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					isCurrentPlayerSelected = isChecked;
-					currentPlayerId = player.getId();
-					selectedPlayersChangedListenerManager.notifyListeners();
-				}
-			});
-			playerRow.addView(playerSelection);
-
-			TextView playerName = new TextView(context);
-			playerName.setText(player.getName());
-			playerName.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
-			playerName.setTextColor(UIConstants.TEXT_COLOR);
-			playerRow.addView(playerName);
 
 			ImageButton upButton = new ImageButton(context);
 			upButton.setImageDrawable(context.getResources().getDrawable(R.drawable.add));
@@ -161,23 +128,21 @@ public class OrderPlayersView {
 				}
 			});
 			playerRow.addView(downButton);
-		}
-	}
 
-	public void addSelectedPlayersChangedListener(Listener listener) {
-		selectedPlayersChangedListenerManager.addListener(listener);
+			TextView playerName = new TextView(context);
+			playerName.setText(player.getName());
+			playerName.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
+			playerName.setTextColor(UIConstants.TEXT_COLOR);
+			playerRow.addView(playerName);
+		}
 	}
 
 	public boolean isCurrentPlayerSelected() {
 		return isCurrentPlayerSelected;
 	}
 
-	public void addStartGameButtonListener(final Listener listener) {
-		startGameButtonListenerManager.addListener(listener);
-	}
-
-	public void addCancelButtonListener(final Listener listener) {
-		cancelButtonListenerManager.addListener(listener);
+	public void addDoneButtonListener(final Listener listener) {
+		doneButtonListenerManager.addListener(listener);
 	}
 
 	public String getCurrentPlayerId() {

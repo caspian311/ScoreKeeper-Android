@@ -4,28 +4,10 @@ public class OrderPlayersPresenter {
 	public static void create(final OrderPlayersView view, final OrderPlayersModel model) {
 		view.setAllPlayers(model.getAllPlayers());
 
-		view.addSelectedPlayersChangedListener(new Listener() {
+		view.addDoneButtonListener(new Listener() {
 			@Override
 			public void handle() {
-				model.selectionChanged(view.getCurrentPlayerId(), view.isCurrentPlayerSelected());
-			}
-		});
-
-		view.addCancelButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				model.cancel();
-			}
-		});
-
-		view.addStartGameButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				if (model.atLeastTwoPlayersSelected()) {
-					model.startGame();
-				} else {
-					view.popupErrorMessage();
-				}
+				model.done();
 			}
 		});
 
@@ -46,7 +28,7 @@ public class OrderPlayersPresenter {
 		view.addBackPressedListener(new Listener() {
 			@Override
 			public void handle() {
-				model.cancel();
+				model.done();
 			}
 		});
 

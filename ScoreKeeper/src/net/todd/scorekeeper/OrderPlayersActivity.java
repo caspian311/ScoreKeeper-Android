@@ -11,8 +11,7 @@ public class OrderPlayersActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		view = new OrderPlayersView(this);
-		OrderPlayersModel model = new OrderPlayersModel(new PlayerStore(this), new PageNavigator(
-				this));
+		OrderPlayersModel model = new OrderPlayersModel(new PageNavigator(this));
 		OrderPlayersPresenter.create(view, model);
 
 		setContentView(view.getView());

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
-import net.todd.scorekeeper.data.ScoreBoardEntry;
+import net.todd.scorekeeper.data.ScoreBoard;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +21,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class OrderPlayersModelTest {
-	@Mock
-	private PlayerStore playerStore;
 	@Mock
 	private PageNavigator pageNavigator;
 
@@ -35,6 +33,8 @@ public class OrderPlayersModelTest {
 	private Player player3;
 
 	private OrderPlayersModel testObject;
+
+	private CurrentGame currentGame;
 
 	@Before
 	public void setUp() {
@@ -52,100 +52,20 @@ public class OrderPlayersModelTest {
 		player3 = new Player();
 		player3.setId(playerThreeId);
 		player3.setName("John");
-
 		allPlayers = Arrays.asList(player1, player2, player3);
-		doReturn(allPlayers).when(playerStore).getAllPlayers();
 
-		testObject = new OrderPlayersModel(playerStore, pageNavigator);
+		currentGame = new CurrentGame();
+		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setPlayers(allPlayers);
+		currentGame.setScoreBoard(scoreBoard);
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new OrderPlayersModel(pageNavigator);
 	}
 
 	@Test
 	public void getAllPlayersReturnsAllPlayersFromPlayerStore() {
 		assertEquals(allPlayers, testObject.getAllPlayers());
-	}
-
-	@Test
-	public void initiallyAtLeastTwoPlayersAreNotSelected() {
-		assertFalse(testObject.atLeastTwoPlayersSelected());
-	}
-
-	@Test
-	public void ifOnePlayerIsSelectedThenAtLeastTwoPlayersAreNotSelected() {
-		testObject.selectionChanged(playerOneId, true);
-
-		assertFalse(testObject.atLeastTwoPlayersSelected());
-	}
-
-	@Test
-	public void ifTwoPlayerIsSelectedThenAtLeastTwoPlayersAreSelected() {
-		testObject.selectionChanged(playerOneId, true);
-		testObject.selectionChanged(playerTwoId, true);
-
-		assertTrue(testObject.atLeastTwoPlayersSelected());
-	}
-
-	@Test
-	public void ifThreePlayerIsSelectedThenAtLeastTwoPlayersAreSelected() {
-		testObject.selectionChanged(playerOneId, true);
-		testObject.selectionChanged(playerTwoId, true);
-		testObject.selectionChanged(playerThreeId, true);
-
-		assertTrue(testObject.atLeastTwoPlayersSelected());
-	}
-
-	@Test
-	public void ifTwoPlayersAreSelectedAndOneIsDeselectedThenAtLeastTwoPlayersAreNotSelected() {
-		testObject.selectionChanged(playerOneId, true);
-		testObject.selectionChanged(playerTwoId, true);
-		testObject.selectionChanged(playerOneId, false);
-
-		assertFalse(testObject.atLeastTwoPlayersSelected());
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
-	public void ifTwoPlayersAreSelectedThenTheSelectedPlayersAreTheSelectedPlayers() {
-		testObject.selectionChanged(playerOneId, true);
-		testObject.selectionChanged(playerTwoId, true);
-
-		testObject.startGame();
-
-		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class), extrasCaptor.capture());
-		Map<String, Serializable> extras = extrasCaptor.getValue();
-
-		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
-		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
-		assertEquals(2, entries.size());
-		assertEquals(player1, entries.get(0).getPlayer());
-		assertEquals(player2, entries.get(1).getPlayer());
-		assertEquals(player1, currentGame.getCurrentPlayer());
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
-	public void ifTwoPlayersAreSelectedAndOneIsDeselectedThenTheSelectedPlayersAreOnlyTheSelectedPlayers() {
-		testObject.selectionChanged(playerOneId, true);
-		testObject.selectionChanged(playerTwoId, true);
-		testObject.selectionChanged(playerOneId, false);
-
-		testObject.startGame();
-
-		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class), extrasCaptor.capture());
-		Map<String, Serializable> extras = extrasCaptor.getValue();
-
-		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
-		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
-		assertEquals(1, entries.size());
-		assertEquals(player2, entries.get(0).getPlayer());
-	}
-
-	@Test
-	public void cancellingFinishesTheActivity() {
-		testObject.cancel();
-
-		verify(pageNavigator).navigateToActivityAndFinish(SetupGameActivity.class);
 	}
 
 	@Test
@@ -198,5 +118,44 @@ public class OrderPlayersModelTest {
 		testObject.movePlayerUp(playerThreeId);
 
 		verify(listener).handle();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void ifNoReorderingWasDonePlayersArePassedAlongWithTheCurrentGameInOriginalOrder() {
+		testObject.done();
+
+		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
+		verify(pageNavigator).navigateToActivityAndFinish(eq(SetupGameActivity.class),
+				extrasCaptor.capture());
+		Map<String, Serializable> extras = extrasCaptor.getValue();
+
+		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
+		assertEquals(currentGame.getGameName(), actualCurrentGame.getGameName());
+		assertEquals(3, actualCurrentGame.getScoreBoard().getEntries().size());
+		assertEquals(player1, actualCurrentGame.getScoreBoard().getEntries().get(0).getPlayer());
+		assertEquals(player2, actualCurrentGame.getScoreBoard().getEntries().get(1).getPlayer());
+		assertEquals(player3, actualCurrentGame.getScoreBoard().getEntries().get(2).getPlayer());
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void reorderedPlayersArePassedAlongWithTheCurrentGameToTheSetupGamePage() {
+		testObject.movePlayerDown(playerOneId);
+		testObject.movePlayerUp(playerThreeId);
+
+		testObject.done();
+
+		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
+		verify(pageNavigator).navigateToActivityAndFinish(eq(SetupGameActivity.class),
+				extrasCaptor.capture());
+		Map<String, Serializable> extras = extrasCaptor.getValue();
+
+		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
+		assertEquals(currentGame.getGameName(), actualCurrentGame.getGameName());
+		assertEquals(3, actualCurrentGame.getScoreBoard().getEntries().size());
+		assertEquals(player2, actualCurrentGame.getScoreBoard().getEntries().get(0).getPlayer());
+		assertEquals(player3, actualCurrentGame.getScoreBoard().getEntries().get(1).getPlayer());
+		assertEquals(player1, actualCurrentGame.getScoreBoard().getEntries().get(2).getPlayer());
 	}
 }
