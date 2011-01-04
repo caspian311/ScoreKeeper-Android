@@ -12,6 +12,8 @@ import java.util.UUID;
 
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +69,22 @@ public class SetupGameModelTest {
 		assertEquals(0, game.getScoreBoard().getEntries().get(1).getScore());
 		assertEquals(player3, game.getScoreBoard().getEntries().get(2).getPlayer());
 		assertEquals(0, game.getScoreBoard().getEntries().get(2).getScore());
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void goingToTheAddPlayersScreenWithoutGameNameAndPlayersAddedStillNavigatesCorrectly() {
+		testObject.goToAddPlayersScreen();
+
+		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
+		verify(pageNavigator).navigateToActivityButDontFinish(eq(AddPlayersToGameActivity.class),
+				extrasCaptor.capture());
+		Map<?, ?> extras = extrasCaptor.getValue();
+
+		CurrentGame game = (CurrentGame) extras.get("currentGame");
+		assertEquals("", game.getGameName());
+		assertEquals(null, game.getCurrentPlayer());
+		assertEquals(0, game.getScoreBoard().getEntries().size());
 	}
 
 	@Test
@@ -293,5 +311,66 @@ public class SetupGameModelTest {
 		testObject = new SetupGameModel(pageNavigator);
 
 		assertEquals(gameName, testObject.getGameName());
+	}
+
+	@Test
+	public void whenACurrentGameIsNotAvailableThenPlayersAreNotAddedToTheGame() {
+		assertFalse("should be false by default", testObject.arePlayersAddedToGame());
+	}
+
+	@Test
+	public void whenACurrentGameIsAvailableAndThereAreNoPlayersAddedThenArePlayersAreAddedToTheGameReturnFalse() {
+		CurrentGame currentGame = mock(CurrentGame.class);
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
+
+		assertFalse("should be false if there are no players", testObject.arePlayersAddedToGame());
+	}
+
+	@Test
+	public void whenACurrentGameIsAvailableAndThereArePlayersAddedThenArePlayersAreAddedToTheGameReturnTrue() {
+		ScoreBoard scoreBoard = mock(ScoreBoard.class);
+		ScoreBoardEntry scoreBoardEntry1 = mock(ScoreBoardEntry.class);
+		ScoreBoardEntry scoreBoardEntry2 = mock(ScoreBoardEntry.class);
+		doReturn(Arrays.asList(scoreBoardEntry1, scoreBoardEntry2)).when(scoreBoard).getEntries();
+		CurrentGame currentGame = mock(CurrentGame.class);
+		doReturn(scoreBoard).when(currentGame).getScoreBoard();
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
+
+		assertTrue(testObject.arePlayersAddedToGame());
+	}
+
+	@Test
+	public void whenACurrentGameIsAvailableAndThereArePlayersButNoGameNameThenGameSetupIsNotComplete() {
+		ScoreBoard scoreBoard = mock(ScoreBoard.class);
+		ScoreBoardEntry scoreBoardEntry1 = mock(ScoreBoardEntry.class);
+		ScoreBoardEntry scoreBoardEntry2 = mock(ScoreBoardEntry.class);
+		doReturn(Arrays.asList(scoreBoardEntry1, scoreBoardEntry2)).when(scoreBoard).getEntries();
+		CurrentGame currentGame = mock(CurrentGame.class);
+		doReturn(scoreBoard).when(currentGame).getScoreBoard();
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
+
+		assertFalse(testObject.isGameSetupComplete());
+	}
+
+	@Test
+	public void whenACurrentGameIsAvailableAndThereArePlayersAndAGameNameThenGameSetupIsComplete() {
+		ScoreBoard scoreBoard = mock(ScoreBoard.class);
+		ScoreBoardEntry scoreBoardEntry1 = mock(ScoreBoardEntry.class);
+		ScoreBoardEntry scoreBoardEntry2 = mock(ScoreBoardEntry.class);
+		doReturn(Arrays.asList(scoreBoardEntry1, scoreBoardEntry2)).when(scoreBoard).getEntries();
+		CurrentGame currentGame = mock(CurrentGame.class);
+		doReturn(scoreBoard).when(currentGame).getScoreBoard();
+		doReturn(UUID.randomUUID().toString()).when(currentGame).getGameName();
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
+
+		assertTrue(testObject.isGameSetupComplete());
 	}
 }

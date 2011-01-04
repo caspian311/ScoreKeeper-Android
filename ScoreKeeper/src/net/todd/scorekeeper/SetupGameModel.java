@@ -9,6 +9,7 @@ import java.util.Map;
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
 
 public class SetupGameModel {
 	private final ListenerManager stateChangedListenerManager = new ListenerManager();
@@ -24,6 +25,11 @@ public class SetupGameModel {
 		CurrentGame currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
 		if (currentGame != null) {
 			gameName = currentGame.getGameName();
+			if (currentGame.getScoreBoard() != null) {
+				for (ScoreBoardEntry scoreBoardEntry : currentGame.getScoreBoard().getEntries()) {
+					selectedPlayers.add(scoreBoardEntry.getPlayer());
+				}
+			}
 		} else {
 			gameName = "";
 		}
@@ -43,7 +49,9 @@ public class SetupGameModel {
 		scoreBoard.setPlayers(selectedPlayers);
 		CurrentGame currentGame = new CurrentGame();
 		currentGame.setGameName(gameName);
-		currentGame.setCurrentPlayer(selectedPlayers.get(0));
+		if (selectedPlayers.size() > 1) {
+			currentGame.setCurrentPlayer(selectedPlayers.get(0));
+		}
 		currentGame.setScoreBoard(scoreBoard);
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
