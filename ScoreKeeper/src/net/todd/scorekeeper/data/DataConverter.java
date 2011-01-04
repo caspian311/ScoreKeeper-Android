@@ -8,6 +8,7 @@ import java.util.List;
 import net.todd.scorekeeper.ObjectSerializerPersistor;
 import net.todd.scorekeeper.Persistor;
 import android.content.Context;
+import android.util.Log;
 
 @SuppressWarnings("deprecation")
 public class DataConverter {
@@ -71,13 +72,18 @@ public class DataConverter {
 			translated = translatedClass.newInstance();
 			for (Field originalField : original.getClass().getDeclaredFields()) {
 				if (!"serialVersionUID".equals(originalField.getName())) {
-					Field tranlsatedField = translated.getClass().getDeclaredField(
-							originalField.getName());
-					originalField.setAccessible(true);
-					tranlsatedField.setAccessible(true);
-					Object originalValue = translateField(originalField.getType(),
-							originalField.get(original));
-					tranlsatedField.set(translated, originalValue);
+					Field tranlsatedField;
+					try {
+						tranlsatedField = translated.getClass().getDeclaredField(
+								originalField.getName());
+						originalField.setAccessible(true);
+						tranlsatedField.setAccessible(true);
+						Object originalValue = translateField(originalField.getType(),
+								originalField.get(original));
+						tranlsatedField.set(translated, originalValue);
+					} catch (NoSuchFieldException e) {
+						Log.w("tried to match a field but it didn't exist", e);
+					}
 				}
 			}
 		}
