@@ -22,7 +22,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class HistoryView {
-	private final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
+	private final DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 	private final ListenerManager backPressedListenerManager = new ListenerManager();
 	private final ListenerManager doneButtonListenerManager = new ListenerManager();
 	private final ListenerManager clearButtonListenerManager = new ListenerManager();
@@ -118,11 +118,11 @@ public class HistoryView {
 			TableRow firstGameRow = new TableRow(activity);
 			historyTable.addView(firstGameRow);
 
-			TextView gameOverTimestamp = new TextView(activity);
-			gameOverTimestamp.setText(dateFormatter.format(game.getGameOverTimestamp()));
-			gameOverTimestamp.setTextSize(UIConstants.TEXT_SMALL_SIZE);
-			gameOverTimestamp.setTextColor(UIConstants.TEXT_COLOR);
-			firstGameRow.addView(gameOverTimestamp);
+			TextView gameName = new TextView(activity);
+			gameName.setText(game.getGameName() == null ? "Unknown Game" : game.getGameName());
+			gameName.setTextSize(UIConstants.TEXT_SMALL_SIZE);
+			gameName.setTextColor(UIConstants.TEXT_COLOR);
+			firstGameRow.addView(gameName);
 
 			ImageButton removeGameButton = new ImageButton(activity);
 			removeGameButton.setImageDrawable(activity.getResources()
@@ -136,19 +136,17 @@ public class HistoryView {
 			});
 			firstGameRow.addView(removeGameButton);
 
-			StringBuilder scoreBoardText = new StringBuilder();
-			List<ScoreBoardEntry> entries = game.getScoreBoard().getEntries();
-			for (int i = 0; i < entries.size(); i++) {
-				ScoreBoardEntry entry = entries.get(i);
-				scoreBoardText.append(entry.getPlayer().getName()).append(":")
-						.append(entry.getScore());
-				if (i < entries.size() - 1) {
-					scoreBoardText.append(", ");
-				}
-			}
-
 			TableRow secondGameRow = new TableRow(activity);
 			historyTable.addView(secondGameRow);
+
+			TextView gameOverTimestamp = new TextView(activity);
+			gameOverTimestamp.setText(dateFormatter.format(game.getGameOverTimestamp()));
+			gameOverTimestamp.setTextSize(UIConstants.TEXT_TINY_SIZE);
+			gameOverTimestamp.setTextColor(UIConstants.TEXT_COLOR);
+			secondGameRow.addView(gameOverTimestamp);
+
+			TableRow thirdGameRow = new TableRow(activity);
+			historyTable.addView(thirdGameRow);
 
 			TextView scoreBoardTextView = new TextView(activity);
 			TableRow.LayoutParams scorBoardTextLayoutParams = new TableRow.LayoutParams(
@@ -156,9 +154,9 @@ public class HistoryView {
 			scorBoardTextLayoutParams.span = 2;
 			scoreBoardTextView.setLayoutParams(scorBoardTextLayoutParams);
 			scoreBoardTextView.setTextColor(UIConstants.TEXT_COLOR);
-			scoreBoardTextView.setText(scoreBoardText.toString());
+			scoreBoardTextView.setText(getScoreBoardText(game));
 			scoreBoardTextView.setTextSize(UIConstants.TEXT_TINY_SIZE);
-			secondGameRow.addView(scoreBoardTextView);
+			thirdGameRow.addView(scoreBoardTextView);
 
 			if (gameIndex < allGames.size() - 1) {
 				TableRow borderGameRow = new TableRow(activity);
@@ -173,6 +171,20 @@ public class HistoryView {
 				borderGameRow.addView(line);
 			}
 		}
+	}
+
+	private String getScoreBoardText(final Game game) {
+		StringBuilder sb = new StringBuilder();
+		List<ScoreBoardEntry> entries = game.getScoreBoard().getEntries();
+		for (int i = 0; i < entries.size(); i++) {
+			ScoreBoardEntry entry = entries.get(i);
+			sb.append(entry.getPlayer().getName()).append(":")
+					.append(entry.getScore());
+			if (i < entries.size() - 1) {
+				sb.append(", ");
+			}
+		}
+		return sb.toString();
 	}
 
 	public void setClearButtonEnabled(boolean isEnabled) {
