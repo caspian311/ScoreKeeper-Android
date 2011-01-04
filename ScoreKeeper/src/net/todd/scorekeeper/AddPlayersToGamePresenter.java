@@ -11,49 +11,21 @@ public class AddPlayersToGamePresenter {
 			}
 		});
 
-		view.addCancelButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				model.cancel();
-			}
-		});
-
-		view.addStartGameButtonListener(new Listener() {
+		view.addDoneButtonListener(new Listener() {
 			@Override
 			public void handle() {
 				if (model.atLeastTwoPlayersSelected()) {
-					model.startGame();
+					model.done();
 				} else {
 					view.popupErrorMessage();
 				}
 			}
 		});
 
-		view.addUpButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				model.movePlayerUp(view.getCurrentPlayerId());
-			}
-		});
-
-		view.addDownButtonListener(new Listener() {
-			@Override
-			public void handle() {
-				model.movePlayerDown(view.getCurrentPlayerId());
-			}
-		});
-
 		view.addBackPressedListener(new Listener() {
 			@Override
 			public void handle() {
-				model.cancel();
-			}
-		});
-
-		model.addPlayersOrderChangedListener(new Listener() {
-			@Override
-			public void handle() {
-				view.setAllPlayers(model.getAllPlayers());
+				model.done();
 			}
 		});
 	}

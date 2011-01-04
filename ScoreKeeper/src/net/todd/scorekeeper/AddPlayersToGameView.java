@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -29,11 +28,8 @@ public class AddPlayersToGameView {
 	private boolean isCurrentPlayerSelected;
 	private String currentPlayerId;
 
-	private final ListenerManager cancelButtonListenerManager = new ListenerManager();
-	private final ListenerManager startGameButtonListenerManager = new ListenerManager();
+	private final ListenerManager doneButtonListenerManager = new ListenerManager();
 	private final ListenerManager selectedPlayersChangedListenerManager = new ListenerManager();
-	private final ListenerManager upButtonListenerManager = new ListenerManager();
-	private final ListenerManager downButtonListenerManager = new ListenerManager();
 	private final ListenerManager backPressedListenerManager = new ListenerManager();
 
 	public AddPlayersToGameView(Context context) {
@@ -57,7 +53,7 @@ public class AddPlayersToGameView {
 
 		TextView title = new TextView(context);
 		title.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-		title.setText("Add Players to the Game");
+		title.setText("Add Players");
 		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		title.setTextColor(UIConstants.TEXT_COLOR);
 		title.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -73,27 +69,17 @@ public class AddPlayersToGameView {
 		controlView.setOrientation(LinearLayout.HORIZONTAL);
 		mainView.addView(controlView);
 
-		Button cancelButton = new Button(context);
-		ButtonUtilities.setLayout(cancelButton);
-		cancelButton.setText("Cancel");
-		cancelButton.setOnClickListener(new OnClickListener() {
+		Button firstDoneButton = new Button(context);
+		firstDoneButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				UIConstants.BUTTON_HEIGHT));
+		firstDoneButton.setText("Done");
+		firstDoneButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				cancelButtonListenerManager.notifyListeners();
+				doneButtonListenerManager.notifyListeners();
 			}
 		});
-		controlView.addView(cancelButton);
-
-		Button startGameButton = new Button(context);
-		ButtonUtilities.setLayout(startGameButton);
-		startGameButton.setText("Start Game");
-		startGameButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startGameButtonListenerManager.notifyListeners();
-			}
-		});
-		controlView.addView(startGameButton);
+		controlView.addView(firstDoneButton);
 
 		allPlayersTable = new TableLayout(context);
 		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
@@ -108,6 +94,18 @@ public class AddPlayersToGameView {
 
 		allPlayersTable.setColumnStretchable(1, true);
 		mainView.addView(allPlayersTable);
+
+		Button secondDoneButton = new Button(context);
+		secondDoneButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				UIConstants.BUTTON_HEIGHT));
+		secondDoneButton.setText("Done");
+		secondDoneButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				doneButtonListenerManager.notifyListeners();
+			}
+		});
+		controlView.addView(secondDoneButton);
 	}
 
 	public View getView() {
@@ -139,28 +137,6 @@ public class AddPlayersToGameView {
 			playerName.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
 			playerName.setTextColor(UIConstants.TEXT_COLOR);
 			playerRow.addView(playerName);
-
-			ImageButton upButton = new ImageButton(context);
-			upButton.setImageDrawable(context.getResources().getDrawable(R.drawable.add));
-			upButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					currentPlayerId = player.getId();
-					upButtonListenerManager.notifyListeners();
-				}
-			});
-			playerRow.addView(upButton);
-
-			ImageButton downButton = new ImageButton(context);
-			downButton.setImageDrawable(context.getResources().getDrawable(R.drawable.minus));
-			downButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					currentPlayerId = player.getId();
-					downButtonListenerManager.notifyListeners();
-				}
-			});
-			playerRow.addView(downButton);
 		}
 	}
 
@@ -172,24 +148,12 @@ public class AddPlayersToGameView {
 		return isCurrentPlayerSelected;
 	}
 
-	public void addStartGameButtonListener(final Listener listener) {
-		startGameButtonListenerManager.addListener(listener);
-	}
-
-	public void addCancelButtonListener(final Listener listener) {
-		cancelButtonListenerManager.addListener(listener);
+	public void addDoneButtonListener(final Listener listener) {
+		doneButtonListenerManager.addListener(listener);
 	}
 
 	public String getCurrentPlayerId() {
 		return currentPlayerId;
-	}
-
-	public void addUpButtonListener(Listener listener) {
-		upButtonListenerManager.addListener(listener);
-	}
-
-	public void addDownButtonListener(Listener listener) {
-		downButtonListenerManager.addListener(listener);
 	}
 
 	public void popupErrorMessage() {

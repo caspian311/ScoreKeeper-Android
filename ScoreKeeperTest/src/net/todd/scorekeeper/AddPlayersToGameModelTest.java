@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
+import net.todd.scorekeeper.data.ScoreBoard;
 import net.todd.scorekeeper.data.ScoreBoardEntry;
 
 import org.junit.Before;
@@ -35,6 +36,7 @@ public class AddPlayersToGameModelTest {
 	private Player player3;
 
 	private AddPlayersToGameModel testObject;
+	private CurrentGame currentGame;
 
 	@Before
 	public void setUp() {
@@ -55,6 +57,11 @@ public class AddPlayersToGameModelTest {
 
 		allPlayers = Arrays.asList(player1, player2, player3);
 		doReturn(allPlayers).when(playerStore).getAllPlayers();
+
+		currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.setGameName(UUID.randomUUID().toString());
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
 		testObject = new AddPlayersToGameModel(playerStore, pageNavigator);
 	}
@@ -108,18 +115,19 @@ public class AddPlayersToGameModelTest {
 		testObject.selectionChanged(playerOneId, true);
 		testObject.selectionChanged(playerTwoId, true);
 
-		testObject.startGame();
+		testObject.done();
 
 		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class), extrasCaptor.capture());
+		verify(pageNavigator).navigateToActivityAndFinish(eq(SetupGameActivity.class),
+				extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
 
-		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
-		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
+		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
+		assertEquals(currentGame.getGameName(), actualCurrentGame.getGameName());
+		List<ScoreBoardEntry> entries = actualCurrentGame.getScoreBoard().getEntries();
 		assertEquals(2, entries.size());
 		assertEquals(player1, entries.get(0).getPlayer());
 		assertEquals(player2, entries.get(1).getPlayer());
-		assertEquals(player1, currentGame.getCurrentPlayer());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -129,74 +137,36 @@ public class AddPlayersToGameModelTest {
 		testObject.selectionChanged(playerTwoId, true);
 		testObject.selectionChanged(playerOneId, false);
 
-		testObject.startGame();
+		testObject.done();
 
 		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class), extrasCaptor.capture());
+		verify(pageNavigator).navigateToActivityAndFinish(eq(SetupGameActivity.class),
+				extrasCaptor.capture());
 		Map<String, Serializable> extras = extrasCaptor.getValue();
 
-		CurrentGame currentGame = (CurrentGame) extras.get("currentGame");
-		List<ScoreBoardEntry> entries = currentGame.getScoreBoard().getEntries();
+		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
+		assertEquals(currentGame.getGameName(), actualCurrentGame.getGameName());
+		List<ScoreBoardEntry> entries = actualCurrentGame.getScoreBoard().getEntries();
 		assertEquals(1, entries.size());
 		assertEquals(player2, entries.get(0).getPlayer());
 	}
 
 	@Test
-	public void cancellingFinishesTheActivity() {
-		testObject.cancel();
+	public void playersThatHaveAScoreBoardEntryAreAlreadySelected() {
+		currentGame = new CurrentGame();
+		ScoreBoard scoreBoard = new ScoreBoard();
+		ScoreBoardEntry scoreBoardEntry = new ScoreBoardEntry();
+		scoreBoardEntry.setPlayer(player2);
+		scoreBoard.getEntries().add(scoreBoardEntry);
+		currentGame.setScoreBoard(scoreBoard);
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
-		verify(pageNavigator).navigateToActivityAndFinish(SetupGameActivity.class);
-	}
+		testObject = new AddPlayersToGameModel(playerStore, pageNavigator);
 
-	@Test
-	public void movingAPlayerDown() {
-		testObject.movePlayerDown(playerOneId);
-		List<Player> players = testObject.getAllPlayers();
-
-		assertEquals(Arrays.asList(player2, player1, player3), players);
-	}
-
-	@Test
-	public void movingAPlayerUp() {
-		testObject.movePlayerUp(playerThreeId);
-		List<Player> players = testObject.getAllPlayers();
-
-		assertEquals(Arrays.asList(player1, player3, player2), players);
-	}
-
-	@Test
-	public void movingTheLowestPlayerDownDoesNothing() {
-		testObject.movePlayerDown(playerThreeId);
-		List<Player> players = testObject.getAllPlayers();
-
-		assertEquals(Arrays.asList(player1, player2, player3), players);
-	}
-
-	@Test
-	public void movingTheHighestPlayerUpDoesNothing() {
-		testObject.movePlayerUp(playerOneId);
-		List<Player> players = testObject.getAllPlayers();
-
-		assertEquals(Arrays.asList(player1, player2, player3), players);
-	}
-
-	@Test
-	public void movingAPlayerDownNotifiesThatThePlayersOrderChanged() {
-		Listener listener = mock(Listener.class);
-		testObject.addPlayersOrderChangedListener(listener);
-
-		testObject.movePlayerDown(playerOneId);
-
-		verify(listener).handle();
-	}
-
-	@Test
-	public void movingAPlayerUpNotifiesThatThePlayersOrderChanged() {
-		Listener listener = mock(Listener.class);
-		testObject.addPlayersOrderChangedListener(listener);
-
-		testObject.movePlayerUp(playerThreeId);
-
-		verify(listener).handle();
+		List<Player> allPlayers = testObject.getAllPlayers();
+		assertEquals(3, allPlayers.size());
+		assertFalse(allPlayers.get(0).isSelected());
+		assertTrue(allPlayers.get(1).isSelected());
+		assertFalse(allPlayers.get(2).isSelected());
 	}
 }

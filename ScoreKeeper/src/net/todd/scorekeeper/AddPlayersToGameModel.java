@@ -9,17 +9,30 @@ import java.util.Map;
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
+import net.todd.scorekeeper.data.ScoreBoardEntry;
 
 public class AddPlayersToGameModel {
 	private final PageNavigator pageNavigator;
 
-	private final ListenerManager playersOrderChangedListenerManager = new ListenerManager();
 	private final ArrayList<Player> allPlayers = new ArrayList<Player>();
+
+	private final CurrentGame currentGame;
 
 	public AddPlayersToGameModel(PlayerStore playerStore, PageNavigator pageNavigator) {
 		this.pageNavigator = pageNavigator;
 
 		allPlayers.addAll(playerStore.getAllPlayers());
+
+		currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
+		for (ScoreBoardEntry scoreBoardEntry : currentGame.getScoreBoard().getEntries()) {
+			String playerId = scoreBoardEntry.getPlayer().getId();
+			for (Player player : allPlayers) {
+				if (player.getId().equals(playerId)) {
+					player.setSelected(true);
+					break;
+				}
+			}
+		}
 	}
 
 	public List<Player> getAllPlayers() {
@@ -28,10 +41,6 @@ public class AddPlayersToGameModel {
 
 	public void selectionChanged(String currentPlayer, boolean isCurrentPlayerSelected) {
 		getPlayerById(currentPlayer).setSelected(isCurrentPlayerSelected);
-	}
-
-	public void cancel() {
-		pageNavigator.navigateToActivityAndFinish(SetupGameActivity.class);
 	}
 
 	public boolean atLeastTwoPlayersSelected() {
@@ -44,7 +53,7 @@ public class AddPlayersToGameModel {
 		return count >= 2;
 	}
 
-	public void startGame() {
+	public void done() {
 		ArrayList<Player> selectedPlayers = new ArrayList<Player>();
 		for (Player player : allPlayers) {
 			if (player.isSelected()) {
@@ -53,23 +62,11 @@ public class AddPlayersToGameModel {
 		}
 		ScoreBoard scoreBoard = new ScoreBoard();
 		scoreBoard.setPlayers(selectedPlayers);
-		CurrentGame currentGame = new CurrentGame();
-		currentGame.setCurrentPlayer(selectedPlayers.get(0));
 		currentGame.setScoreBoard(scoreBoard);
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);
-		pageNavigator.navigateToActivityAndFinish(GameActivity.class, extras);
-	}
-
-	public void movePlayerUp(String currentPlayerId) {
-		Player player = getPlayerById(currentPlayerId);
-		int currentIndex = allPlayers.indexOf(player);
-		if (currentIndex != 0) {
-			allPlayers.remove(player);
-			allPlayers.add(currentIndex - 1, player);
-		}
-		playersOrderChangedListenerManager.notifyListeners();
+		pageNavigator.navigateToActivityAndFinish(SetupGameActivity.class, extras);
 	}
 
 	private Player getPlayerById(String currentPlayerId) {
@@ -80,19 +77,5 @@ public class AddPlayersToGameModel {
 			}
 		}
 		return targetPlayer;
-	}
-
-	public void movePlayerDown(String currentPlayerId) {
-		Player player = getPlayerById(currentPlayerId);
-		int currentIndex = allPlayers.indexOf(player);
-		if (currentIndex != allPlayers.size() - 1) {
-			allPlayers.remove(player);
-			allPlayers.add(currentIndex + 1, player);
-		}
-		playersOrderChangedListenerManager.notifyListeners();
-	}
-
-	public void addPlayersOrderChangedListener(Listener listener) {
-		playersOrderChangedListenerManager.addListener(listener);
 	}
 }
