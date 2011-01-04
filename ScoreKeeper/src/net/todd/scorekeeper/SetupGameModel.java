@@ -1,37 +1,27 @@
 package net.todd.scorekeeper;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
-import net.todd.scorekeeper.data.ScoreBoardEntry;
 
 public class SetupGameModel {
 	private final ListenerManager stateChangedListenerManager = new ListenerManager();
 
 	private final PageNavigator pageNavigator;
-	private final List<Player> selectedPlayers = new ArrayList<Player>();
-
-	private String gameName;
+	private CurrentGame currentGame;
 
 	public SetupGameModel(PageNavigator pageNavigator) {
 		this.pageNavigator = pageNavigator;
 
-		CurrentGame currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
-		if (currentGame != null) {
-			gameName = currentGame.getGameName();
-			if (currentGame.getScoreBoard() != null) {
-				for (ScoreBoardEntry scoreBoardEntry : currentGame.getScoreBoard().getEntries()) {
-					selectedPlayers.add(scoreBoardEntry.getPlayer());
-				}
-			}
-		} else {
-			gameName = "";
+		currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
+		if (currentGame == null) {
+			currentGame = new CurrentGame();
+			currentGame.setScoreBoard(new ScoreBoard());
+			currentGame.setGameName("");
 		}
 	}
 
@@ -40,20 +30,13 @@ public class SetupGameModel {
 	}
 
 	public void startGame() {
+		Player firstPlayer = currentGame.getScoreBoard().getEntries().get(0).getPlayer();
+		currentGame.setCurrentPlayer(firstPlayer);
 		pageNavigator.navigateToActivityAndFinish(GameActivity.class,
 				createExtrasMapWithCurrentGame());
 	}
 
 	private Map<String, Serializable> createExtrasMapWithCurrentGame() {
-		ScoreBoard scoreBoard = new ScoreBoard();
-		scoreBoard.setPlayers(selectedPlayers);
-		CurrentGame currentGame = new CurrentGame();
-		currentGame.setGameName(gameName);
-		if (selectedPlayers.size() > 1) {
-			currentGame.setCurrentPlayer(selectedPlayers.get(0));
-		}
-		currentGame.setScoreBoard(scoreBoard);
-
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);
 		return extras;
@@ -65,7 +48,7 @@ public class SetupGameModel {
 	}
 
 	public boolean arePlayersAddedToGame() {
-		return selectedPlayers.size() >= 2;
+		return currentGame.getScoreBoard().getEntries().size() >= 2;
 	}
 
 	public boolean isGameSetupComplete() {
@@ -73,33 +56,22 @@ public class SetupGameModel {
 	}
 
 	private boolean isGameNamePopulated() {
-		return gameName != null && gameName.length() > 0;
-	}
-
-	public void setPlayers(List<Player> players) {
-		if (!players.equals(selectedPlayers)) {
-			selectedPlayers.addAll(players);
-			stateChangedListenerManager.notifyListeners();
-		}
+		return currentGame.getGameName().length() > 0;
 	}
 
 	public void addStateChangedListener(Listener listener) {
 		stateChangedListenerManager.addListener(listener);
 	}
 
-	public List<Player> getSelectedPlayers() {
-		return selectedPlayers;
-	}
-
 	public void setGameName(String gameName) {
-		if (this.gameName == null || !this.gameName.equals(gameName)) {
-			this.gameName = gameName;
+		if (!currentGame.getGameName().equals(gameName)) {
+			currentGame.setGameName(gameName);
 			stateChangedListenerManager.notifyListeners();
 		}
 	}
 
 	public String getGameName() {
-		return gameName;
+		return currentGame.getGameName();
 	}
 
 	public void goToOrderPlayersScreen() {

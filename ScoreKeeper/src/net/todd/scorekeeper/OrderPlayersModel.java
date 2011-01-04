@@ -17,10 +17,13 @@ public class OrderPlayersModel {
 	private final ListenerManager playersOrderChangedListenerManager = new ListenerManager();
 	private final ArrayList<Player> allPlayers = new ArrayList<Player>();
 
+	private final String gameName;
+
 	public OrderPlayersModel(PageNavigator pageNavigator) {
 		this.pageNavigator = pageNavigator;
 
 		CurrentGame currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
+		gameName = currentGame.getGameName();
 		for (ScoreBoardEntry scoreBoardEntry : currentGame.getScoreBoard().getEntries()) {
 			allPlayers.add(scoreBoardEntry.getPlayer());
 		}
@@ -35,6 +38,7 @@ public class OrderPlayersModel {
 		scoreBoard.setPlayers(allPlayers);
 		CurrentGame currentGame = new CurrentGame();
 		currentGame.setScoreBoard(scoreBoard);
+		currentGame.setGameName(gameName);
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);

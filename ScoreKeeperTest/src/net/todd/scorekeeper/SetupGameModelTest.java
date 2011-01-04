@@ -4,9 +4,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,11 +44,6 @@ public class SetupGameModelTest {
 	public void goingToTheAddPlayersScreenNavigatesToTheCorrectActivity() {
 		String gameName = UUID.randomUUID().toString();
 		testObject.setGameName(gameName);
-		Player player1 = mock(Player.class);
-		Player player2 = mock(Player.class);
-		Player player3 = mock(Player.class);
-		List<Player> players = Arrays.asList(player1, player2, player3);
-		testObject.setPlayers(players);
 
 		testObject.goToAddPlayersScreen();
 
@@ -61,7 +54,30 @@ public class SetupGameModelTest {
 
 		CurrentGame game = (CurrentGame) extras.get("currentGame");
 		assertEquals(gameName, game.getGameName());
-		assertEquals(player1, game.getCurrentPlayer());
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void goingToTheAddPlayersScreenWithExistingPlayersNavigatesToTheCorrectActivity() {
+		Player player1 = mock(Player.class);
+		Player player2 = mock(Player.class);
+		Player player3 = mock(Player.class);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+		testObject = new SetupGameModel(pageNavigator);
+
+		testObject.goToAddPlayersScreen();
+
+		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
+		verify(pageNavigator).navigateToActivityButDontFinish(eq(AddPlayersToGameActivity.class),
+				extrasCaptor.capture());
+		Map<?, ?> extras = extrasCaptor.getValue();
+
+		CurrentGame game = (CurrentGame) extras.get("currentGame");
+		assertEquals(currentGame.getGameName(), game.getGameName());
 		assertEquals(3, game.getScoreBoard().getEntries().size());
 		assertEquals(player1, game.getScoreBoard().getEntries().get(0).getPlayer());
 		assertEquals(0, game.getScoreBoard().getEntries().get(0).getScore());
@@ -94,71 +110,57 @@ public class SetupGameModelTest {
 
 	@Test
 	public void ifEmptyPlayersAreAddedThenPlayersAreNotAddedToTheGame() {
-		testObject.setPlayers(Arrays.<Player> asList());
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.<Player> asList());
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
 
 		assertFalse(testObject.arePlayersAddedToGame());
 	}
 
 	@Test
 	public void ifOnlyOnePlayerIsAddedThenPlayersAreNotAddedToTheGame() {
-		testObject.setPlayers(Arrays.asList(mock(Player.class)));
+		Player player1 = mock(Player.class);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
 
 		assertFalse(testObject.arePlayersAddedToGame());
 	}
 
 	@Test
 	public void ifTwoPlayersAreAddedThenPlayersAreAddedToTheGame() {
-		testObject.setPlayers(Arrays.asList(mock(Player.class), mock(Player.class)));
+		Player player1 = mock(Player.class);
+		Player player2 = mock(Player.class);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
 
 		assertTrue(testObject.arePlayersAddedToGame());
 	}
 
 	@Test
 	public void ifMoreThanTwoPlayersAreAddedThenPlayersAreAddedToTheGame() {
-		testObject.setPlayers(Arrays.asList(mock(Player.class), mock(Player.class),
-				mock(Player.class), mock(Player.class)));
-
-		assertTrue(testObject.arePlayersAddedToGame());
-	}
-
-	@Test
-	public void notifyStateChangedListenerWhenAddedPlayersAreChangedToADiffererntSetOfPlayers() {
 		Player player1 = mock(Player.class);
 		Player player2 = mock(Player.class);
+		Player player3 = mock(Player.class);
+		Player player4 = mock(Player.class);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3, player4));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
-		Listener listener = mock(Listener.class);
-		testObject.addStateChangedListener(listener);
+		testObject = new SetupGameModel(pageNavigator);
 
-		testObject.setPlayers(Arrays.asList(player1));
-
-		verify(listener).handle();
-		reset(listener);
-
-		testObject.setPlayers(Arrays.asList(player1));
-
-		verify(listener, never()).handle();
-		reset(listener);
-
-		testObject.setPlayers(Arrays.asList(player2));
-
-		verify(listener).handle();
-	}
-
-	@Test
-	public void playersAreMadeAvailableBeforeTheStateChangeListenersAreNotified() {
-		List<Player> expectedPlayers = Arrays.asList(mock(Player.class), mock(Player.class));
-
-		final List<Player> actualPlayers = new ArrayList<Player>();
-		testObject.addStateChangedListener(new Listener() {
-			@Override
-			public void handle() {
-				actualPlayers.addAll(testObject.getSelectedPlayers());
-			}
-		});
-
-		testObject.setPlayers(expectedPlayers);
-
-		assertEquals(expectedPlayers, actualPlayers);
+		assertTrue(testObject.arePlayersAddedToGame());
 	}
 
 	@Test
@@ -208,7 +210,14 @@ public class SetupGameModelTest {
 
 	@Test
 	public void ifGameNameIsNotSetButPlayersAreSetThenGameIsNotSetupCompletely() {
-		testObject.setPlayers(Arrays.asList(mock(Player.class), mock(Player.class)));
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName("");
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(
+				Arrays.asList(mock(Player.class), mock(Player.class)));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
 
 		assertFalse(testObject.isGameSetupComplete());
 	}
@@ -222,7 +231,13 @@ public class SetupGameModelTest {
 
 	@Test
 	public void ifGameNameIsSetButNotEnoughPlayersAreSetThenGameIsNotSetupCompletely() {
-		testObject.setPlayers(Arrays.asList(mock(Player.class)));
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(mock(Player.class)));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
 		testObject.setGameName(UUID.randomUUID().toString());
 
 		assertFalse(testObject.isGameSetupComplete());
@@ -230,7 +245,15 @@ public class SetupGameModelTest {
 
 	@Test
 	public void ifGameNameIsSetAndEnoughPlayersAreSetThenGameIsSetupCompletely() {
-		testObject.setPlayers(Arrays.asList(mock(Player.class), mock(Player.class)));
+		Player player1 = mock(Player.class);
+		Player player2 = mock(Player.class);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
 		testObject.setGameName(UUID.randomUUID().toString());
 
 		assertTrue(testObject.isGameSetupComplete());
@@ -239,13 +262,16 @@ public class SetupGameModelTest {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void goingToOrderPlayersScreenNavigatesToTheOrderPlayersActivityWithTheCorrectGame() {
-		String gameName = UUID.randomUUID().toString();
-		testObject.setGameName(gameName);
 		Player player1 = mock(Player.class);
 		Player player2 = mock(Player.class);
 		Player player3 = mock(Player.class);
-		List<Player> players = Arrays.asList(player1, player2, player3);
-		testObject.setPlayers(players);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
 
 		testObject.goToOrderPlayersScreen();
 
@@ -255,8 +281,7 @@ public class SetupGameModelTest {
 		Map<?, ?> extras = extrasCaptor.getValue();
 
 		CurrentGame game = (CurrentGame) extras.get("currentGame");
-		assertEquals(gameName, game.getGameName());
-		assertEquals(player1, game.getCurrentPlayer());
+		assertEquals(currentGame.getGameName(), game.getGameName());
 		assertEquals(3, game.getScoreBoard().getEntries().size());
 		assertEquals(player1, game.getScoreBoard().getEntries().get(0).getPlayer());
 		assertEquals(0, game.getScoreBoard().getEntries().get(0).getScore());
@@ -269,24 +294,27 @@ public class SetupGameModelTest {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void startingTheGameNavigatesToTheGameActivityWithTheCorrectCurrentGame() {
-		String gameName = UUID.randomUUID().toString();
-		testObject.setGameName(gameName);
 		Player player1 = mock(Player.class);
 		Player player2 = mock(Player.class);
 		Player player3 = mock(Player.class);
-		List<Player> players = Arrays.asList(player1, player2, player3);
-		testObject.setPlayers(players);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
-		testObject.goToOrderPlayersScreen();
+		testObject = new SetupGameModel(pageNavigator);
+		reset(pageNavigator);
+
+		testObject.startGame();
 
 		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivityButDontFinish(eq(OrderPlayersActivity.class),
+		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class),
 				extrasCaptor.capture());
 		Map<?, ?> extras = extrasCaptor.getValue();
 
 		CurrentGame game = (CurrentGame) extras.get("currentGame");
-		assertEquals(gameName, game.getGameName());
-		assertEquals(player1, game.getCurrentPlayer());
+		assertEquals(currentGame.getGameName(), game.getGameName());
 		assertEquals(3, game.getScoreBoard().getEntries().size());
 		assertEquals(player1, game.getScoreBoard().getEntries().get(0).getPlayer());
 		assertEquals(0, game.getScoreBoard().getEntries().get(0).getScore());
@@ -304,8 +332,9 @@ public class SetupGameModelTest {
 	@Test
 	public void whenACurrentGameIsAvailableThenPopulateTheGameName() {
 		String gameName = UUID.randomUUID().toString();
-		CurrentGame currentGame = mock(CurrentGame.class);
-		doReturn(gameName).when(currentGame).getGameName();
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.setGameName(gameName);
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
 		testObject = new SetupGameModel(pageNavigator);
@@ -320,7 +349,8 @@ public class SetupGameModelTest {
 
 	@Test
 	public void whenACurrentGameIsAvailableAndThereAreNoPlayersAddedThenArePlayersAreAddedToTheGameReturnFalse() {
-		CurrentGame currentGame = mock(CurrentGame.class);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
 		testObject = new SetupGameModel(pageNavigator);
@@ -345,12 +375,11 @@ public class SetupGameModelTest {
 
 	@Test
 	public void whenACurrentGameIsAvailableAndThereArePlayersButNoGameNameThenGameSetupIsNotComplete() {
-		ScoreBoard scoreBoard = mock(ScoreBoard.class);
-		ScoreBoardEntry scoreBoardEntry1 = mock(ScoreBoardEntry.class);
-		ScoreBoardEntry scoreBoardEntry2 = mock(ScoreBoardEntry.class);
-		doReturn(Arrays.asList(scoreBoardEntry1, scoreBoardEntry2)).when(scoreBoard).getEntries();
-		CurrentGame currentGame = mock(CurrentGame.class);
-		doReturn(scoreBoard).when(currentGame).getScoreBoard();
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName("");
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(
+				Arrays.asList(mock(Player.class), mock(Player.class)));
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
 		testObject = new SetupGameModel(pageNavigator);
@@ -360,17 +389,39 @@ public class SetupGameModelTest {
 
 	@Test
 	public void whenACurrentGameIsAvailableAndThereArePlayersAndAGameNameThenGameSetupIsComplete() {
-		ScoreBoard scoreBoard = mock(ScoreBoard.class);
-		ScoreBoardEntry scoreBoardEntry1 = mock(ScoreBoardEntry.class);
-		ScoreBoardEntry scoreBoardEntry2 = mock(ScoreBoardEntry.class);
-		doReturn(Arrays.asList(scoreBoardEntry1, scoreBoardEntry2)).when(scoreBoard).getEntries();
-		CurrentGame currentGame = mock(CurrentGame.class);
-		doReturn(scoreBoard).when(currentGame).getScoreBoard();
-		doReturn(UUID.randomUUID().toString()).when(currentGame).getGameName();
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(
+				Arrays.asList(mock(Player.class), mock(Player.class)));
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
 		testObject = new SetupGameModel(pageNavigator);
 
 		assertTrue(testObject.isGameSetupComplete());
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	public void whenStartingTheGameTheFirstPlayerIsSelectedAsBeingTheCurrentPlayer() {
+		Player player1 = mock(Player.class);
+		Player player2 = mock(Player.class);
+		Player player3 = mock(Player.class);
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+		testObject = new SetupGameModel(pageNavigator);
+
+		testObject.startGame();
+
+		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
+		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class),
+				extrasCaptor.capture());
+		Map<?, ?> extras = extrasCaptor.getValue();
+
+		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
+		assertEquals(player1, actualCurrentGame.getCurrentPlayer());
 	}
 }

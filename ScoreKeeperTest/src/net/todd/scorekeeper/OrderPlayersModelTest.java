@@ -55,6 +55,7 @@ public class OrderPlayersModelTest {
 		allPlayers = Arrays.asList(player1, player2, player3);
 
 		currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
 		ScoreBoard scoreBoard = new ScoreBoard();
 		scoreBoard.setPlayers(allPlayers);
 		currentGame.setScoreBoard(scoreBoard);
