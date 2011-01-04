@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.todd.scorekeeper.data.CurrentGame;
-import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
 
 public class SetupGameModel {
@@ -30,8 +29,6 @@ public class SetupGameModel {
 	}
 
 	public void startGame() {
-		Player firstPlayer = currentGame.getScoreBoard().getEntries().get(0).getPlayer();
-		currentGame.setCurrentPlayer(firstPlayer);
 		pageNavigator.navigateToActivityAndFinish(GameActivity.class,
 				createExtrasMapWithCurrentGame());
 	}

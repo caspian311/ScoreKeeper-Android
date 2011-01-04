@@ -11,7 +11,7 @@ public class Game implements Serializable, Comparable<Game> {
 	@Element(required = false)
 	private Date gameOverTimestamp;
 	@Element(required = false)
-	private String gameType;
+	private String gameName;
 	@Element
 	private ScoreBoard scoreBoard;
 
@@ -23,12 +23,12 @@ public class Game implements Serializable, Comparable<Game> {
 		this.gameOverTimestamp = gameOverTimestamp;
 	}
 
-	public String getGameType() {
-		return gameType;
+	public String getGameName() {
+		return gameName;
 	}
 
-	public void setGameType(String gameType) {
-		this.gameType = gameType;
+	public void setGameName(String gameName) {
+		this.gameName = gameName;
 	}
 
 	public ScoreBoard getScoreBoard() {
@@ -44,7 +44,7 @@ public class Game implements Serializable, Comparable<Game> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((gameOverTimestamp == null) ? 0 : gameOverTimestamp.hashCode());
-		result = prime * result + ((gameType == null) ? 0 : gameType.hashCode());
+		result = prime * result + ((gameName == null) ? 0 : gameName.hashCode());
 		result = prime * result + ((scoreBoard == null) ? 0 : scoreBoard.hashCode());
 		return result;
 	}
@@ -63,10 +63,10 @@ public class Game implements Serializable, Comparable<Game> {
 				return false;
 		} else if (!gameOverTimestamp.equals(other.gameOverTimestamp))
 			return false;
-		if (gameType == null) {
-			if (other.gameType != null)
+		if (gameName == null) {
+			if (other.gameName != null)
 				return false;
-		} else if (!gameType.equals(other.gameType))
+		} else if (!gameName.equals(other.gameName))
 			return false;
 		if (scoreBoard == null) {
 			if (other.scoreBoard != null)

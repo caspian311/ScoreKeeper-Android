@@ -176,7 +176,7 @@ public class DataConverterTest {
 		List<net.todd.scorekeeper.data.Game> translatedGames = target.load();
 		assertEquals(1, translatedGames.size());
 		assertEquals(game.getGameOverTimestamp(), translatedGames.get(0).getGameOverTimestamp());
-		assertEquals(game.getGameType(), translatedGames.get(0).getGameType());
+		assertEquals(game.getGameType(), translatedGames.get(0).getGameName());
 		assertEquals(1, translatedGames.get(0).getScoreBoard().getEntries().size());
 		assertEquals(player1.getId(), translatedGames.get(0).getScoreBoard().getEntries().get(0)
 				.getPlayer().getId());

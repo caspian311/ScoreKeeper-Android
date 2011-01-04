@@ -400,28 +400,4 @@ public class SetupGameModelTest {
 
 		assertTrue(testObject.isGameSetupComplete());
 	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Test
-	public void whenStartingTheGameTheFirstPlayerIsSelectedAsBeingTheCurrentPlayer() {
-		Player player1 = mock(Player.class);
-		Player player2 = mock(Player.class);
-		Player player3 = mock(Player.class);
-		CurrentGame currentGame = new CurrentGame();
-		currentGame.setGameName(UUID.randomUUID().toString());
-		currentGame.setScoreBoard(new ScoreBoard());
-		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
-		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
-		testObject = new SetupGameModel(pageNavigator);
-
-		testObject.startGame();
-
-		ArgumentCaptor<Map> extrasCaptor = ArgumentCaptor.forClass(Map.class);
-		verify(pageNavigator).navigateToActivityAndFinish(eq(GameActivity.class),
-				extrasCaptor.capture());
-		Map<?, ?> extras = extrasCaptor.getValue();
-
-		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
-		assertEquals(player1, actualCurrentGame.getCurrentPlayer());
-	}
 }

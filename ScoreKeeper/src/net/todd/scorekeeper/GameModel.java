@@ -20,10 +20,10 @@ public class GameModel {
 
 	private final List<Player> selectedPlayers = new ArrayList<Player>();
 	private final ScoreBoard scoreBoard;
-	private final String gameType;
 
 	private int currentPlayersTurn;
 	private final PageNavigator pageNavigator;
+	private final String gameName;
 
 	public GameModel(GameStore gameStore, PageNavigator pageNavigator) {
 		this.gameStore = gameStore;
@@ -34,10 +34,10 @@ public class GameModel {
 		for (ScoreBoardEntry entry : scoreBoard.getEntries()) {
 			selectedPlayers.add(entry.getPlayer());
 		}
+		gameName = currentGame.getGameName();
 		if (currentGame.getCurrentPlayer() != null) {
 			currentPlayersTurn = selectedPlayers.indexOf(currentGame.getCurrentPlayer());
 		}
-		gameType = (String) pageNavigator.getExtra("gameType");
 	}
 
 	public void nextPlayer() {
@@ -99,7 +99,7 @@ public class GameModel {
 	public void gameOver() {
 		Game game = new Game();
 		game.setGameOverTimestamp(new Date());
-		game.setGameType(gameType);
+		game.setGameName(gameName);
 		game.setScoreBoard(scoreBoard);
 		gameStore.addGame(game);
 
@@ -116,7 +116,6 @@ public class GameModel {
 	}
 
 	public String getGameName() {
-		// TODO
-		return null;
+		return gameName;
 	}
 }

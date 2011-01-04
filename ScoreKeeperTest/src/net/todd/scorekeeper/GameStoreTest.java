@@ -26,7 +26,7 @@ public class GameStoreTest extends AbstractStoreTest {
 	public void afterAddingAPlayerThenPlayerShouldBeReturnedInTheAllPlayersCall() {
 		Game game = new Game();
 		game.setGameOverTimestamp(new Date());
-		game.setGameType(UUID.randomUUID().toString());
+		game.setGameName(UUID.randomUUID().toString());
 		ScoreBoard scoreBoard = new ScoreBoard();
 		Player player1 = new Player();
 		player1.setId(UUID.randomUUID().toString());
@@ -40,7 +40,7 @@ public class GameStoreTest extends AbstractStoreTest {
 		List<Game> savedGames = new GameStore(getContext()).getAllGames();
 		assertEquals(1, savedGames.size());
 		assertEquals(game.getGameOverTimestamp(), savedGames.get(0).getGameOverTimestamp());
-		assertEquals(game.getGameType(), savedGames.get(0).getGameType());
+		assertEquals(game.getGameName(), savedGames.get(0).getGameName());
 		assertEquals(1, savedGames.get(0).getScoreBoard().getEntries().size());
 		assertEquals(player1.getId(), savedGames.get(0).getScoreBoard().getEntries().get(0)
 				.getPlayer().getId());

@@ -38,22 +38,18 @@ public class GameModelTest {
 
 	private GameModel testObject;
 
-	private String gameType;
-
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 
-		gameType = UUID.randomUUID().toString();
-
 		ScoreBoard scoreBoard = new ScoreBoard();
 		scoreBoard.setPlayers(Arrays.asList(player1, player2, player3));
 		currentGame = new CurrentGame();
+		currentGame.setGameName(UUID.randomUUID().toString());
 		currentGame.setCurrentPlayer(player2);
 		currentGame.setScoreBoard(scoreBoard);
 
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
-		doReturn(gameType).when(pageNavigator).getExtra("gameType");
 
 		testObject = new GameModel(gameStore, pageNavigator);
 	}
@@ -220,7 +216,7 @@ public class GameModelTest {
 		verify(gameStore).addGame(gameCaptor.capture());
 		Game game = gameCaptor.getValue();
 
-		assertEquals(gameType, game.getGameType());
+		assertEquals(currentGame.getGameName(), game.getGameName());
 	}
 
 	@Test
@@ -258,18 +254,20 @@ public class GameModelTest {
 
 	@Test
 	public void ifNoCurrentPlayerWasGivenThenAssumeFirstPlayerIsCurrentPlayer() {
-		gameType = UUID.randomUUID().toString();
-
 		ScoreBoard scoreBoard = new ScoreBoard();
 		scoreBoard.setPlayers(Arrays.asList(player1, player2, player3));
 		currentGame = new CurrentGame();
 		currentGame.setScoreBoard(scoreBoard);
 
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
-		doReturn(gameType).when(pageNavigator).getExtra("gameType");
 
 		testObject = new GameModel(gameStore, pageNavigator);
 
 		assertEquals(player1, testObject.getCurrentPlayer());
+	}
+
+	@Test
+	public void gameNameIsPulledFromCurrentGameGivenInExtras() {
+		assertEquals(currentGame.getGameName(), testObject.getGameName());
 	}
 }
