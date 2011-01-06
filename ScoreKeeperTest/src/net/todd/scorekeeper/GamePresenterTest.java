@@ -4,6 +4,7 @@ import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Random;
+import java.util.UUID;
 
 import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
@@ -94,6 +95,16 @@ public class GamePresenterTest {
 		GamePresenter.create(view, model);
 
 		verify(view).setCurrentPlayersScore(score);
+	}
+
+	@Test
+	public void gameNameIsSetInitially() {
+		String gameName = UUID.randomUUID().toString();
+		doReturn(gameName).when(model).getGameName();
+
+		GamePresenter.create(view, model);
+
+		verify(view).setGameName(gameName);
 	}
 
 	@Test

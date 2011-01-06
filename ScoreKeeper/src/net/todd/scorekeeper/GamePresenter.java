@@ -5,6 +5,7 @@ public class GamePresenter {
 		view.setCurrentPlayer(model.getCurrentPlayer());
 		view.setCurrentPlayersScore(model.getCurrentPlayersScore());
 		view.setScoreBoard(model.getScoreBoard());
+		view.setGameName(model.getGameName());
 
 		view.addNextPlayerButtonListener(new Listener() {
 			@Override

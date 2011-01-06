@@ -32,6 +32,7 @@ public class GameView {
 	private Listener backPressedListener;
 	private Listener cancelGameListener;
 	private final TextView playerScore;
+	private final TextView gameNameText;
 
 	private final ListenerManager gameOverButtonListenerManager = new ListenerManager();
 	private final ListenerManager gameOverConfirmationListenerManager = new ListenerManager();
@@ -54,6 +55,28 @@ public class GameView {
 		BackgroundUtil.setBackground(mainView);
 		mainView.setOrientation(LinearLayout.VERTICAL);
 		mainScrollView.addView(mainView);
+
+		gameNameText = new TextView(context);
+		LinearLayout.LayoutParams gameNameLayout = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		gameNameText.setLayoutParams(gameNameLayout);
+		gameNameLayout.leftMargin = UIConstants.MARGIN_SIZE;
+		gameNameLayout.rightMargin = UIConstants.MARGIN_SIZE;
+		gameNameText.setTextColor(UIConstants.TEXT_COLOR);
+		gameNameText.setTextSize(UIConstants.TEXT_TITLE_SIZE);
+		mainView.addView(gameNameText);
+
+		View line = new View(context);
+		line.setBackgroundColor(UIConstants.TEXT_COLOR);
+		TableRow.LayoutParams lineLayoutParam = new TableRow.LayoutParams(
+				TableRow.LayoutParams.FILL_PARENT, 2);
+		lineLayoutParam.topMargin = 0;
+		lineLayoutParam.bottomMargin = UIConstants.MARGIN_SIZE;
+		lineLayoutParam.rightMargin = UIConstants.MARGIN_SIZE;
+		lineLayoutParam.leftMargin = UIConstants.MARGIN_SIZE;
+		lineLayoutParam.span = 2;
+		line.setLayoutParams(lineLayoutParam);
+		mainView.addView(line);
 
 		LinearLayout playerData = new LinearLayout(context);
 		playerData.setOrientation(LinearLayout.HORIZONTAL);
@@ -147,6 +170,10 @@ public class GameView {
 
 	public void setCurrentPlayer(Player player) {
 		playerName.setText(player.getName());
+	}
+
+	public void setGameName(String gameName) {
+		gameNameText.setText(gameName);
 	}
 
 	public void setCurrentPlayersScore(int score) {
