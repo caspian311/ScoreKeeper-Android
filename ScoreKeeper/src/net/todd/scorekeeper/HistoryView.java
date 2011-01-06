@@ -120,7 +120,7 @@ public class HistoryView {
 
 			TextView gameName = new TextView(activity);
 			gameName.setText(game.getGameName() == null ? "Unknown Game" : game.getGameName());
-			gameName.setTextSize(UIConstants.TEXT_SMALL_SIZE);
+			gameName.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
 			gameName.setTextColor(UIConstants.TEXT_COLOR);
 			firstGameRow.addView(gameName);
 
@@ -155,7 +155,7 @@ public class HistoryView {
 			scoreBoardTextView.setLayoutParams(scorBoardTextLayoutParams);
 			scoreBoardTextView.setTextColor(UIConstants.TEXT_COLOR);
 			scoreBoardTextView.setText(getScoreBoardText(game));
-			scoreBoardTextView.setTextSize(UIConstants.TEXT_TINY_SIZE);
+			scoreBoardTextView.setTextSize(UIConstants.TEXT_SMALL_SIZE);
 			thirdGameRow.addView(scoreBoardTextView);
 
 			if (gameIndex < allGames.size() - 1) {
@@ -166,6 +166,8 @@ public class HistoryView {
 				line.setBackgroundColor(UIConstants.TEXT_COLOR);
 				TableRow.LayoutParams lineLayoutParam = new TableRow.LayoutParams(
 						TableRow.LayoutParams.FILL_PARENT, 2);
+				lineLayoutParam.topMargin = UIConstants.MARGIN_SIZE;
+				lineLayoutParam.bottomMargin = UIConstants.MARGIN_SIZE;
 				lineLayoutParam.span = 2;
 				line.setLayoutParams(lineLayoutParam);
 				borderGameRow.addView(line);
@@ -178,8 +180,7 @@ public class HistoryView {
 		List<ScoreBoardEntry> entries = game.getScoreBoard().getEntries();
 		for (int i = 0; i < entries.size(); i++) {
 			ScoreBoardEntry entry = entries.get(i);
-			sb.append(entry.getPlayer().getName()).append(":")
-					.append(entry.getScore());
+			sb.append(entry.getPlayer().getName()).append(":").append(entry.getScore());
 			if (i < entries.size() - 1) {
 				sb.append(", ");
 			}
