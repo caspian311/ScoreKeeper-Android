@@ -8,7 +8,6 @@ import java.util.Map;
 
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
-import net.todd.scorekeeper.data.ScoreBoard;
 import net.todd.scorekeeper.data.ScoreBoardEntry;
 
 public class OrderPlayersModel {
@@ -17,13 +16,12 @@ public class OrderPlayersModel {
 	private final ListenerManager playersOrderChangedListenerManager = new ListenerManager();
 	private final ArrayList<Player> allPlayers = new ArrayList<Player>();
 
-	private final String gameName;
+	private final CurrentGame currentGame;
 
 	public OrderPlayersModel(PageNavigator pageNavigator) {
 		this.pageNavigator = pageNavigator;
 
-		CurrentGame currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
-		gameName = currentGame.getGameName();
+		currentGame = (CurrentGame) pageNavigator.getExtra("currentGame");
 		for (ScoreBoardEntry scoreBoardEntry : currentGame.getScoreBoard().getEntries()) {
 			allPlayers.add(scoreBoardEntry.getPlayer());
 		}
@@ -34,11 +32,7 @@ public class OrderPlayersModel {
 	}
 
 	public void done() {
-		ScoreBoard scoreBoard = new ScoreBoard();
-		scoreBoard.setPlayers(allPlayers);
-		CurrentGame currentGame = new CurrentGame();
-		currentGame.setScoreBoard(scoreBoard);
-		currentGame.setGameName(gameName);
+		currentGame.getScoreBoard().setPlayers(allPlayers);
 
 		Map<String, Serializable> extras = new HashMap<String, Serializable>();
 		extras.put("currentGame", currentGame);

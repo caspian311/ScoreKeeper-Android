@@ -44,6 +44,7 @@ public class SetupGameModelTest {
 	public void goingToTheAddPlayersScreenNavigatesToTheCorrectActivity() {
 		String gameName = UUID.randomUUID().toString();
 		testObject.setGameName(gameName);
+		testObject.setScoring(Scoring.HIGH);
 
 		testObject.goToAddPlayersScreen();
 
@@ -54,6 +55,7 @@ public class SetupGameModelTest {
 
 		CurrentGame game = (CurrentGame) extras.get("currentGame");
 		assertEquals(gameName, game.getGameName());
+		assertEquals(Scoring.HIGH, game.getScoreBoard().getScoring());
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -62,11 +64,12 @@ public class SetupGameModelTest {
 		Player player1 = mock(Player.class);
 		Player player2 = mock(Player.class);
 		Player player3 = mock(Player.class);
-		CurrentGame currentGame = new CurrentGame();
-		currentGame.setGameName(UUID.randomUUID().toString());
-		currentGame.setScoreBoard(new ScoreBoard());
-		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
-		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+		CurrentGame expectedGame = new CurrentGame();
+		expectedGame.setGameName(UUID.randomUUID().toString());
+		expectedGame.setScoreBoard(new ScoreBoard());
+		expectedGame.getScoreBoard().setScoring(Scoring.HIGH);
+		expectedGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
+		doReturn(expectedGame).when(pageNavigator).getExtra("currentGame");
 		testObject = new SetupGameModel(pageNavigator);
 
 		testObject.goToAddPlayersScreen();
@@ -76,15 +79,16 @@ public class SetupGameModelTest {
 				extrasCaptor.capture());
 		Map<?, ?> extras = extrasCaptor.getValue();
 
-		CurrentGame game = (CurrentGame) extras.get("currentGame");
-		assertEquals(currentGame.getGameName(), game.getGameName());
-		assertEquals(3, game.getScoreBoard().getEntries().size());
-		assertEquals(player1, game.getScoreBoard().getEntries().get(0).getPlayer());
-		assertEquals(0, game.getScoreBoard().getEntries().get(0).getScore());
-		assertEquals(player2, game.getScoreBoard().getEntries().get(1).getPlayer());
-		assertEquals(0, game.getScoreBoard().getEntries().get(1).getScore());
-		assertEquals(player3, game.getScoreBoard().getEntries().get(2).getPlayer());
-		assertEquals(0, game.getScoreBoard().getEntries().get(2).getScore());
+		CurrentGame actualGame = (CurrentGame) extras.get("currentGame");
+		assertEquals(expectedGame.getGameName(), actualGame.getGameName());
+		assertEquals(Scoring.HIGH, actualGame.getScoreBoard().getScoring());
+		assertEquals(3, actualGame.getScoreBoard().getEntries().size());
+		assertEquals(player1, actualGame.getScoreBoard().getEntries().get(0).getPlayer());
+		assertEquals(0, actualGame.getScoreBoard().getEntries().get(0).getScore());
+		assertEquals(player2, actualGame.getScoreBoard().getEntries().get(1).getPlayer());
+		assertEquals(0, actualGame.getScoreBoard().getEntries().get(1).getScore());
+		assertEquals(player3, actualGame.getScoreBoard().getEntries().get(2).getPlayer());
+		assertEquals(0, actualGame.getScoreBoard().getEntries().get(2).getScore());
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -204,6 +208,41 @@ public class SetupGameModelTest {
 	}
 
 	@Test
+	public void changingScoringOnlyNotifiesStateChangeListenersWhenValueIsDifferent() {
+		Listener listener = mock(Listener.class);
+		testObject.addStateChangedListener(listener);
+
+		testObject.setScoring(Scoring.LOW);
+
+		verify(listener).handle();
+		reset(listener);
+
+		testObject.setScoring(Scoring.LOW);
+
+		verify(listener, never()).handle();
+		reset(listener);
+
+		testObject.setScoring(Scoring.HIGH);
+
+		verify(listener).handle();
+	}
+
+	@Test
+	public void scoringIsAvailableBeforeStateChangeListenersAreNotified() {
+		final Scoring[] scorings = new Scoring[1];
+		testObject.addStateChangedListener(new Listener() {
+			@Override
+			public void handle() {
+				scorings[0] = testObject.getScoring();
+			}
+		});
+
+		testObject.setScoring(Scoring.LOW);
+
+		assertEquals(Scoring.LOW, scorings[0]);
+	}
+
+	@Test
 	public void initiallyGameIsNotSetupCompletely() {
 		assertFalse(testObject.isGameSetupComplete());
 	}
@@ -268,6 +307,7 @@ public class SetupGameModelTest {
 		CurrentGame currentGame = new CurrentGame();
 		currentGame.setGameName(UUID.randomUUID().toString());
 		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setScoring(Scoring.LOW);
 		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
@@ -282,6 +322,7 @@ public class SetupGameModelTest {
 
 		CurrentGame game = (CurrentGame) extras.get("currentGame");
 		assertEquals(currentGame.getGameName(), game.getGameName());
+		assertEquals(Scoring.LOW, game.getScoreBoard().getScoring());
 		assertEquals(3, game.getScoreBoard().getEntries().size());
 		assertEquals(player1, game.getScoreBoard().getEntries().get(0).getPlayer());
 		assertEquals(0, game.getScoreBoard().getEntries().get(0).getScore());
@@ -300,6 +341,7 @@ public class SetupGameModelTest {
 		CurrentGame currentGame = new CurrentGame();
 		currentGame.setGameName(UUID.randomUUID().toString());
 		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setScoring(Scoring.HIGH);
 		currentGame.getScoreBoard().setPlayers(Arrays.asList(player1, player2, player3));
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
@@ -315,6 +357,7 @@ public class SetupGameModelTest {
 
 		CurrentGame game = (CurrentGame) extras.get("currentGame");
 		assertEquals(currentGame.getGameName(), game.getGameName());
+		assertEquals(Scoring.HIGH, game.getScoreBoard().getScoring());
 		assertEquals(3, game.getScoreBoard().getEntries().size());
 		assertEquals(player1, game.getScoreBoard().getEntries().get(0).getPlayer());
 		assertEquals(0, game.getScoreBoard().getEntries().get(0).getScore());
@@ -340,6 +383,18 @@ public class SetupGameModelTest {
 		testObject = new SetupGameModel(pageNavigator);
 
 		assertEquals(gameName, testObject.getGameName());
+	}
+
+	@Test
+	public void whenACurrentGameIsAvailableThenPopulateTheScoring() {
+		CurrentGame currentGame = new CurrentGame();
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setScoring(Scoring.HIGH);
+		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
+
+		testObject = new SetupGameModel(pageNavigator);
+
+		assertEquals(Scoring.HIGH, testObject.getScoring());
 	}
 
 	@Test

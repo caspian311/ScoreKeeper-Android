@@ -22,6 +22,7 @@ public class SetupGamePresenterTest {
 	private Listener startGameButtonListener;
 	private Listener gameNameChangedListener;
 	private Listener orderPlayersButtonListener;
+	private Listener scoringChangedListener;
 
 	@Before
 	public void setUp() {
@@ -52,6 +53,11 @@ public class SetupGamePresenterTest {
 				.forClass(Listener.class);
 		verify(view).addGameNameChangedListener(gameNameChangedListenerCaptor.capture());
 		gameNameChangedListener = gameNameChangedListenerCaptor.getValue();
+
+		ArgumentCaptor<Listener> scoringChangedListenerCaptor = ArgumentCaptor
+				.forClass(Listener.class);
+		verify(view).addScoringChangedListener(scoringChangedListenerCaptor.capture());
+		scoringChangedListener = scoringChangedListenerCaptor.getValue();
 
 		ArgumentCaptor<Listener> gameStateChangedListenerCaptor = ArgumentCaptor
 				.forClass(Listener.class);
@@ -183,5 +189,14 @@ public class SetupGamePresenterTest {
 		orderPlayersButtonListener.handle();
 
 		verify(model).goToOrderPlayersScreen();
+	}
+
+	@Test
+	public void whenScoringChangesThenTakeTheScoringFromViewAndPutInOnTheModel() {
+		doReturn(Scoring.LOW).when(view).getScoring();
+
+		scoringChangedListener.handle();
+
+		verify(model).setScoring(Scoring.LOW);
 	}
 }

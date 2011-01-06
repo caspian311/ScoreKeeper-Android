@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.todd.scorekeeper.Scoring;
+
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 
 public class ScoreBoard implements Serializable {
@@ -12,8 +15,14 @@ public class ScoreBoard implements Serializable {
 
 	@ElementList
 	private List<ScoreBoardEntry> scoreBoardEntries;
+	@Element(required = false)
+	private String scoring;
 
 	public ScoreBoard() {
+		initializeScoreBoardEntries();
+	}
+
+	private void initializeScoreBoardEntries() {
 		scoreBoardEntries = new ArrayList<ScoreBoardEntry>();
 	}
 
@@ -47,7 +56,15 @@ public class ScoreBoard implements Serializable {
 	}
 
 	public List<ScoreBoardEntry> getEntries() {
-		Collections.sort(scoreBoardEntries);
+		Collections.sort(scoreBoardEntries, getScoring().getComparator());
 		return scoreBoardEntries;
+	}
+
+	public Scoring getScoring() {
+		return scoring == null ? Scoring.HIGH : Scoring.byName(scoring);
+	}
+
+	public void setScoring(Scoring scoring) {
+		this.scoring = scoring.getText();
 	}
 }

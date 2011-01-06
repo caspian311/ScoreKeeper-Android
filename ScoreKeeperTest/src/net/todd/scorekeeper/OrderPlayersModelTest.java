@@ -57,6 +57,7 @@ public class OrderPlayersModelTest {
 		currentGame = new CurrentGame();
 		currentGame.setGameName(UUID.randomUUID().toString());
 		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setScoring(Scoring.HIGH);
 		scoreBoard.setPlayers(allPlayers);
 		currentGame.setScoreBoard(scoreBoard);
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
@@ -133,6 +134,8 @@ public class OrderPlayersModelTest {
 
 		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
 		assertEquals(currentGame.getGameName(), actualCurrentGame.getGameName());
+		assertEquals(currentGame.getScoreBoard().getScoring(), actualCurrentGame.getScoreBoard()
+				.getScoring());
 		assertEquals(3, actualCurrentGame.getScoreBoard().getEntries().size());
 		assertEquals(player1, actualCurrentGame.getScoreBoard().getEntries().get(0).getPlayer());
 		assertEquals(player2, actualCurrentGame.getScoreBoard().getEntries().get(1).getPlayer());
@@ -154,6 +157,8 @@ public class OrderPlayersModelTest {
 
 		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
 		assertEquals(currentGame.getGameName(), actualCurrentGame.getGameName());
+		assertEquals(currentGame.getScoreBoard().getScoring(), actualCurrentGame.getScoreBoard()
+				.getScoring());
 		assertEquals(3, actualCurrentGame.getScoreBoard().getEntries().size());
 		assertEquals(player2, actualCurrentGame.getScoreBoard().getEntries().get(0).getPlayer());
 		assertEquals(player3, actualCurrentGame.getScoreBoard().getEntries().get(1).getPlayer());

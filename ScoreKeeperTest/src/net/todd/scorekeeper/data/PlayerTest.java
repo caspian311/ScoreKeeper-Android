@@ -1,4 +1,4 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.data;
 
 import static org.junit.Assert.*;
 
@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import net.todd.scorekeeper.data.Player;
-import net.todd.scorekeeper.data.ScoreBoard;
-import net.todd.scorekeeper.data.ScoreBoardEntry;
+import net.todd.scorekeeper.Scoring;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +36,20 @@ public class ScoreBoardTest {
 	}
 
 	@Test
+	public void defaultScoringIsHighestWins() {
+		assertEquals(Scoring.HIGH, testObject.getScoring());
+	}
+
+	@Test
+	public void scoringIsSetAndRetreivedFromTheScoreBoard() {
+		testObject.setScoring(Scoring.HIGH);
+		assertEquals(Scoring.HIGH, testObject.getScoring());
+
+		testObject.setScoring(Scoring.LOW);
+		assertEquals(Scoring.LOW, testObject.getScoring());
+	}
+
+	@Test
 	public void settingAndGettingThePlayersScore() {
 		int score1 = new Random().nextInt();
 		testObject.setScore(player1, score1);
@@ -52,7 +64,35 @@ public class ScoreBoardTest {
 	}
 
 	@Test
-	public void entriesAreAlwaysReturnedSortedByHighestToLowestScore() {
+	public void byDefaultEntriesAreReturnedSortedByHighestToLowestScore() {
+		testObject.setScore(player1, 3);
+		testObject.setScore(player2, 1);
+		testObject.setScore(player3, 5);
+
+		List<ScoreBoardEntry> entries = testObject.getEntries();
+
+		assertEquals(player3, entries.get(0).getPlayer());
+		assertEquals(player1, entries.get(1).getPlayer());
+		assertEquals(player2, entries.get(2).getPlayer());
+	}
+
+	@Test
+	public void ifScoringIsSetToLowestWinsThenEntriesAreReturnedSortedByLowestToHighestScore() {
+		testObject.setScoring(Scoring.LOW);
+		testObject.setScore(player1, 3);
+		testObject.setScore(player2, 1);
+		testObject.setScore(player3, 5);
+
+		List<ScoreBoardEntry> entries = testObject.getEntries();
+
+		assertEquals(player2, entries.get(0).getPlayer());
+		assertEquals(player1, entries.get(1).getPlayer());
+		assertEquals(player3, entries.get(2).getPlayer());
+	}
+
+	@Test
+	public void ifScoringIsSetToHighestWinsThenEntriesAreReturnedSortedByHighestToLowestScore() {
+		testObject.setScoring(Scoring.HIGH);
 		testObject.setScore(player1, 3);
 		testObject.setScore(player2, 1);
 		testObject.setScore(player3, 5);

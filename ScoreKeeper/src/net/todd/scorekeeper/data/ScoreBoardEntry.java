@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.simpleframework.xml.Element;
 
-public class ScoreBoardEntry implements Serializable, Comparable<ScoreBoardEntry> {
+public class ScoreBoardEntry implements Serializable {
 	private static final long serialVersionUID = 490726045699984371L;
 
 	@Element
@@ -26,12 +26,5 @@ public class ScoreBoardEntry implements Serializable, Comparable<ScoreBoardEntry
 
 	public Player getPlayer() {
 		return player;
-	}
-
-	@Override
-	public int compareTo(ScoreBoardEntry that) {
-		Integer score1 = this.getScore();
-		Integer score2 = that.getScore();
-		return score1.compareTo(score2) * -1;
 	}
 }

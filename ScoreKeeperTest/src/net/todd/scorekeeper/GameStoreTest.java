@@ -28,6 +28,7 @@ public class GameStoreTest extends AbstractStoreTest {
 		game.setGameOverTimestamp(new Date());
 		game.setGameName(UUID.randomUUID().toString());
 		ScoreBoard scoreBoard = new ScoreBoard();
+		scoreBoard.setScoring(Scoring.HIGH);
 		Player player1 = new Player();
 		player1.setId(UUID.randomUUID().toString());
 		player1.setName(UUID.randomUUID().toString());
@@ -41,6 +42,7 @@ public class GameStoreTest extends AbstractStoreTest {
 		assertEquals(1, savedGames.size());
 		assertEquals(game.getGameOverTimestamp(), savedGames.get(0).getGameOverTimestamp());
 		assertEquals(game.getGameName(), savedGames.get(0).getGameName());
+		assertEquals(Scoring.HIGH, savedGames.get(0).getScoreBoard().getScoring());
 		assertEquals(1, savedGames.get(0).getScoreBoard().getEntries().size());
 		assertEquals(player1.getId(), savedGames.get(0).getScoreBoard().getEntries().get(0)
 				.getPlayer().getId());

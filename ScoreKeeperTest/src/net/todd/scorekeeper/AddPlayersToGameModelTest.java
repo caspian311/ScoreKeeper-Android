@@ -59,8 +59,9 @@ public class AddPlayersToGameModelTest {
 		doReturn(allPlayers).when(playerStore).getAllPlayers();
 
 		currentGame = new CurrentGame();
-		currentGame.setScoreBoard(new ScoreBoard());
 		currentGame.setGameName(UUID.randomUUID().toString());
+		currentGame.setScoreBoard(new ScoreBoard());
+		currentGame.getScoreBoard().setScoring(Scoring.LOW);
 		doReturn(currentGame).when(pageNavigator).getExtra("currentGame");
 
 		testObject = new AddPlayersToGameModel(playerStore, pageNavigator);
@@ -124,6 +125,8 @@ public class AddPlayersToGameModelTest {
 
 		CurrentGame actualCurrentGame = (CurrentGame) extras.get("currentGame");
 		assertEquals(currentGame.getGameName(), actualCurrentGame.getGameName());
+		assertEquals(currentGame.getScoreBoard().getScoring(), actualCurrentGame.getScoreBoard()
+				.getScoring());
 		List<ScoreBoardEntry> entries = actualCurrentGame.getScoreBoard().getEntries();
 		assertEquals(2, entries.size());
 		assertEquals(player1, entries.get(0).getPlayer());

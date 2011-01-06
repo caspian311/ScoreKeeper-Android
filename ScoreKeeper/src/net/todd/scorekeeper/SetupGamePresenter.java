@@ -42,6 +42,13 @@ public class SetupGamePresenter {
 			}
 		});
 
+		view.addScoringChangedListener(new Listener() {
+			@Override
+			public void handle() {
+				model.setScoring(view.getScoring());
+			}
+		});
+
 		model.addStateChangedListener(new Listener() {
 			@Override
 			public void handle() {

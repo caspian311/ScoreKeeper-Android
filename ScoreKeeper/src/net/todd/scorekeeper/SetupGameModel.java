@@ -11,6 +11,7 @@ public class SetupGameModel {
 	private final ListenerManager stateChangedListenerManager = new ListenerManager();
 
 	private final PageNavigator pageNavigator;
+
 	private CurrentGame currentGame;
 
 	public SetupGameModel(PageNavigator pageNavigator) {
@@ -77,7 +78,13 @@ public class SetupGameModel {
 	}
 
 	public Scoring getScoring() {
-		// TODO
-		return null;
+		return currentGame.getScoreBoard().getScoring();
+	}
+
+	public void setScoring(Scoring scoring) {
+		if (!scoring.equals(currentGame.getScoreBoard().getScoring())) {
+			currentGame.getScoreBoard().setScoring(scoring);
+			stateChangedListenerManager.notifyListeners();
+		}
 	}
 }

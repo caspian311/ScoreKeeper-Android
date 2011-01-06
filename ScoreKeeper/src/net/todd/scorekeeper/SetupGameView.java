@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -157,6 +158,16 @@ public class SetupGameView {
 		spinnerLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		spinnerLayout.rightMargin = UIConstants.MARGIN_SIZE;
 		scoringSpinner.setLayoutParams(spinnerLayout);
+		scoringSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				scoringChangedListenerManager.notifyListeners();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+			}
+		});
 		mainView.addView(scoringSpinner);
 
 		startGameButton = new Button(context);

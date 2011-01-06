@@ -8,7 +8,6 @@ import java.util.List;
 import net.todd.scorekeeper.ObjectSerializerPersistor;
 import net.todd.scorekeeper.Persistor;
 import android.content.Context;
-import android.util.Log;
 
 @SuppressWarnings("deprecation")
 public class DataConverter {
@@ -82,7 +81,6 @@ public class DataConverter {
 								originalField.get(original));
 						tranlsatedField.set(translated, originalValue);
 					} catch (NoSuchFieldException e) {
-						Log.w("tried to match a field but it didn't exist", e);
 					}
 				}
 			}
