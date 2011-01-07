@@ -7,15 +7,10 @@ import java.util.List;
 
 import net.todd.scorekeeper.Scoring;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-
 public class ScoreBoard implements Serializable {
 	private static final long serialVersionUID = -9216810547295023938L;
 
-	@ElementList
 	private List<ScoreBoardEntry> scoreBoardEntries;
-	@Element(required = false)
 	private String scoring;
 
 	public ScoreBoard() {

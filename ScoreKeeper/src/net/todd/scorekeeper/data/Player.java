@@ -2,16 +2,11 @@ package net.todd.scorekeeper.data;
 
 import java.io.Serializable;
 
-import org.simpleframework.xml.Element;
-
 public class Player implements Serializable {
 	private static final long serialVersionUID = -3804201764603746312L;
 
-	@Element
 	private String id;
-	@Element
 	private String name;
-	@Element(required = false)
 	private boolean selected;
 
 	public void setId(String id) {

@@ -3,16 +3,11 @@ package net.todd.scorekeeper.data;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.simpleframework.xml.Element;
-
 public class Game implements Serializable, Comparable<Game> {
 	private static final long serialVersionUID = -4703874076017365877L;
 
-	@Element(required = false)
 	private Date gameOverTimestamp;
-	@Element(required = false)
 	private String gameName;
-	@Element
 	private ScoreBoard scoreBoard;
 
 	public Date getGameOverTimestamp() {
