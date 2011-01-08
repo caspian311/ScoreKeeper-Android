@@ -50,7 +50,7 @@ public class XmlPersistor<T> extends Persistor<T> {
 				List<T> fromXML = (List<T>) xstream.fromXML(input);
 				items.addAll(fromXML);
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				super.context.deleteFile(getDataFilename());
 			} finally {
 				try {
 					input.close();

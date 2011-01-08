@@ -7,7 +7,7 @@ import java.util.List;
 import android.content.Context;
 
 public abstract class Persistor<T> {
-	private Context context;
+	protected Context context;
 	private Class<T> clazz;
 
 	protected Persistor(Class<T> clazz, Context context) {

@@ -28,9 +28,18 @@ public class MainPageActivity extends Activity {
 	@SuppressWarnings("deprecation")
 	private void convertLegacyData() {
 		DataConverter dataConverter = DataConverterFactory.createDataConverter(this);
-		dataConverter.convertData(Player.class, net.todd.scorekeeper.data.Player.class);
-		dataConverter.convertData(Game.class, net.todd.scorekeeper.data.Game.class);
-		dataConverter.convertData(CurrentGame.class, net.todd.scorekeeper.data.CurrentGame.class);
+		convert(dataConverter, Player.class, net.todd.scorekeeper.data.Player.class);
+		convert(dataConverter, Game.class, net.todd.scorekeeper.data.Game.class);
+		convert(dataConverter, CurrentGame.class, net.todd.scorekeeper.data.CurrentGame.class);
+	}
+
+	private void convert(DataConverter dataConverter, Class<?> oldClass, Class<?> newClass) {
+		try {
+			dataConverter.convertData(oldClass, newClass);
+		} finally {
+			deleteFile(oldClass.getName());
+			deleteFile(newClass.getName());
+		}
 	}
 
 	@Override
