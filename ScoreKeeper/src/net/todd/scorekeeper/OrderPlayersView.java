@@ -1,22 +1,14 @@
 package net.todd.scorekeeper;
 
-import java.util.List;
+import java.util.*;
 
 import net.todd.scorekeeper.data.Player;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.view.Gravity;
-import android.view.View;
+import android.app.*;
+import android.content.*;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.*;
 
 public class OrderPlayersView {
 	private final ScrollView mainScrollView;
@@ -36,8 +28,7 @@ public class OrderPlayersView {
 
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		LinearLayout mainView = new LinearLayout(context);
 		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -69,8 +60,7 @@ public class OrderPlayersView {
 		mainView.addView(controlView);
 
 		Button doneButton = new Button(context);
-		doneButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				UIConstants.BUTTON_HEIGHT));
+		doneButton.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, UIConstants.BUTTON_HEIGHT));
 		doneButton.setText("Done");
 		doneButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -81,8 +71,7 @@ public class OrderPlayersView {
 		controlView.addView(doneButton);
 
 		allPlayersTable = new TableLayout(context);
-		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
+		allPlayersTable.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		allPlayersTable.setGravity(Gravity.CENTER_HORIZONTAL);
 		TableLayout.LayoutParams allPlayersTableLayoutParams = new TableLayout.LayoutParams(
@@ -105,6 +94,7 @@ public class OrderPlayersView {
 			TableRow playerRow = new TableRow(context);
 			playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
 					TableRow.LayoutParams.WRAP_CONTENT));
+			playerRow.setGravity(Gravity.CENTER_VERTICAL);
 			allPlayersTable.addView(playerRow);
 
 			ImageButton upButton = new ImageButton(context);

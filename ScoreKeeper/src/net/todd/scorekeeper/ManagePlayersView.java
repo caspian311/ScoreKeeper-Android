@@ -1,22 +1,13 @@
 package net.todd.scorekeeper;
 
-import java.util.List;
+import java.util.*;
 
 import net.todd.scorekeeper.data.Player;
-import android.content.Context;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.View;
+import android.content.*;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.*;
 
 public class ManagePlayersView {
 	private final Context context;
@@ -35,8 +26,7 @@ public class ManagePlayersView {
 		this.context = context;
 
 		mainScrollView = new ScrollView(context);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 		mainScrollView.setFillViewport(true);
 
 		LinearLayout mainView = new LinearLayout(context);
@@ -96,7 +86,7 @@ public class ManagePlayersView {
 		controlsRow.addView(addPlayerButton);
 
 		Button doneButton = new Button(context);
-		doneButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		doneButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		TableLayout.LayoutParams doneButtonLayoutParams = new TableLayout.LayoutParams(
 				TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
 		doneButtonLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
@@ -132,6 +122,7 @@ public class ManagePlayersView {
 		TableRow playerRow = new TableRow(context);
 		playerRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
 				TableRow.LayoutParams.WRAP_CONTENT));
+		playerRow.setGravity(Gravity.CENTER_VERTICAL);
 		tableView.addView(playerRow);
 
 		TextView player = new TextView(context);

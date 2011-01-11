@@ -3,23 +3,14 @@ package net.todd.scorekeeper;
 import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
 import net.todd.scorekeeper.data.ScoreBoardEntry;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.text.InputType;
-import android.view.Gravity;
-import android.view.View;
+import android.app.*;
+import android.content.*;
+import android.text.*;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.view.inputmethod.*;
+import android.widget.*;
 
 public class GameView {
 	private final ScrollView mainScrollView;
@@ -42,8 +33,7 @@ public class GameView {
 
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		LinearLayout mainView = new LinearLayout(context);
 		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -57,8 +47,8 @@ public class GameView {
 		mainScrollView.addView(mainView);
 
 		gameNameText = new TextView(context);
-		LinearLayout.LayoutParams gameNameLayout = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams gameNameLayout = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
 		gameNameText.setLayoutParams(gameNameLayout);
 		gameNameLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		gameNameLayout.rightMargin = UIConstants.MARGIN_SIZE;
@@ -68,8 +58,7 @@ public class GameView {
 
 		View line = new View(context);
 		line.setBackgroundColor(UIConstants.TEXT_COLOR);
-		TableRow.LayoutParams lineLayoutParam = new TableRow.LayoutParams(
-				TableRow.LayoutParams.FILL_PARENT, 2);
+		TableRow.LayoutParams lineLayoutParam = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 2);
 		lineLayoutParam.topMargin = 0;
 		lineLayoutParam.bottomMargin = UIConstants.MARGIN_SIZE;
 		lineLayoutParam.rightMargin = UIConstants.MARGIN_SIZE;
@@ -80,8 +69,7 @@ public class GameView {
 
 		LinearLayout playerData = new LinearLayout(context);
 		playerData.setOrientation(LinearLayout.HORIZONTAL);
-		playerData.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT));
+		playerData.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		playerData.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(playerData);
 
@@ -108,12 +96,12 @@ public class GameView {
 		score.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		score.setWidth(100);
 		score.setLines(1);
-		score.setGravity(Gravity.CENTER_HORIZONTAL);
+		score.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		score.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 		mainView.addView(score);
 
 		LinearLayout buttonLayout = new LinearLayout(context);
-		buttonLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+		buttonLayout.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		buttonLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
@@ -125,13 +113,13 @@ public class GameView {
 		previousPlayerButton = new Button(context);
 		ButtonUtilities.setLayout(previousPlayerButton);
 		previousPlayerButton.setText("Previous");
-		previousPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		previousPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		buttonLayout.addView(previousPlayerButton);
 
 		nextPlayerButton = new Button(context);
 		ButtonUtilities.setLayout(nextPlayerButton);
 		nextPlayerButton.setText("Next");
-		nextPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		nextPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		buttonLayout.addView(nextPlayerButton);
 
 		TextView scoreBoardTitle = new TextView(context);
@@ -147,16 +135,16 @@ public class GameView {
 		mainView.addView(scoreBoardTitle);
 
 		scoreBoardTable = new TableLayout(context);
-		scoreBoardTable.setGravity(Gravity.CENTER_HORIZONTAL);
-		TableLayout.LayoutParams scoreBoardLayoutParams = new TableLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		scoreBoardTable.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+		TableLayout.LayoutParams scoreBoardLayoutParams = new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
 		scoreBoardLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardTable.setColumnStretchable(0, true);
 		mainView.addView(scoreBoardTable, scoreBoardLayoutParams);
 
 		Button gameOverButton = new Button(context);
-		gameOverButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		gameOverButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		ButtonUtilities.setLayout(gameOverButton);
 		gameOverButton.setText("Game Over");
 		gameOverButton.setOnClickListener(new OnClickListener() {
@@ -260,8 +248,7 @@ public class GameView {
 	}
 
 	public void popupNoBackButtonDialog() {
-		new AlertDialog.Builder(context)
-				.setMessage("If you leave this page you will lose any game data.  Is that ok?")
+		new AlertDialog.Builder(context).setMessage("If you leave this page you will lose any game data.  Is that ok?")
 				.setPositiveButton("Leave page", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {

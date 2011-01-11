@@ -1,21 +1,11 @@
 package net.todd.scorekeeper;
 
-import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.View;
+import android.content.*;
+import android.text.*;
+import android.view.*;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import android.widget.TextView.OnEditorActionListener;
 
 public class SetupGameView {
@@ -35,11 +25,10 @@ public class SetupGameView {
 	public SetupGameView(Context context) {
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
 		LinearLayout mainView = new LinearLayout(context);
-		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
+		mainView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		LinearLayout.LayoutParams mainLayoutParams = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
 		mainLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
@@ -54,23 +43,22 @@ public class SetupGameView {
 		title.setText("Setup the Game");
 		title.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		title.setTextColor(UIConstants.TEXT_COLOR);
-		title.setGravity(Gravity.CENTER_HORIZONTAL);
+		title.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		mainView.addView(title);
 
 		TextView gameNameLabel = new TextView(context);
-		gameNameLabel.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT));
+		gameNameLabel.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		gameNameLabel.setTextSize(UIConstants.TEXT_SMALL_SIZE);
 		gameNameLabel.setText("Game name:");
-		gameNameLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+		gameNameLabel.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		mainView.addView(gameNameLabel);
 
 		gameNameText = new EditText(context);
-		LinearLayout.LayoutParams gameTextLayout = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout.LayoutParams gameTextLayout = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
 		gameTextLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		gameTextLayout.rightMargin = UIConstants.MARGIN_SIZE;
-		gameNameText.setGravity(Gravity.CENTER_HORIZONTAL);
+		gameNameText.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		gameNameText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable arg0) {
@@ -96,8 +84,8 @@ public class SetupGameView {
 		mainView.addView(gameNameText);
 
 		TextView gameNameExplanationLabel = new TextView(context);
-		LinearLayout.LayoutParams gameNameExplanationLayout = new LinearLayout.LayoutParams(
-				new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		LinearLayout.LayoutParams gameNameExplanationLayout = new LinearLayout.LayoutParams(new LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		gameNameExplanationLayout.bottomMargin = UIConstants.MARGIN_SIZE;
 		gameNameExplanationLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		gameNameExplanationLayout.rightMargin = UIConstants.MARGIN_SIZE;
@@ -108,14 +96,14 @@ public class SetupGameView {
 		mainView.addView(gameNameExplanationLabel);
 
 		Button addPlayersButton = new Button(context);
-		LinearLayout.LayoutParams addPlayersButtonLayout = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, UIConstants.BUTTON_HEIGHT);
+		LinearLayout.LayoutParams addPlayersButtonLayout = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+				UIConstants.BUTTON_HEIGHT);
 		addPlayersButtonLayout.bottomMargin = UIConstants.MARGIN_SIZE;
 		addPlayersButtonLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		addPlayersButtonLayout.rightMargin = UIConstants.MARGIN_SIZE;
 		addPlayersButton.setLayoutParams(addPlayersButtonLayout);
 		addPlayersButton.setText("Add Players >");
-		addPlayersButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		addPlayersButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		addPlayersButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -125,14 +113,14 @@ public class SetupGameView {
 		mainView.addView(addPlayersButton);
 
 		orderPlayersButton = new Button(context);
-		LinearLayout.LayoutParams orderPlayersButtonLayout = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, UIConstants.BUTTON_HEIGHT);
+		LinearLayout.LayoutParams orderPlayersButtonLayout = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+				UIConstants.BUTTON_HEIGHT);
 		orderPlayersButtonLayout.bottomMargin = UIConstants.MARGIN_SIZE;
 		orderPlayersButtonLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		orderPlayersButtonLayout.rightMargin = UIConstants.MARGIN_SIZE;
 		orderPlayersButton.setLayoutParams(orderPlayersButtonLayout);
 		orderPlayersButton.setText("Order Players >");
-		orderPlayersButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		orderPlayersButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		orderPlayersButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -142,18 +130,17 @@ public class SetupGameView {
 		mainView.addView(orderPlayersButton);
 
 		TextView scoringLabel = new TextView(context);
-		scoringLabel.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT));
+		scoringLabel.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		scoringLabel.setTextSize(UIConstants.TEXT_SMALL_SIZE);
 		scoringLabel.setText("Scoring:");
-		scoringLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+		scoringLabel.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		mainView.addView(scoringLabel);
 
 		scoringSpinner = new Spinner(context);
-		scoringSpinner.setAdapter(new ArrayAdapter<Scoring>(context,
-				android.R.layout.simple_spinner_item, Scoring.values()));
-		LinearLayout.LayoutParams spinnerLayout = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		scoringSpinner.setAdapter(new ArrayAdapter<Scoring>(context, android.R.layout.simple_spinner_item, Scoring
+				.values()));
+		LinearLayout.LayoutParams spinnerLayout = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
 		spinnerLayout.bottomMargin = UIConstants.MARGIN_SIZE;
 		spinnerLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		spinnerLayout.rightMargin = UIConstants.MARGIN_SIZE;
@@ -171,13 +158,13 @@ public class SetupGameView {
 		mainView.addView(scoringSpinner);
 
 		startGameButton = new Button(context);
-		LinearLayout.LayoutParams startGameLayout = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, UIConstants.BUTTON_HEIGHT);
+		LinearLayout.LayoutParams startGameLayout = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
+				UIConstants.BUTTON_HEIGHT);
 		startGameLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		startGameLayout.rightMargin = UIConstants.MARGIN_SIZE;
 		startGameButton.setLayoutParams(startGameLayout);
 		startGameButton.setText("Start Game");
-		startGameButton.setGravity(Gravity.CENTER_HORIZONTAL);
+		startGameButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		startGameButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
