@@ -1,13 +1,22 @@
 package net.todd.scorekeeper;
 
-import java.util.*;
+import java.util.List;
 
 import net.todd.scorekeeper.data.Player;
-import android.content.*;
-import android.view.*;
+import android.content.Context;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 public class ManagePlayersView {
 	private final Context context;

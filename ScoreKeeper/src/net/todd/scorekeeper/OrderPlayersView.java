@@ -1,14 +1,22 @@
 package net.todd.scorekeeper;
 
-import java.util.*;
+import java.util.List;
 
 import net.todd.scorekeeper.data.Player;
-import android.app.*;
-import android.content.*;
-import android.view.*;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.view.Gravity;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 public class OrderPlayersView {
 	private final ScrollView mainScrollView;
