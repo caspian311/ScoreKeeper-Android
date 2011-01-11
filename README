@@ -1,5 +1,24 @@
+-------------------------------------------------------------------------------
 ScoreKeeper
 -------------------------------------------------------------------------------
-Android app for keeping score during various games (cards, dice, dominoes, etc)
+ScoreKeeper eliminates the need for grabbing paper and pencil every time you 
+and your friends sit down to play a card game, board game, dice game, or domino 
+game. The simple interface is designed to not interfere with the main 
+functionality of keeping track of players scores and letting you know who's in 
+the lead. 
 
 Site: http://caspian311.github.com/ScoreKeeper-Android
+
+
+-------------------------------------------------------------------------------
+Author
+-------------------------------------------------------------------------------
+Matt Todd (http://www.github.com/caspian311)
+
+-------------------------------------------------------------------------------
+Contributors
+-------------------------------------------------------------------------------
+Srdjan Grubor (http://www.github.com/sgnn7)
+	* QA work with Android 2.1 devices
+	* UI fix to vertically center buttons
+
