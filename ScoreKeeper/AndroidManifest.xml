@@ -25,4 +25,5 @@
 			android:screenOrientation="portrait" />
 	</application>
 	<uses-sdk android:minSdkVersion="7" android:targetSdkVersion="7"></uses-sdk>
+	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 </manifest> 

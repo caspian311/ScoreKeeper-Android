@@ -22,6 +22,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class GameView {
+	public static final int GAME_NAME_LABEL_ID = 106;
+	public static final int PLAYER_NAME_LABEL_ID = 100;
+	public static final int PLAYER_SCORE_LABEL_ID = 101;
+	public static final int SCORE_TEXTFIELD_ID = 102;
+	public static final int PREVIOUS_BUTTON_ID = 103;
+	public static final int NEXT_BUTTON_ID = 104;
+	public static final int SCOREBOARD_TABLE_ID = 105;
+
 	private final ScrollView mainScrollView;
 	private final TextView playerName;
 	private final Button nextPlayerButton;
@@ -29,20 +37,22 @@ public class GameView {
 	private final Button previousPlayerButton;
 	private final TableLayout scoreBoardTable;
 	private final Activity context;
-	private Listener backPressedListener;
-	private Listener cancelGameListener;
 	private final TextView playerScore;
 	private final TextView gameNameText;
 
 	private final ListenerManager gameOverButtonListenerManager = new ListenerManager();
 	private final ListenerManager gameOverConfirmationListenerManager = new ListenerManager();
 
+	private Listener backPressedListener;
+	private Listener cancelGameListener;
+
 	public GameView(Activity context) {
 		this.context = context;
 
 		mainScrollView = new ScrollView(context);
 		mainScrollView.setFillViewport(true);
-		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		mainScrollView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.FILL_PARENT));
 
 		LinearLayout mainView = new LinearLayout(context);
 		mainView.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -56,8 +66,9 @@ public class GameView {
 		mainScrollView.addView(mainView);
 
 		gameNameText = new TextView(context);
-		LinearLayout.LayoutParams gameNameLayout = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
+		gameNameText.setId(GAME_NAME_LABEL_ID);
+		LinearLayout.LayoutParams gameNameLayout = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		gameNameText.setLayoutParams(gameNameLayout);
 		gameNameLayout.leftMargin = UIConstants.MARGIN_SIZE;
 		gameNameLayout.rightMargin = UIConstants.MARGIN_SIZE;
@@ -67,7 +78,8 @@ public class GameView {
 
 		View line = new View(context);
 		line.setBackgroundColor(UIConstants.TEXT_COLOR);
-		TableRow.LayoutParams lineLayoutParam = new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, 2);
+		TableRow.LayoutParams lineLayoutParam = new TableRow.LayoutParams(
+				TableRow.LayoutParams.FILL_PARENT, 2);
 		lineLayoutParam.topMargin = 0;
 		lineLayoutParam.bottomMargin = UIConstants.MARGIN_SIZE;
 		lineLayoutParam.rightMargin = UIConstants.MARGIN_SIZE;
@@ -78,11 +90,13 @@ public class GameView {
 
 		LinearLayout playerData = new LinearLayout(context);
 		playerData.setOrientation(LinearLayout.HORIZONTAL);
-		playerData.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		playerData.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT));
 		playerData.setGravity(Gravity.CENTER_HORIZONTAL);
 		mainView.addView(playerData);
 
 		playerName = new TextView(context);
+		playerName.setId(PLAYER_NAME_LABEL_ID);
 		playerName.setTextColor(UIConstants.TEXT_COLOR);
 		playerName.setTextSize(UIConstants.TEXT_TITLE_SIZE);
 		playerName.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -96,12 +110,14 @@ public class GameView {
 		playerData.addView(colonText);
 
 		playerScore = new TextView(context);
+		playerScore.setId(PLAYER_SCORE_LABEL_ID);
 		playerScore.setTextColor(UIConstants.TEXT_COLOR);
 		playerScore.setTextSize(UIConstants.TEXT_NORMAL_SIZE);
 		playerScore.setGravity(Gravity.CENTER_HORIZONTAL);
 		playerData.addView(playerScore);
 
 		score = new EditText(context);
+		score.setId(SCORE_TEXTFIELD_ID);
 		score.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		score.setWidth(100);
 		score.setLines(1);
@@ -120,12 +136,14 @@ public class GameView {
 		mainView.addView(buttonLayout);
 
 		previousPlayerButton = new Button(context);
+		previousPlayerButton.setId(PREVIOUS_BUTTON_ID);
 		ButtonUtilities.setLayout(previousPlayerButton);
 		previousPlayerButton.setText("Previous");
 		previousPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
 		buttonLayout.addView(previousPlayerButton);
 
 		nextPlayerButton = new Button(context);
+		nextPlayerButton.setId(NEXT_BUTTON_ID);
 		ButtonUtilities.setLayout(nextPlayerButton);
 		nextPlayerButton.setText("Next");
 		nextPlayerButton.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
@@ -144,9 +162,10 @@ public class GameView {
 		mainView.addView(scoreBoardTitle);
 
 		scoreBoardTable = new TableLayout(context);
+		scoreBoardTable.setId(SCOREBOARD_TABLE_ID);
 		scoreBoardTable.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-		TableLayout.LayoutParams scoreBoardLayoutParams = new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
+		TableLayout.LayoutParams scoreBoardLayoutParams = new TableLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		scoreBoardLayoutParams.leftMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardLayoutParams.rightMargin = UIConstants.MARGIN_SIZE;
 		scoreBoardTable.setColumnStretchable(0, true);
@@ -257,7 +276,8 @@ public class GameView {
 	}
 
 	public void popupNoBackButtonDialog() {
-		new AlertDialog.Builder(context).setMessage("If you leave this page you will lose any game data.  Is that ok?")
+		new AlertDialog.Builder(context)
+				.setMessage("If you leave this page you will lose any game data.  Is that ok?")
 				.setPositiveButton("Leave page", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
