@@ -1,7 +1,9 @@
-package net.todd.scorekeeper;
+package net.todd.scorekeeper.test;
 
 import java.util.Arrays;
 
+import net.todd.scorekeeper.GameActivity;
+import net.todd.scorekeeper.GameView;
 import net.todd.scorekeeper.data.CurrentGame;
 import net.todd.scorekeeper.data.Player;
 import net.todd.scorekeeper.data.ScoreBoard;
