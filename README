@@ -22,3 +22,19 @@ Srdjan Grubor (http://www.github.com/sgnn7)
 	* QA work with Android 2.1 devices
 	* UI fix to vertically center buttons
 
+-------------------------------------------------------------------------------
+Build
+-------------------------------------------------------------------------------
+To build, you will need to first set the location of your Android SDK in the 
+build shell script and the local.properties file located in the 
+ScoreKeeper-androidtest project.
+
+$ vi build.sh 
+edit the android sdk path, ex:
+ANDROID_SDK_PATH=/path/to/android/sdk
+
+$ echo sdk.dir=/path/to/android/sdk > sqlite-orm-androidtest/local.properties
+
+Then run the build script.
+
+$ ./build.sh
