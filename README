@@ -33,7 +33,7 @@ $ vi build.sh
 edit the android sdk path, ex:
 ANDROID_SDK_PATH=/path/to/android/sdk
 
-$ echo sdk.dir=/path/to/android/sdk > sqlite-orm-androidtest/local.properties
+$ echo sdk.dir=/path/to/android/sdk > ScoreKeeper-androidtest/local.properties
 
 Then run the build script.
 
