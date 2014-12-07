@@ -9,5 +9,7 @@
     <string name="new_game_heading">New Game</string>
     <string name="history_heading">History</string>
     <string name="manage_players_heading">Manage Players</string>
+    <string name="add_player_button">Add Player</string>
+    <string name="done">Done</string>
 
 </resources>
