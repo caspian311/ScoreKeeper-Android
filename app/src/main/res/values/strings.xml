@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Scorekeeper</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="manage_players_button">Manage Players</string>
+    <string name="new_game_button">New Game</string>
+    <string name="history_button">History</string>
+
+</resources>
