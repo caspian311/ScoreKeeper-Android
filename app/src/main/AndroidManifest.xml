@@ -16,6 +16,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="net.todd.scorekeeper.NewGameActivity"
+            android:label="@string/new_game_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.HistoryActivity"
+            android:label="@string/history_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.ManagePlayersActivity"
+            android:label="@string/manage_players_heading" />
     </application>
 
 </manifest>
