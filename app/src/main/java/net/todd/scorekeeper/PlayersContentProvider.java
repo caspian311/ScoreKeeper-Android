@@ -62,7 +62,24 @@ public class PlayersContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        Player target = getPlayerById(Long.parseLong(selection));
+
+        if (target != null) {
+            data.remove(target);
+        }
+
         return 0;
+    }
+
+    private Player getPlayerById(long playerId) {
+        Player target = null;
+        for (Player player : data) {
+            if (player.getId() == playerId) {
+                target = player;
+                break;
+            }
+        }
+        return target;
     }
 
     @Override

@@ -16,7 +16,8 @@
         <EditText
             android:id="@+id/new_player_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/add_player_button"
@@ -33,15 +34,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/new_player_controls"
-        android:dividerHeight="2dp"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="48dp"
-        android:divider="#CCCCCC" />
+        android:layout_marginTop="5dp"
+        android:divider="#CCCCCC"
+        android:dividerHeight="2dp" />
 
-    <Button android:id="@+id/done_managing_players"
-        android:layout_alignParentBottom="true"
+    <Button
+        android:id="@+id/done_managing_players"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:text="@string/done"
         android:textSize="@dimen/button_text_size" />
 

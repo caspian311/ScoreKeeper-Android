@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -11,7 +12,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -23,10 +27,11 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
     private EditText newNameTextField;
 
     private TextWatcher newNameTextWatcher;
-    private SimpleCursorAdapter adapter;
+    private PlayerCursorAdapter adapter;
     private Button doneButton;
 
     private Uri uri = Uri.parse("content://net.todd.scorekeeper.players");
+    private ListView playersListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +42,16 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
         newNameTextField = (EditText) findViewById(R.id.new_player_name);
         doneButton = (Button) findViewById(R.id.done_managing_players);
 
-        adapter = new SimpleCursorAdapter(this, R.layout.player, null, new String[]{"name"}, new int[]{R.id.player_name}, 0);
+        adapter = new PlayerCursorAdapter(this);
+        adapter.setDeletePlayerListener(new PlayerCursorAdapter.DeletePlayerListener() {
+            @Override
+            public void deletePlayer(long playerId) {
+                doDeletePlayer(playerId);
+            }
+        });
 
-        ListView listView = (ListView) findViewById(R.id.players_list);
-        listView.setAdapter(adapter);
+        playersListView = (ListView) findViewById(R.id.players_list);
+        playersListView.setAdapter(adapter);
 
         newNameTextWatcher = new TextWatcher() {
             @Override
@@ -56,6 +67,17 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
                 addPlayerButton.setEnabled(newNameTextField.getText().length() != 0);
             }
         };
+    }
+
+    private void doDeletePlayer(long playerId) {
+        new AsyncQueryHandler(getContentResolver()) {
+            @Override
+            protected void onDeleteComplete(int token, Object cookie, int result) {
+                super.onDeleteComplete(token, cookie, result);
+
+                getLoaderManager().restartLoader(PLAYERS_LOADER, null, ManagePlayersActivity.this);
+            }
+        }.startDelete(-1, null, uri, "" + playerId, null);
     }
 
     @Override

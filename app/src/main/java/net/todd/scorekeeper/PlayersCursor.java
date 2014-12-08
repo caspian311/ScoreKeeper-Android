@@ -37,14 +37,14 @@ public class PlayersCursor extends AbstractCursor {
 
     @Override
     public int getInt(int column) {
-        if (column == 0) {
-            return data.get(mPos).getId();
-        }
         return 0;
     }
 
     @Override
     public long getLong(int column) {
+        if (column == 0) {
+            return data.get(mPos).getId();
+        }
         return 0;
     }
 
