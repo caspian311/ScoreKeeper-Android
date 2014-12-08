@@ -11,7 +11,9 @@
     <EditText
         android:id="@+id/game_name_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="@string/game_name_hint"
+        android:singleLine="true" />
 
     <Spinner
         android:id="@+id/game_type_spinner"
@@ -19,6 +21,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/game_name_text"
         android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/no_players_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_players_available"
+        android:textSize="@dimen/button_text_size"
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/available_players"

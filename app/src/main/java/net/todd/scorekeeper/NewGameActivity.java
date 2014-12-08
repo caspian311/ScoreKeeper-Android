@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +36,14 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
     private List<Long> selectedPlayerIds = new ArrayList<Long>();
     private EditText gameNameText;
     private TextWatcher gameNameTextWatcher;
+    private TextView noPlayersAvailableMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_game);
+
+        noPlayersAvailableMessage = (TextView)findViewById(R.id.no_players_available);
 
         gameNameText = (EditText)findViewById(R.id.game_name_text);
         gameNameTextWatcher = new TextWatcher() {
@@ -80,6 +84,8 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
 
         cancelButton = (Button)findViewById(R.id.cancel_game_button);
         startGameButton = (Button)findViewById(R.id.start_game_button);
+
+        getLoaderManager().initLoader(PLAYERS_LOADER, null, this);
     }
 
     private void updateStartGameButton() {
@@ -116,7 +122,7 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
             }
         });
 
-        getLoaderManager().initLoader(PLAYERS_LOADER, null, this);
+        getLoaderManager().restartLoader(PLAYERS_LOADER, null, this);
     }
 
     @Override
@@ -137,6 +143,14 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         availablePlayerListAdapter.swapCursor(data);
+
+        if (data.getCount() == 0) {
+            gameNameText.setVisibility(View.GONE);
+            gameTypeSpinner.setVisibility(View.GONE);
+            availablePlayersList.setVisibility(View.GONE);
+
+            noPlayersAvailableMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

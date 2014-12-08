@@ -13,6 +13,9 @@
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="start_game">Start Game!</string>
+    <string name="no_players_available">You currently have not setup any players. Please go back to the Manage Players screen and add a few people.</string>
+    <string name="game_name_hint">Game name (Hearts, Spades, Mini-Golf, etc.)</string>
+    <string name="player_name_hint">Player name</string>
     <string-array name="game_types">
         <item>Highest score wins</item>
         <item>Lowest score wins</item>

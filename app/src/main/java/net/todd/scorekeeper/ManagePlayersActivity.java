@@ -67,6 +67,8 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
                 addPlayerButton.setEnabled(newNameTextField.getText().length() != 0);
             }
         };
+
+        getLoaderManager().initLoader(PLAYERS_LOADER, null, this);
     }
 
     private void doDeletePlayer(long playerId) {
@@ -110,7 +112,7 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
             }
         });
 
-        getLoaderManager().initLoader(PLAYERS_LOADER, null, this);
+        getLoaderManager().restartLoader(PLAYERS_LOADER, null, this);
     }
 
     @Override

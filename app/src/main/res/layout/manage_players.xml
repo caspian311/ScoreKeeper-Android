@@ -15,6 +15,7 @@
 
         <EditText
             android:id="@+id/new_player_name"
+            android:hint="@string/player_name_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true" />
