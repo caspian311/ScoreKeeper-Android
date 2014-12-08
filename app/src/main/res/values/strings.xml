@@ -11,5 +11,11 @@
     <string name="manage_players_heading">Manage Players</string>
     <string name="add_player_button">Add Player</string>
     <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="start_game">Start Game!</string>
+    <string-array name="game_types">
+        <item>Highest score wins</item>
+        <item>Lowest score wins</item>
+    </string-array>
 
 </resources>
