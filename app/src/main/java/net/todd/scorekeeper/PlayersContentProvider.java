@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.text.TextUtils;
 
 public class PlayersContentProvider extends ContentProvider {
     private DbHelper dbHelper;
@@ -18,7 +19,12 @@ public class PlayersContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return dbHelper.getReadableDatabase().rawQuery("SELECT _id, name FROM Players", null);
+        String ids = uri.getQueryParameter("ids");
+        String sql = "SELECT _id, name FROM Players";
+        if (!TextUtils.isEmpty(ids)) {
+            sql += " WHERE _id in (" + ids + ")";
+        }
+        return dbHelper.getReadableDatabase().rawQuery(sql, null);
     }
 
     @Override

@@ -3,6 +3,7 @@ package net.todd.scorekeeper;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -29,7 +30,7 @@ public class NewGameActivity extends Activity {
     private ListView availablePlayersList;
     private AvailablePlayerCurorAdapter availablePlayerListAdapter;
     private Button cancelButton;
-    private Button startGameButton;
+    private Button nextButton;
 
     private Uri uri = Uri.parse("content://net.todd.scorekeeper.players");
 
@@ -84,7 +85,7 @@ public class NewGameActivity extends Activity {
         });
 
         cancelButton = (Button)findViewById(R.id.cancel_game_button);
-        startGameButton = (Button)findViewById(R.id.start_game_button);
+        nextButton = (Button)findViewById(R.id.next_button);
 
         loaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
             @Override
@@ -115,7 +116,7 @@ public class NewGameActivity extends Activity {
     }
 
     private void updateStartGameButton() {
-        startGameButton.setEnabled(selectedPlayerIds.size() > 0 && gameNameText.getText().length() > 0);
+        nextButton.setEnabled(selectedPlayerIds.size() > 0 && gameNameText.getText().length() > 0);
     }
 
     @Override
@@ -135,10 +136,14 @@ public class NewGameActivity extends Activity {
             }
         });
 
-        startGameButton.setOnClickListener(new View.OnClickListener() {
+        nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("scorekeeper", "starting game...");
+                String gameName = gameNameText.getText().toString();
+                GameConfiguration gameConfiguration = new GameConfiguration(gameName, selectedPlayerIds);
+                Intent intent = new Intent(NewGameActivity.this, OrderPlayersActivity.class);
+                intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);
+                startActivityForResult(intent, 0);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -157,7 +162,7 @@ public class NewGameActivity extends Activity {
 
         gameNameText.removeTextChangedListener(gameNameTextWatcher);
         gameTypeSpinner.setOnItemSelectedListener(null);
-        startGameButton.setOnClickListener(null);
+        nextButton.setOnClickListener(null);
         cancelButton.setOnClickListener(null);
     }
 }

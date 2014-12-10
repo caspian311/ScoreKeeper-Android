@@ -26,6 +26,9 @@
         <activity
             android:name="net.todd.scorekeeper.ManagePlayersActivity"
             android:label="@string/manage_players_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.OrderPlayersActivity"
+            android:label="@string/order_players" />
         
         <provider
             android:authorities="net.todd.scorekeeper.players"

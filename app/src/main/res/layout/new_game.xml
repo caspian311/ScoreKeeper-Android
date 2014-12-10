@@ -56,12 +56,12 @@
             android:textSize="@dimen/button_text_size" />
 
         <Button
-            android:id="@+id/start_game_button"
+            android:id="@+id/next_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:enabled="false"
-            android:text="@string/start_game"
+            android:text="@string/next"
             android:textSize="@dimen/button_text_size" />
     </LinearLayout>
 
