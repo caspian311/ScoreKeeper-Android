@@ -91,7 +91,7 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(PlayersContentProvider.NEW_NAME, newNameTextField.getText().toString());
+                contentValues.put("name", newNameTextField.getText().toString());
 
                 newNameTextField.setText("");
 

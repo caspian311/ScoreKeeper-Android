@@ -22,7 +22,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewGameActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class NewGameActivity extends Activity {
     private static final int PLAYERS_LOADER = 1;
 
     private Spinner gameTypeSpinner;
@@ -37,6 +37,7 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
     private EditText gameNameText;
     private TextWatcher gameNameTextWatcher;
     private TextView noPlayersAvailableMessage;
+    private LoaderManager.LoaderCallbacks<Cursor> loaderCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,32 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
         cancelButton = (Button)findViewById(R.id.cancel_game_button);
         startGameButton = (Button)findViewById(R.id.start_game_button);
 
-        getLoaderManager().initLoader(PLAYERS_LOADER, null, this);
+        loaderCallback = new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+                return new CursorLoader(NewGameActivity.this, uri, null, null, null, null);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                availablePlayerListAdapter.swapCursor(data);
+
+                if (data.getCount() == 0) {
+                    gameNameText.setVisibility(View.GONE);
+                    gameTypeSpinner.setVisibility(View.GONE);
+                    availablePlayersList.setVisibility(View.GONE);
+
+                    noPlayersAvailableMessage.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+                availablePlayerListAdapter.swapCursor(null);
+            }
+        };
+
+        getLoaderManager().initLoader(PLAYERS_LOADER, null, loaderCallback);
     }
 
     private void updateStartGameButton() {
@@ -122,7 +148,7 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
             }
         });
 
-        getLoaderManager().restartLoader(PLAYERS_LOADER, null, this);
+        getLoaderManager().restartLoader(PLAYERS_LOADER, null, loaderCallback);
     }
 
     @Override
@@ -133,28 +159,5 @@ public class NewGameActivity extends Activity implements LoaderManager.LoaderCal
         gameTypeSpinner.setOnItemSelectedListener(null);
         startGameButton.setOnClickListener(null);
         cancelButton.setOnClickListener(null);
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(this, uri, null, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        availablePlayerListAdapter.swapCursor(data);
-
-        if (data.getCount() == 0) {
-            gameNameText.setVisibility(View.GONE);
-            gameTypeSpinner.setVisibility(View.GONE);
-            availablePlayersList.setVisibility(View.GONE);
-
-            noPlayersAvailableMessage.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        availablePlayerListAdapter.swapCursor(null);
     }
 }
