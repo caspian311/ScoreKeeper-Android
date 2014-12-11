@@ -17,8 +17,9 @@
     <string name="game_name_hint">Game name (Hearts, Spades, Mini-Golf, etc.)</string>
     <string name="player_name_hint">Player name</string>
     <string name="next">Next</string>
-    <string name="order_players">Order players</string>
+    <string name="order_players_heading">Order players</string>
     <string name="order_players_title">Order the players</string>
+    <string name="game_play_heading">Game</string>
     <string-array name="game_types">
         <item>Highest score wins</item>
         <item>Lowest score wins</item>

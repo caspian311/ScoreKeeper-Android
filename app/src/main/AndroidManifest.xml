@@ -28,8 +28,11 @@
             android:label="@string/manage_players_heading" />
         <activity
             android:name="net.todd.scorekeeper.OrderPlayersActivity"
-            android:label="@string/order_players" />
-        
+            android:label="@string/order_players_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.GamePlayActivity"
+            android:label="@string/game_play_heading" />
+
         <provider
             android:authorities="net.todd.scorekeeper.players"
             android:name="net.todd.scorekeeper.PlayersContentProvider"

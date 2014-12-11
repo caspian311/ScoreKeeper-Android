@@ -3,12 +3,16 @@ package net.todd.scorekeeper;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -23,15 +27,20 @@ public class OrderPlayersActivity extends Activity implements LoaderManager.Load
 
     private static final int PLAYERS_LOADER = 1;
     private List<Long> orderedPlayerIds;
+    private GameConfiguration gameConfiguration;
+    private Button nextButton;
+    private Button cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_players);
 
+        nextButton = (Button)findViewById(R.id.next_button);
+        cancelButton = (Button)findViewById(R.id.cancel_button);
+
         orderedPlayerList = (ListView)findViewById(R.id.ordered_players_list);
-        GameConfiguration gameConfiguration = getIntent().getParcelableExtra(GameConfiguration.class.getSimpleName());
-        orderedPlayerIds = gameConfiguration.getSelectedPlayers();
+        gameConfiguration = getIntent().getParcelableExtra(GameConfiguration.class.getSimpleName());
 
         uri = Uri.parse("content://net.todd.scorekeeper.players?ids=" + TextUtils.join(",", gameConfiguration.getSelectedPlayers()));
 
@@ -51,6 +60,23 @@ public class OrderPlayersActivity extends Activity implements LoaderManager.Load
     protected void onResume() {
         super.onResume();
 
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);
+                setResult(1, intent);
+                finish();
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         adapter.setMovePlayerUpListener(new OrderPlayerCursorAdapter.MovePlayerListener() {
             @Override
             public void playerMoved(long playerId) {
@@ -64,12 +90,16 @@ public class OrderPlayersActivity extends Activity implements LoaderManager.Load
             }
         });
 
+
         getLoaderManager().restartLoader(PLAYERS_LOADER, null, this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        nextButton.setOnClickListener(null);
+        cancelButton.setOnClickListener(null);
 
         adapter.setMovePlayerUpListener(null);
         adapter.setMovePlayerDownListener(null);

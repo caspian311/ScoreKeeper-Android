@@ -143,7 +143,7 @@ public class NewGameActivity extends Activity {
                 GameConfiguration gameConfiguration = new GameConfiguration(gameName, selectedPlayerIds);
                 Intent intent = new Intent(NewGameActivity.this, OrderPlayersActivity.class);
                 intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 1);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -164,5 +164,16 @@ public class NewGameActivity extends Activity {
         gameTypeSpinner.setOnItemSelectedListener(null);
         nextButton.setOnClickListener(null);
         cancelButton.setOnClickListener(null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1) {
+            GameConfiguration gameConfiguration = data.getParcelableExtra(GameConfiguration.class.getSimpleName());
+            Intent intent = new Intent(this, GamePlayActivity.class);
+            intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);
+            startActivity(intent);
+        }
+        finish();
     }
 }
