@@ -65,7 +65,7 @@ public class OrderPlayersActivity extends Activity implements LoaderManager.Load
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);
-                setResult(1, intent);
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });
@@ -73,6 +73,7 @@ public class OrderPlayersActivity extends Activity implements LoaderManager.Load
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -89,7 +90,6 @@ public class OrderPlayersActivity extends Activity implements LoaderManager.Load
                 movePlayerDown(playerId);
             }
         });
-
 
         getLoaderManager().restartLoader(PLAYERS_LOADER, null, this);
     }
