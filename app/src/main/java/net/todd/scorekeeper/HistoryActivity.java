@@ -9,12 +9,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 public class HistoryActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int GAME_HISTORY_LOADER = 1;
     private Button doneButton;
-    private ListView gameHistoryList;
+    private ExpandableListView gameHistoryList;
     private GameHistoryAdapter adapter;
 
     private final Uri gamesUri = Uri.parse("content://net.todd.scorekeeper/games");
@@ -25,7 +26,7 @@ public class HistoryActivity extends Activity implements LoaderManager.LoaderCal
         setContentView(R.layout.history_activity);
 
         doneButton = (Button)findViewById(R.id.done_button);
-        gameHistoryList = (ListView)findViewById(R.id.game_history);
+        gameHistoryList = (ExpandableListView)findViewById(R.id.game_history);
 
         adapter = new GameHistoryAdapter(this);
         gameHistoryList.setAdapter(adapter);
@@ -63,11 +64,13 @@ public class HistoryActivity extends Activity implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
+        adapter.setGroupCursor(data);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
+        adapter.setGroupCursor(null);
+        adapter.notifyDataSetChanged();
     }
 }
