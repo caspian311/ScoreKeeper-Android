@@ -32,6 +32,9 @@
         <activity
             android:name="net.todd.scorekeeper.GamePlayActivity"
             android:label="@string/game_play_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.GameOverActivity"
+            android:label="@string/game_over_heading" />
 
         <provider
             android:authorities="net.todd.scorekeeper.players"

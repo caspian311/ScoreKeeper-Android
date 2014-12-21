@@ -69,7 +69,8 @@ public class GamePlayActivity extends Activity {
             public void onClick(View v) {
                 getContentResolver().insert(Uri.parse("content://net.todd.scorekeeper.games"), gameModel.getGameStats());
 
-                Intent intent = new Intent(GamePlayActivity.this, HistoryActivity.class);
+                Intent intent = new Intent(GamePlayActivity.this, GameOverActivity.class);
+                intent.putExtra(Constants.WINNER_NAME, gameModel.getWinner());
                 startActivity(intent);
                 finish();
             }

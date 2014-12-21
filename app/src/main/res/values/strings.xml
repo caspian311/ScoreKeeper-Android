@@ -22,6 +22,9 @@
     <string name="game_play_heading">Game</string>
     <string name="game_over">Game Over</string>
     <string name="next_player">Next Player</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="the_winner_is">The Winner Is:</string>
+    <string name="game_over_heading">Game Over</string>
     <string-array name="game_types">
         <item>Highest score wins</item>
         <item>Lowest score wins</item>

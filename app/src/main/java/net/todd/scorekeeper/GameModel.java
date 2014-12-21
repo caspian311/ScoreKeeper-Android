@@ -58,4 +58,16 @@ public class GameModel {
     public ContentValues getGameStats() {
         return null;
     }
+
+    public String getWinner() {
+        ScoreboardEntry winner = null;
+        int highestScore = Integer.MIN_VALUE;
+        for (ScoreboardEntry entry : scoreboard) {
+            if (entry.getScore() > highestScore) {
+                highestScore = entry.getScore();
+                winner = entry;
+            }
+        }
+        return winner.getName();
+    }
 }
