@@ -15,11 +15,15 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE Players (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
+        db.execSQL("CREATE TABLE Games (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, winner TEXT, date TEXT)");
+        db.execSQL("CREATE TABLE Scoreboard (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, score REAL, gameId REAL)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS Players");
+        db.execSQL("DROP TABLE IF EXISTS Games");
+        db.execSQL("DROP TABLE IF EXISTS Scoreboard");
         onCreate(db);
     }
 }

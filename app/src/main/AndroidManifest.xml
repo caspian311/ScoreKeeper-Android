@@ -37,13 +37,8 @@
             android:label="@string/game_over_heading" />
 
         <provider
-            android:authorities="net.todd.scorekeeper.players"
-            android:name="net.todd.scorekeeper.PlayersContentProvider"
-            android:exported="false"/>
-
-        <provider
-            android:authorities="net.todd.scorekeeper.games"
-            android:name="net.todd.scorekeeper.GameHistoryContentProvider"
+            android:authorities="net.todd.scorekeeper"
+            android:name="net.todd.scorekeeper.ScorekeeperContentProvider"
             android:exported="false"/>
     </application>
 

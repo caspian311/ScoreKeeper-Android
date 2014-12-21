@@ -24,6 +24,8 @@ public class GamePlayActivity extends Activity {
     private GameModel gameModel;
     private TextView playersTurnText;
 
+    private final Uri gamesUri = Uri.parse("content://net.todd.scorekeeper/games");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class GamePlayActivity extends Activity {
         gameOverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getContentResolver().insert(Uri.parse("content://net.todd.scorekeeper.games"), gameModel.getGameStats());
+                saveGameToHistory();
 
                 Intent intent = new Intent(GamePlayActivity.this, GameOverActivity.class);
                 intent.putExtra(Constants.WINNER_NAME, gameModel.getWinner());
@@ -75,6 +77,15 @@ public class GamePlayActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    private void saveGameToHistory() {
+        Uri savedGameUri = getContentResolver().insert(gamesUri, gameModel.getGameData());
+        Uri scoreBoardEntryUri = gamesUri.buildUpon().appendPath(savedGameUri.getLastPathSegment()).appendPath("scoreboard").build();
+        for (ContentValues datum : gameModel.getScoreboardData()) {
+            datum.put("gameId", Long.parseLong(savedGameUri.getLastPathSegment()));
+            getContentResolver().insert(scoreBoardEntryUri, datum);
+        }
     }
 
     private int getCurrentScore() {

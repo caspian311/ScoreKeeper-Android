@@ -30,7 +30,7 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
     private PlayerCursorAdapter adapter;
     private Button doneButton;
 
-    private Uri uri = Uri.parse("content://net.todd.scorekeeper.players");
+    private Uri uri = Uri.parse("content://net.todd.scorekeeper/players");
     private ListView playersListView;
 
     @Override

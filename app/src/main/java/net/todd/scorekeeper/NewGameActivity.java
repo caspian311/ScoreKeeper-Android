@@ -32,7 +32,7 @@ public class NewGameActivity extends Activity {
     private Button cancelButton;
     private Button nextButton;
 
-    private Uri uri = Uri.parse("content://net.todd.scorekeeper.players");
+    private Uri uri = Uri.parse("content://net.todd.scorekeeper/players");
 
     private List<Player> selectedPlayers = new ArrayList<Player>();
     private EditText gameNameText;

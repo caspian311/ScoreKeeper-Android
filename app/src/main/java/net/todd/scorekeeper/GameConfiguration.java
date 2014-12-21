@@ -88,4 +88,5 @@ public class GameConfiguration implements Parcelable {
             Collections.swap(getSelectedPlayers(), index, index + 1);
         }
     }
+
 }
