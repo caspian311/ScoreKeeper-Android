@@ -20,6 +20,8 @@
     <string name="order_players_heading">Order players</string>
     <string name="order_players_title">Order the players</string>
     <string name="game_play_heading">Game</string>
+    <string name="game_over">Game Over</string>
+    <string name="next_player">Next Player</string>
     <string-array name="game_types">
         <item>Highest score wins</item>
         <item>Lowest score wins</item>

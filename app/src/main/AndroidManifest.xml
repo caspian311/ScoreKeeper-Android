@@ -37,6 +37,11 @@
             android:authorities="net.todd.scorekeeper.players"
             android:name="net.todd.scorekeeper.PlayersContentProvider"
             android:exported="false"/>
+
+        <provider
+            android:authorities="net.todd.scorekeeper.games"
+            android:name="net.todd.scorekeeper.GameHistoryContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>
