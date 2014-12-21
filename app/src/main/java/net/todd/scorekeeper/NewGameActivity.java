@@ -34,7 +34,7 @@ public class NewGameActivity extends Activity {
 
     private Uri uri = Uri.parse("content://net.todd.scorekeeper.players");
 
-    private List<Long> selectedPlayerIds = new ArrayList<Long>();
+    private List<Player> selectedPlayers = new ArrayList<Player>();
     private EditText gameNameText;
     private TextWatcher gameNameTextWatcher;
     private TextView noPlayersAvailableMessage;
@@ -73,11 +73,11 @@ public class NewGameActivity extends Activity {
         availablePlayerListAdapter = new AvailablePlayerCurorAdapter(this);
         availablePlayersList.setAdapter(availablePlayerListAdapter);
         availablePlayerListAdapter.setPlayerSelectionChangeListener(new AvailablePlayerCurorAdapter.PlayerSelectionChangeListener() {
-            public void playerSelectionChanged(long playerId, boolean isSelected) {
+            public void playerSelectionChanged(Player player, boolean isSelected) {
                 if (isSelected) {
-                    selectedPlayerIds.add(playerId);
+                    selectedPlayers.add(player);
                 } else {
-                    selectedPlayerIds.remove(playerId);
+                    selectedPlayers.remove(player);
                 }
 
                 updateStartGameButton();
@@ -116,7 +116,7 @@ public class NewGameActivity extends Activity {
     }
 
     private void updateStartGameButton() {
-        nextButton.setEnabled(selectedPlayerIds.size() > 0 && gameNameText.getText().length() > 0);
+        nextButton.setEnabled(selectedPlayers.size() > 0 && gameNameText.getText().length() > 0);
     }
 
     @Override
@@ -139,8 +139,9 @@ public class NewGameActivity extends Activity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String gameName = gameNameText.getText().toString();
-                GameConfiguration gameConfiguration = new GameConfiguration(gameName, selectedPlayerIds);
+                GameConfiguration gameConfiguration = new GameConfiguration();
+                gameConfiguration.setGameName(gameNameText.getText().toString());
+                gameConfiguration.setSelectedPlayers(selectedPlayers);
                 Intent intent = new Intent(NewGameActivity.this, OrderPlayersActivity.class);
                 intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);
                 startActivityForResult(intent, 1);
@@ -168,7 +169,7 @@ public class NewGameActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == 1) {
+        if (resultCode == RESULT_OK) {
             GameConfiguration gameConfiguration = data.getParcelableExtra(GameConfiguration.class.getSimpleName());
             Intent intent = new Intent(this, GamePlayActivity.class);
             intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);

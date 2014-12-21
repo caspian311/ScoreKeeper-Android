@@ -18,18 +18,19 @@ public class AvailablePlayerCurorAdapter extends ResourceCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        final long playerId = cursor.getLong(0);
-        String playerName = cursor.getString(1);
+        final Player player = new Player();
+        player.setId(cursor.getLong(0));
+        player.setName(cursor.getString(1));
 
         TextView availablePlayerName = (TextView)view.findViewById(R.id.available_player_name);
-        availablePlayerName.setText(playerName);
+        availablePlayerName.setText(player.getName());
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.select_player_checkbox);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (playerSelectionChangeListener != null) {
-                    playerSelectionChangeListener.playerSelectionChanged(playerId, isChecked);
+                    playerSelectionChangeListener.playerSelectionChanged(player, isChecked);
                 }
             }
         });
@@ -40,6 +41,6 @@ public class AvailablePlayerCurorAdapter extends ResourceCursorAdapter {
     }
 
     public static interface PlayerSelectionChangeListener {
-        void playerSelectionChanged(long playerId, boolean isSelected);
+        void playerSelectionChanged(Player player, boolean isSelected);
     }
 }

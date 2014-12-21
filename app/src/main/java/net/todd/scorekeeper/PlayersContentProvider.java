@@ -19,12 +19,7 @@ public class PlayersContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        String ids = uri.getQueryParameter("ids");
-        String sql = "SELECT _id, name FROM Players";
-        if (!TextUtils.isEmpty(ids)) {
-            sql += " WHERE _id in (" + ids + ")";
-        }
-        return dbHelper.getReadableDatabase().rawQuery(sql, null);
+        return dbHelper.getReadableDatabase().rawQuery("SELECT _id, name FROM Players", null);
     }
 
     @Override

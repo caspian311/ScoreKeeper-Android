@@ -1,49 +1,40 @@
 package net.todd.scorekeeper;
 
+import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GameConfiguration implements Parcelable {
-    private final String gameName;
-    private List<Long> selectedPlayerIds;
-
-    public GameConfiguration(String gameName, List<Long> selectedPlayerIds) {
-        this.gameName = gameName;
-        this.selectedPlayerIds = selectedPlayerIds;
-    }
+    private String gameName;
+    private List<Player> selectedPlayers = new ArrayList<Player>();
 
     public String getGameName() {
         return gameName;
     }
 
-    public List<Long> getSelectedPlayers() {
-        return selectedPlayerIds;
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 
-    private List<Long> convertIds(long[] selectedPlayerIds) {
-        List<Long> ids = new ArrayList<Long>();
-        for (long selectedPlayerId : selectedPlayerIds) {
-            ids.add(new Long(selectedPlayerId));
+    public List<Player> getSelectedPlayers() {
+        return selectedPlayers;
+    }
+
+    public void setSelectedPlayers(List<Player> selectedPlayers) {
+        this.selectedPlayers = selectedPlayers;
+    }
+
+    public Cursor getPlayersAsCursor() {
+        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "name" });
+        for (Player player : getSelectedPlayers()) {
+            cursor.addRow(new Object[] { player.getId(), player.getName() });
         }
-        return ids;
-    }
-
-    private static long[] convertIds(List<Long> selectedPlayerIds) {
-        Long[] playerIds = new Long[selectedPlayerIds.size()];
-        selectedPlayerIds.toArray(playerIds);
-        long[] ids = new long[selectedPlayerIds.size()];
-        for (int i = 0; i < selectedPlayerIds.size(); i++) {
-            ids[i] = selectedPlayerIds.get(i);
-        }
-        return ids;
-    }
-
-    public GameConfiguration(Parcel source) {
-        gameName = source.readString();
-        selectedPlayerIds = convertIds(source.createLongArray());
+        return cursor;
     }
 
     @Override
@@ -53,18 +44,48 @@ public class GameConfiguration implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(gameName);
-        dest.writeLongArray(convertIds(selectedPlayerIds));
+        dest.writeString(this.gameName);
+        dest.writeTypedList(selectedPlayers);
     }
 
-    public static final Parcelable.Creator<GameConfiguration> CREATOR = new Parcelable.Creator<GameConfiguration>() {
+    public GameConfiguration() {
+    }
+
+    private GameConfiguration(Parcel in) {
+        this.gameName = in.readString();
+        in.readTypedList(selectedPlayers, Player.CREATOR);
+    }
+
+    public static final Creator<GameConfiguration> CREATOR = new Creator<GameConfiguration>() {
         public GameConfiguration createFromParcel(Parcel source) {
             return new GameConfiguration(source);
         }
 
-        @Override
         public GameConfiguration[] newArray(int size) {
-            return new GameConfiguration[0];
+            return new GameConfiguration[size];
         }
     };
+
+    public void movePlayerUp(long playerId) {
+        int index = getSelectedPlayers().indexOf(getPlayerById(playerId));
+        if (index != 0) {
+            Collections.swap(getSelectedPlayers(), index, index - 1);
+        }
+    }
+
+    private Player getPlayerById(long playerId) {
+        for (int i=0; i<getSelectedPlayers().size(); i++) {
+            if (getSelectedPlayers().get(i).getId() == playerId) {
+                return getSelectedPlayers().get(i);
+            }
+        }
+        return null;
+    }
+
+    public void movePlayerDown(long playerId) {
+        int index = getSelectedPlayers().indexOf(getPlayerById(playerId));
+        if (index != getSelectedPlayers().size() - 1) {
+            Collections.swap(getSelectedPlayers(), index, index + 1);
+        }
+    }
 }
