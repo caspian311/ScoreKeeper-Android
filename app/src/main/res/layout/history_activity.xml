@@ -17,7 +17,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_margin="2dp"
+        android:background="@drawable/button"
         android:text="@string/done"
+        android:textColor="#ffffff"
         android:textSize="@dimen/text_size" />
 
 </RelativeLayout>

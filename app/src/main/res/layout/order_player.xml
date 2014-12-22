@@ -23,14 +23,20 @@
             android:id="@+id/lower_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="1"
-            android:text="-" />
+            android:background="@drawable/button"
+            android:text="-"
+            android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/higher_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_weight="1"
-            android:text="+" />
+            android:background="@drawable/button"
+            android:text="+"
+            android:textColor="#ffffff" />
     </LinearLayout>
 </LinearLayout>

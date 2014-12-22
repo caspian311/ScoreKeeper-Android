@@ -15,9 +15,9 @@
 
         <EditText
             android:id="@+id/new_player_name"
-            android:hint="@string/player_name_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/player_name_hint"
             android:singleLine="true" />
 
         <Button
@@ -25,8 +25,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/new_game_button"
+            android:layout_margin="2dp"
+            android:background="@drawable/button"
             android:enabled="false"
-            android:text="@string/add_player_button" />
+            android:text="@string/add_player_button"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 
@@ -45,7 +48,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_margin="2dp"
+        android:background="@drawable/button"
         android:text="@string/done"
+        android:textColor="#ffffff"
         android:textSize="@dimen/button_text_size" />
 
 </RelativeLayout>
