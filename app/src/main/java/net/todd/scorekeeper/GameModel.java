@@ -74,7 +74,7 @@ public class GameModel {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", gameConfiguration.getGameName());
         contentValues.put("winner", getWinner());
-        contentValues.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        contentValues.put("date", Constants.DATE_STORAGE_FORMAT.format(new Date()));
         return contentValues;
     }
 
