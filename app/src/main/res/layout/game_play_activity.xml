@@ -27,7 +27,7 @@
         <TextView
             android:id="@+id/players_turn_text"
             android:textSize="@dimen/text_size"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
@@ -35,7 +35,8 @@
 
         <EditText
             android:id="@+id/players_score_field"
-            android:layout_width="wrap_content"
+            android:inputType="number"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="22"
