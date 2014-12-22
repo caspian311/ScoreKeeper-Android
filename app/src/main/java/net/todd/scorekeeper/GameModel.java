@@ -60,11 +60,21 @@ public class GameModel {
 
     public String getWinner() {
         ScoreboardEntry winner = null;
-        int highestScore = Integer.MIN_VALUE;
-        for (ScoreboardEntry entry : scoreboard) {
-            if (entry.getScore() > highestScore) {
-                highestScore = entry.getScore();
-                winner = entry;
+        if (gameConfiguration.isHighestScoreWins()) {
+            int highestScore = Integer.MIN_VALUE;
+            for (ScoreboardEntry entry : scoreboard) {
+                if (entry.getScore() > highestScore) {
+                    highestScore = entry.getScore();
+                    winner = entry;
+                }
+            }
+        } else {
+            int lowestScore = Integer.MAX_VALUE;
+            for (ScoreboardEntry entry : scoreboard) {
+                if (entry.getScore() < lowestScore) {
+                    lowestScore = entry.getScore();
+                    winner = entry;
+                }
             }
         }
         return winner.getName();

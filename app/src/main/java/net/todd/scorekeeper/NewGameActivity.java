@@ -39,6 +39,7 @@ public class NewGameActivity extends Activity {
     private TextWatcher gameNameTextWatcher;
     private TextView noPlayersAvailableMessage;
     private LoaderManager.LoaderCallbacks<Cursor> loaderCallback;
+    private boolean highestScoreWins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +130,7 @@ public class NewGameActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.i("scorekeeper", "game type selection made: " + id);
+                highestScoreWins = id == 0;
             }
 
             @Override
@@ -142,6 +144,7 @@ public class NewGameActivity extends Activity {
                 GameConfiguration gameConfiguration = new GameConfiguration();
                 gameConfiguration.setGameName(gameNameText.getText().toString());
                 gameConfiguration.setSelectedPlayers(selectedPlayers);
+                gameConfiguration.setHighestScoreWins(highestScoreWins);
                 Intent intent = new Intent(NewGameActivity.this, OrderPlayersActivity.class);
                 intent.putExtra(GameConfiguration.class.getSimpleName(), gameConfiguration);
                 startActivityForResult(intent, 1);

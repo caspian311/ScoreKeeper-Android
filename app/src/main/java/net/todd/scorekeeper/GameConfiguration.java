@@ -12,6 +12,7 @@ import java.util.List;
 public class GameConfiguration implements Parcelable {
     private String gameName;
     private List<Player> selectedPlayers = new ArrayList<Player>();
+    private boolean highestScoreWins;
 
     public String getGameName() {
         return gameName;
@@ -37,34 +38,8 @@ public class GameConfiguration implements Parcelable {
         return cursor;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.gameName);
-        dest.writeTypedList(selectedPlayers);
-    }
-
     public GameConfiguration() {
     }
-
-    private GameConfiguration(Parcel in) {
-        this.gameName = in.readString();
-        in.readTypedList(selectedPlayers, Player.CREATOR);
-    }
-
-    public static final Creator<GameConfiguration> CREATOR = new Creator<GameConfiguration>() {
-        public GameConfiguration createFromParcel(Parcel source) {
-            return new GameConfiguration(source);
-        }
-
-        public GameConfiguration[] newArray(int size) {
-            return new GameConfiguration[size];
-        }
-    };
 
     public void movePlayerUp(long playerId) {
         int index = getSelectedPlayers().indexOf(getPlayerById(playerId));
@@ -89,4 +64,39 @@ public class GameConfiguration implements Parcelable {
         }
     }
 
+    public boolean isHighestScoreWins() {
+        return highestScoreWins;
+    }
+
+    public void setHighestScoreWins(boolean highestScoreWins) {
+        this.highestScoreWins = highestScoreWins;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.gameName);
+        dest.writeTypedList(selectedPlayers);
+        dest.writeByte(highestScoreWins ? (byte) 1 : (byte) 0);
+    }
+
+    private GameConfiguration(Parcel in) {
+        this.gameName = in.readString();
+        in.readTypedList(selectedPlayers, Player.CREATOR);
+        this.highestScoreWins = in.readByte() != 0;
+    }
+
+    public static final Creator<GameConfiguration> CREATOR = new Creator<GameConfiguration>() {
+        public GameConfiguration createFromParcel(Parcel source) {
+            return new GameConfiguration(source);
+        }
+
+        public GameConfiguration[] newArray(int size) {
+            return new GameConfiguration[size];
+        }
+    };
 }
