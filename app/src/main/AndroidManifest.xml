@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.todd.scorekeeper" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="net.todd.scorekeeper.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="net.todd.scorekeeper.NewGameActivity"
+            android:label="@string/new_game_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.HistoryActivity"
+            android:label="@string/history_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.ManagePlayersActivity"
+            android:label="@string/manage_players_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.OrderPlayersActivity"
+            android:label="@string/order_players_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.GamePlayActivity"
+            android:label="@string/game_play_heading" />
+        <activity
+            android:name="net.todd.scorekeeper.GameOverActivity"
+            android:label="@string/game_over_heading" />
+
+        <provider
+            android:authorities="net.todd.scorekeeper"
+            android:name="net.todd.scorekeeper.ScorekeeperContentProvider"
+            android:exported="false"/>
+    </application>
+
+</manifest>

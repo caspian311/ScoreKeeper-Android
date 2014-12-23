@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    android:weightSum="5">
+
+    <CheckBox
+        android:id="@+id/current_player_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:editable="false" />
+
+    <TextView
+        android:id="@+id/player_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="left"
+        android:paddingRight="10dp"
+        android:text="Abbi"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/player_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:paddingLeft="10dp"
+        android:text="1234"
+        android:textSize="@dimen/text_size" />
+
+</LinearLayout>

@@ -1,0 +1,12 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/scorekeeper_actionBar</item>
+    </style>
+
+    <style name="scorekeeper_actionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="@android:background">@drawable/title</item>
+    </style>
+</resources>
