@@ -3,36 +3,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'robolectric'
 apply plugin: 'android'
 
-android {
-    packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE'
-    }
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
-
-    defaultConfig {
-        applicationId "net.todd.scorekeeper"
-        minSdkVersion 16
-        targetSdkVersion 19
-        versionCode 11
-        versionName "2.0.0"
-        testInstrumentationRunner "com.google.android.apps.common.testing.testrunner.GoogleInstrumentationTestRunner"
-    }
-    buildTypes {
-        release {
-        }
-    }
-
-    sourceSets {
-        androidTest {
-            setRoot('src/androidTest')
-        }
-    }
-}
-
 robolectric {
     include '**/*Test.class'
     exclude '**/espresso/**/*.class'
@@ -42,6 +12,7 @@ dependencies {
     repositories {
         mavenCentral()
     }
+
     androidTestCompile('junit:junit:4.12') {
         exclude module: 'hamcrest-core'
     }
@@ -71,8 +42,6 @@ dependencies {
     androidTestCompile 'org.hamcrest:hamcrest-integration:1.1'
     androidTestCompile 'org.hamcrest:hamcrest-core:1.1'
     androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
-
-    androidTestCompile 'com.google.android:android:4.1.1.4'
 }
 
 apply plugin: 'idea'
@@ -81,5 +50,35 @@ idea {
     module {
         outputDir = file('build/resources/testDebug')
         testOutputDir = file('build/test-classes/debug')
+    }
+}
+
+android {
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE'
+    }
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "net.todd.scorekeeper"
+        minSdkVersion 16
+        targetSdkVersion 19
+        versionCode 11
+        versionName "2.0.0"
+
+    }
+    buildTypes {
+        release {
+        }
+    }
+
+    sourceSets {
+        androidTest {
+            setRoot('src/androidTest')
+        }
     }
 }
