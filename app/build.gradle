@@ -3,6 +3,17 @@ apply plugin: 'com.android.application'
 apply plugin: 'robolectric'
 apply plugin: 'android'
 
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'junit:junit:4.12'
+        classpath 'org.robolectric:robolectric-gradle-plugin:0.14.+'
+    }
+}
+
 robolectric {
     include '**/*Test.class'
     exclude '**/espresso/**/*.class'
@@ -44,14 +55,14 @@ dependencies {
     androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
 }
 
-apply plugin: 'idea'
-
-idea {
-    module {
-        outputDir = file('build/resources/testDebug')
-        testOutputDir = file('build/test-classes/debug')
-    }
-}
+//apply plugin: 'idea'
+//
+//idea {
+//    module {
+//        outputDir = file('build/resources/testDebug')
+//        testOutputDir = file('build/test-classes/debug')
+//    }
+//}
 
 android {
     packagingOptions {
