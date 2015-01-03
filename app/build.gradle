@@ -24,6 +24,8 @@ dependencies {
         mavenCentral()
     }
 
+    compile 'com.android.support:support-v4:21.0.+'
+
     androidTestCompile('junit:junit:4.12') {
         exclude module: 'hamcrest-core'
     }
