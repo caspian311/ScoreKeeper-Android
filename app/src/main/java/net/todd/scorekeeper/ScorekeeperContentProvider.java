@@ -17,6 +17,7 @@ public class ScorekeeperContentProvider extends ContentProvider {
 
     static {
         uriMatcher.addURI("net.todd.scorekeeper", "players", PLAYERS);
+        uriMatcher.addURI("net.todd.scorekeeper", "players/#", PLAYERS);
         uriMatcher.addURI("net.todd.scorekeeper", "games", GAMES);
         uriMatcher.addURI("net.todd.scorekeeper", "games/#/scoreboard", SCORE_BOARD);
     }
@@ -88,7 +89,7 @@ public class ScorekeeperContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int count = db.delete(getTableFromUri(uri), "_id = ?", new String[]{selection});
+        int count = db.delete(getTableFromUri(uri), "_id = ?", new String[]{ uri.getLastPathSegment() });
         db.close();
 
         return count;

@@ -79,7 +79,7 @@ public class ManagePlayersActivity extends Activity implements LoaderManager.Loa
 
                 getLoaderManager().restartLoader(PLAYERS_LOADER, null, ManagePlayersActivity.this);
             }
-        }.startDelete(-1, null, uri, "" + playerId, null);
+        }.startDelete(-1, null, uri.buildUpon().appendPath(new Long(playerId).toString()).build(), null, null);
     }
 
     @Override
