@@ -55,14 +55,14 @@ dependencies {
     androidTestCompile 'org.hamcrest:hamcrest-library:1.1'
 }
 
-//apply plugin: 'idea'
-//
-//idea {
-//    module {
-//        outputDir = file('build/resources/testDebug')
-//        testOutputDir = file('build/test-classes/debug')
-//    }
-//}
+apply plugin: 'idea'
+
+idea {
+    module {
+        outputDir = file('build/resources/debug')
+        testOutputDir = file('build/test-classes/testDebug')
+    }
+}
 
 android {
     packagingOptions {
@@ -71,8 +71,8 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE'
     }
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
 
     defaultConfig {
         applicationId "net.todd.scorekeeper"

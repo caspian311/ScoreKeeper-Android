@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
@@ -20,6 +21,6 @@ public class MainActivityTest {
     @Test
     public void shouldHaveApplicationName() throws Exception {
         String appName = activity.getResources().getString(R.string.app_name);
-        assertThat(appName, equalTo("MainActivity"));
+        assertThat(appName, equalTo("Scorekeeper"));
     }
 }
